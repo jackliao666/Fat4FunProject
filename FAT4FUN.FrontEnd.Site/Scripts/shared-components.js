@@ -1,5 +1,15 @@
+// util function just for syntax highlighting
+// you can download the `lit-html` vscode extension to enabled the syntax highlight
+// https://marketplace.visualstudio.com/items?itemName=bierner.lit-html
+function html(strings, ...values) {
+    return strings.reduce(
+        (result, str, i) => result + str + (values[i] || ""),
+        ""
+    );
+}
+
 const HeaderComponent = {
-  template: `
+    template: html`
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
       <div class="container-fluid">
         <a href="index.html" class="col-1">
@@ -17,31 +27,58 @@ const HeaderComponent = {
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav col-7">
+          <ul class="navbar-nav col-6">
             <li class="nav-item col-3">
-              <a class="nav-link" href="#">最新消息</a>
+              <a
+                class="nav-link"
+                :class="{'active-link': isActiveLink('#')}"
+                href="#"
+                >最新消息</a
+              >
             </li>
             <li class="nav-item col-3">
-              <a class="nav-link" href="#">熱門商品</a>
+              <a
+                class="nav-link"
+                :class="{'active-link': isActiveLink('#')}"
+                href="#"
+                >熱門商品</a
+              >
             </li>
             <li class="nav-item col-3">
-              <a class="nav-link" href="PC.html">PC專區</a>
+              <a
+                class="nav-link"
+                :class="{'active-link': isActiveLink('PC.html')}"
+                href="PC.html"
+                >PC專區</a
+              >
             </li>
             <li class="nav-item col-3">
-              <a class="nav-link disabled" aria-disabled="true">週邊專區</a>
+              <a
+                class="nav-link"
+                :class="{'active-link': isActiveLink('Devices.html')}"
+                href="Devices.html"
+                >週邊專區</a
+              >
             </li>
           </ul>
         </div>
-        <form class="d-flex align-items-center" role="search">
+
+        <form
+          class="d-flex align-items-center"
+          role="search"
+          @submit.prevent="searchProduct"
+        >
           <div class="input-group">
-            <span class="input-group-text" id="basic-addon1"
-              ><i class="bi bi-search"></i
-            ></span>
+            <span class="input-group-text" id="basic-addon1">
+              <i class="bi bi-search"></i>
+            </span>
+
             <input
               class="form-control"
               type="search"
               placeholder="請輸入商品名稱"
               aria-label="Search"
+              v-model="searchQuery"
             />
           </div>
           <button class="btn btn-danger ms-2" type="submit">
@@ -62,11 +99,24 @@ const HeaderComponent = {
         </div>
       </div>
     </nav>
-  `
-}
+  `,
+    data() {
+        return {
+            searchQuery: "", // 绑定搜索输入
+        };
+    },
+    methods: {
+        searchProduct() {
+            this.$emit("search", this.searchQuery); // 通过事件传递搜索关键字
+        },
+        isActiveLink(pathname) {
+            return window.location.pathname.includes(pathname);
+        },
+    },
+};
 
- const FooterComponent = {
-  template: `
+const FooterComponent = {
+    template: `
     <footer>
       <div class="container">
         <div class="row d-flex justify-content-between align-items-start">
@@ -119,5 +169,7 @@ const HeaderComponent = {
         </div>
       </div>
     </footer>
-  `
-}
+  `,
+};
+
+export { HeaderComponent, FooterComponent };

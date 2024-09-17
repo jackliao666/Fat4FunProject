@@ -6,12 +6,12 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class ProductSku
+    public partial class ProductSkus
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ProductSku()
+        public ProductSkus()
         {
-            SkuItems = new HashSet<SkuItem>();
+            SkuItems = new HashSet<SkuItems>();
         }
 
         public int Id { get; set; }
@@ -22,13 +22,13 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         [StringLength(50)]
         public string Name { get; set; }
 
-        public decimal Price { get; set; }
+        public int Price { get; set; }
 
-        public decimal Sale { get; set; }
+        public int? Sale { get; set; }
 
-        public virtual Product Product { get; set; }
+        public virtual Products Products { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SkuItem> SkuItems { get; set; }
+        public virtual ICollection<SkuItems> SkuItems { get; set; }
     }
 }

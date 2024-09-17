@@ -6,18 +6,20 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class MemberFollowList
+    public partial class SkuItems
     {
         public int Id { get; set; }
 
-        public int MemberId { get; set; }
-
-        public int ProductId { get; set; }
+        public int ProductSkuId { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Name { get; set; }
+        public string key { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string value { get; set; }
+
+        public virtual ProductSkus ProductSkus { get; set; }
     }
 }

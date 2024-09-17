@@ -17,7 +17,7 @@ namespace FAT4FUN.FrontEnd.Site.Services
 			var data = db.Products.Where(t => t.Id == id).Select(t => new DtoProduct
 			{
 				Id = t.Id,
-				BrandName = t.Brand.Name,
+				BrandName = t.Brands.Name,
 				Name = t.Name,
 				Description = t.Description,
 				Status = t.Status,

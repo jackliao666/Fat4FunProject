@@ -12,83 +12,43 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 		{
 		}
 
-		public virtual DbSet<Account> Accounts { get; set; }
-		public virtual DbSet<Brand> Brands { get; set; }
-		public virtual DbSet<Cart> Carts { get; set; }
-		public virtual DbSet<Empolyee> Empolyees { get; set; }
-		public virtual DbSet<Image> Images { get; set; }
-		public virtual DbSet<MemberFollowList> MemberFollowLists { get; set; }
-		public virtual DbSet<Member> Members { get; set; }
-		public virtual DbSet<OrderItem> OrderItems { get; set; }
-		public virtual DbSet<Order> Orders { get; set; }
-		public virtual DbSet<ProductCategory> ProductCategories { get; set; }
-		public virtual DbSet<Product> Products { get; set; }
-		public virtual DbSet<ProductSku> ProductSkus { get; set; }
-		public virtual DbSet<SkuItem> SkuItems { get; set; }
-		public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+		public virtual DbSet<Brands> Brands { get; set; }
+		public virtual DbSet<Images> Images { get; set; }
+		public virtual DbSet<ProductCategories> ProductCategories { get; set; }
+		public virtual DbSet<Products> Products { get; set; }
+		public virtual DbSet<ProductSkus> ProductSkus { get; set; }
+		public virtual DbSet<SkuItems> SkuItems { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Account>()
-				.Property(e => e.Account1)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<Account>()
-				.Property(e => e.Password)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<Account>()
-				.Property(e => e.Email)
-				.IsFixedLength();
-
-			modelBuilder.Entity<Brand>()
+			modelBuilder.Entity<Brands>()
 				.HasMany(e => e.Products)
-				.WithRequired(e => e.Brand)
+				.WithRequired(e => e.Brands)
+				.HasForeignKey(e => e.BrandId)
 				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<Empolyee>()
-				.Property(e => e.Phone)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<Member>()
-				.Property(e => e.Phone)
-				.IsFixedLength();
-
-			modelBuilder.Entity<Order>()
-				.Property(e => e.No)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<Order>()
-				.HasMany(e => e.OrderItems)
-				.WithRequired(e => e.Order)
-				.WillCascadeOnDelete(false);
-
-			modelBuilder.Entity<ProductCategory>()
+			modelBuilder.Entity<ProductCategories>()
 				.HasMany(e => e.Products)
-				.WithRequired(e => e.ProductCategory)
+				.WithRequired(e => e.ProductCategories)
+				.HasForeignKey(e => e.ProductCategoryId)
 				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<Product>()
+			modelBuilder.Entity<Products>()
 				.HasMany(e => e.Images)
-				.WithRequired(e => e.Product)
+				.WithRequired(e => e.Products)
+				.HasForeignKey(e => e.ProductId)
 				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<Product>()
+			modelBuilder.Entity<Products>()
 				.HasMany(e => e.ProductSkus)
-				.WithRequired(e => e.Product)
+				.WithRequired(e => e.Products)
+				.HasForeignKey(e => e.ProductId)
 				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<ProductSku>()
-				.Property(e => e.Price)
-				.HasPrecision(38, 2);
-
-			modelBuilder.Entity<ProductSku>()
-				.Property(e => e.Sale)
-				.HasPrecision(38, 2);
-
-			modelBuilder.Entity<ProductSku>()
+			modelBuilder.Entity<ProductSkus>()
 				.HasMany(e => e.SkuItems)
-				.WithRequired(e => e.ProductSku)
+				.WithRequired(e => e.ProductSkus)
+				.HasForeignKey(e => e.ProductSkuId)
 				.WillCascadeOnDelete(false);
 		}
 	}

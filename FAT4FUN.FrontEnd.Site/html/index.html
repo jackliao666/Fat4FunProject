@@ -17,8 +17,8 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="NavFooter.css" />
-    <script src="/vue.global.js"></script>
+    <link rel="stylesheet" href="../Content/NavFooter.css" />
+    <script src="../Scripts/vue.global.js"></script>
     <!--<script src="/shared-components.js"></script>-->
     <style>
         /* 调整第一個輪播的位置 */
@@ -331,24 +331,24 @@
         <footer-component></footer-component>
         <!-- footer end -->
     </div>
+    <script type="module">
+        // 创建 Vue 实例
+        const config = {
+            setup() {
+                return {};
+            },
+        };
+
+        const app = Vue.createApp();
+
+        import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
+        app.component("header-component", HeaderComponent);
+        app.component("footer-component", FooterComponent);
+
+   
+        app.mount("#app");
+    </script>
 </body>
 
-    <scrip type="module">
-    // 创建 Vue 实例
-    const config = {
-        setup() {
-            return {};
-        },
-    };
-
-    const app = Vue.createApp();
-
-
-    import { HeaderComponent, FooterComponent } from "./shared-components.js";
-    app.component("header-component", HeaderComponent);
-    app.component("footer-component", FooterComponent);
-
-    // 将 Vue 实例挂载到 #app
-    app.mount("#app");
-</scrip>
 </html>
+

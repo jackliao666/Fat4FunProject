@@ -6,13 +6,13 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Product
+    public partial class Products
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Product()
+        public Products()
         {
-            Images = new HashSet<Image>();
-            ProductSkus = new HashSet<ProductSku>();
+            Images = new HashSet<Images>();
+            ProductSkus = new HashSet<ProductSkus>();
         }
 
         public int Id { get; set; }
@@ -36,14 +36,14 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         public DateTime ModifyDate { get; set; }
 
-        public virtual Brand Brand { get; set; }
+        public virtual Brands Brands { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<Images> Images { get; set; }
 
-        public virtual ProductCategory ProductCategory { get; set; }
+        public virtual ProductCategories ProductCategories { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductSku> ProductSkus { get; set; }
+        public virtual ICollection<ProductSkus> ProductSkus { get; set; }
     }
 }

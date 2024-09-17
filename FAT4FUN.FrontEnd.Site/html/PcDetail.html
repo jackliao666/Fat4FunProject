@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fat4Fun-PcDetail</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../Content/NavFooter.css" />
+    <script src="../Scripts/vue.global.js"></script>
+    <style>
+      .product-image-gallery {
+        position: relative;
+      }
+
+      .main-image {
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+
+      .thumbnail-container {
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .thumbnail-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.3s ease;
+      }
+
+      .thumbnail-image.active {
+        border-color: #007bff;
+      }
+
+      .product-title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .product-brand {
+        font-size: 1.1rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+      }
+
+      .product-price {
+        margin-bottom: 1rem;
+      }
+
+      .current-price {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #28a745;
+      }
+
+      .original-price {
+        font-size: 1.2rem;
+        color: #6c757d;
+        text-decoration: line-through;
+        margin-left: 10px;
+      }
+
+      .product-description {
+        margin-bottom: 1rem;
+      }
+
+      .product-specs {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+      }
+
+      @media (max-width: 768px) {
+        .product-title {
+          font-size: 1.5rem;
+        }
+        .current-price {
+          font-size: 1.5rem;
+        }
+        .btn-lg {
+          padding: 0.5rem 1rem;
+          font-size: 1rem;
+        }
+      }
+      /* 右侧商品信息部分的样式 */
+      .col-md-6 {
+        background-color: white; /* 设置背景为白色 */
+        padding: 20px; /* 添加内部边距，使内容不紧贴边缘 */
+        border-radius: 8px; /* 圆角效果 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加轻微阴影效果 */
+      }
+      .mt-5 {
+        padding-top: 120px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- nav start-->
+      <header-component></header-component>
+      <!-- nav end -->
+      <div class="container mt-5">
+        <div class="row" v-if="product">
+          <!-- 左側圖片區 -->
+          <div class="col-md-5 mb-4">
+            <div class="product-image-gallery">
+              <img
+                :src="selectedImage"
+                alt="Selected product image"
+                class="main-image img-fluid mb-3"
+              />
+              <div class="thumbnail-container d-flex justify-content-start">
+                <img
+                  v-for="(image, index) in productImages"
+                  :key="index"
+                  :src="image"
+                  :alt="`Thumbnail ${index + 1}`"
+                  class="thumbnail-image me-2"
+                  @click="selectImage(image)"
+                  :class="{ 'active': selectedImage === image }"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 右側商品資訊區 -->
+          <div class="col-md-6">
+            <h1 class="product-title">{{ product.name }}</h1>
+            <p class="product-brand">品牌: {{ product.brand }}</p>
+            <div class="product-price mb-3">
+              <span class="current-price"
+                >${{product.specs[0].sale + Number(selectedSpec?.value ??
+                0)}}</span
+              >
+              <span class="original-price" v-if="product.specs?.[0]?.price"
+                >${{ product.specs[0].price }}</span
+              >
+            </div>
+            <div class="product-description mb-3">
+              <p>{{ product.description }}</p>
+            </div>
+            <div class="product-specs mb-4">
+              <div>{{ product.specs[0].name}}</div>
+              <!-- <p><strong>硬碟:</strong> {{ selectedSpec.harddrive }}</p>
+              <p><strong>記憶體:</strong> {{ selectedSpec.memory }}</p>
+              <p><strong>顯示卡:</strong> {{ selectedSpec.gpu }}</p> -->
+
+              <!-- 规格选择器 -->
+              <div class="mb-3">
+                <label for="specSelect" class="form-label"
+                  ><strong>選擇規格:</strong></label
+                >
+                <select
+                  id="specSelect"
+                  class="form-select"
+                  v-model="selectedSpec"
+                  @change="updatePrice"
+                >
+                  <option :value="undefined">基本款</option>
+                  <option
+                    v-for="item in product.specs[0].skuItems"
+                    :key="item.key"
+                    :value="item"
+                  >
+                    配置： {{item.key}} / 價格： {{item.value}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="product-actions">
+              <button class="btn btn-primary btn-lg me-2" @click="addToCart">
+                加入購物車
+              </button>
+              <button
+                class="btn btn-outline-secondary btn-lg"
+                @click="addToWishlist"
+              >
+                加入收藏
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="text-center py-5">
+          <p class="lead">商品信息加載中或未找到該商品。</p>
+        </div>
+      </div>
+      <!-- footer start-->
+      <footer-component></footer-component>
+      <!-- footer end -->
+    </div>
+
+    <script type="module">
+        import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
+
+      const app = Vue.createApp({
+        data() {
+          return {
+            product: null,
+            selectedImage: "",
+            productImages: [],
+            selectedSpec: null, // 选中的规格
+          };
+        },
+        mounted() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const productId = urlParams.get("id");
+
+          // 从 localStorage 中获取商品数据
+          // const products = JSON.parse(localStorage.getItem("products"));
+          // 加载商品数据
+          fetch("/api/products")
+            .then((response) => response.json())
+            .then((products) => {
+              this.product = products.find((p) => p.id == productId);
+              if (this.product) {
+                this.selectedImage = this.product.image;
+                this.productImages = [
+                  this.product.image,
+                  "/image/a4.webp",
+                  "/image/a3.webp",
+                  // 添加更多图片
+                ];
+
+                // 设置默认规格为第一个规格
+                // if (this.product.specs && this.product.specs.length > 0) {
+                //   this.selectedSpec = this.product.specs[0].skuItems[0];
+                // }
+                this.selectedSpec = undefined;
+              } else {
+                alert("商品未找到");
+              }
+              // this.products = data;
+              // this.filteredProducts = data; // 初始化显示所有商品
+            })
+            .catch((error) => console.error("Error loading products:", error));
+
+          // if (products) {
+          //   // 匹配点击的商品
+
+          // } else {
+          //   alert("商品数据未加载");
+          // }
+        },
+
+        methods: {
+          selectImage(image) {
+            this.selectedImage = image;
+          },
+          updatePrice() {
+            // 更新价格和规格时，不需要额外操作，v-model 会自动处理
+          },
+          addToCart() {
+            const item = {
+              id: this.product.id,
+              name: this.product.name,
+              price: this.selectedSpec.price,
+              quantity: 1,
+              image: this.product.image,
+              spec: this.selectedSpec, // 保存选中的规格
+            };
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const existingItem = cart.find(
+              (cartItem) =>
+                cartItem.id === item.id && cartItem.spec === item.spec
+            );
+            if (existingItem) {
+              existingItem.quantity++;
+            } else {
+              cart.push(item);
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            alert("商品已加入購物車");
+            window.location.href = "/card03.html";
+          },
+          addToWishlist() {
+            alert("已加入收藏");
+          },
+        },
+      });
+
+      app.component("header-component", HeaderComponent);
+      app.component("footer-component", FooterComponent);
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>
