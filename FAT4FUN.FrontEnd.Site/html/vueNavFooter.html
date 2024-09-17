@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NavbarFooter元件範例</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="NavFooter.css" />
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="shared-components.js"></script>
+</head>
+  <body>
+    <div id="app">
+      <!-- nav start-->
+      <header-component></header-component>
+      <!-- nav end -->
+
+      <!-- footer start-->
+      <footer-component></footer-component>
+      <!-- footer end -->
+    </div>
+    <script>
+
+        // 创建 Vue 实例
+        const config = {
+            setup() {
+                return {};
+            }
+        };
+
+        const app = Vue.createApp(config);
+
+        // 注册 header 和 footer 组件
+        app.component('header-component', HeaderComponent);
+        app.component('footer-component', FooterComponent);
+
+        // 将 Vue 实例挂载到 #app
+        app.mount('#app');
+    </script>
+  </body>
+</html>
