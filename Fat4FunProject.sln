@@ -3,7 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT4FUN.FrontEnd.Site", "FAT4FUN.FrontEnd.Site\FAT4FUN.FrontEnd.Site.csproj", "{BE2F72EF-6B28-49BE-A5B4-D85631400652}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項目", "{6D233573-8719-43D7-8E9B-7B21FF1FC02F}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.txt = ReadMe.txt
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE2F72EF-6B28-49BE-A5B4-D85631400652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2F72EF-6B28-49BE-A5B4-D85631400652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2F72EF-6B28-49BE-A5B4-D85631400652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2F72EF-6B28-49BE-A5B4-D85631400652}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

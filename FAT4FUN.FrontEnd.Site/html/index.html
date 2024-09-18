@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fat4Fun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="NavFooter.css" />
+    <script src="/vue.global.js"></script>
+    <!--<script src="/shared-components.js"></script>-->
+    <style>
+        /* 调整第一個輪播的位置 */
+        #carouselExampleInterval {
+            margin-top: 40px; /* 根據導覽列的高度調整此值 */
+        }
+
+        .carousel-inner img {
+            width: 100%; /* 使圖片寬度填滿容器 */
+            height: auto; /* 保持圖片的高度按比例縮放 */
+            object-fit: cover; /* 使圖片按比例填滿容器 */
+        }
+
+        .carousel-caption {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            text-align: right;
+            right: 5%; /* 向右移动，调整这个值以控制具体的偏移量 */
+            left: auto; /* 确保 left 属性不干扰 */
+            bottom: 20%; /* 调整文字位置 */
+            right: 10%;
+            text-align: right;
+        }
+
+            .carousel-caption h1 {
+                font-size: 5rem;
+                font-weight: bold;
+                animation: neonGlow 2s infinite alternate;
+            }
+
+            .carousel-caption p {
+                font-size: 3rem;
+                animation: neonGlow 2s infinite alternate;
+            }
+
+            .carousel-caption .btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 2.5rem;
+                background-color: #ff0000; /* 红色背景 */
+                border: none;
+                box-shadow: 0 0 10px #ff0000;
+            }
+
+                .carousel-caption .btn:hover {
+                    background-color: #00ff00;
+                    box-shadow: 0 0 10px #00ff00;
+                }
+
+        /* 发光动画效果 */
+        @keyframes neonGlow {
+            0% {
+                text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00;
+            }
+
+            100% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000;
+            }
+        }
+
+        /* 隐藏左右控制按钮和默认的控制按钮 */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon,
+        .carousel-control-prev,
+        .carousel-control-next {
+            display: none;
+        }
+
+        /* 自定义圆点按钮样式 */
+        .carousel-indicators [data-bs-target] {
+            width: 15px;
+            height: 15px;
+            background-color: #00ff00; /* 霓虹绿色 */
+            border-radius: 50%;
+            box-shadow: 0 0 5px #00ff00; /* 霓虹灯发光效果 */
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-indicators .active {
+            background-color: #ff0000; /* 激活状态为红色 */
+            box-shadow: 0 0 10px #ff0000; /* 红色发光效果 */
+        }
+
+        /* 自定义按钮样式 */
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+            .carousel-control-prev:hover,
+            .carousel-control-next:hover {
+                background-color: rgba(0, 0, 0, 0.8); /* 鼠标悬停时的背景颜色 */
+            }
+
+            .carousel-control-prev::before,
+            .carousel-control-next::before {
+                content: "";
+                width: 20px;
+                height: 20px;
+                border: solid 3px #00ff00; /* 霓虹绿色的边框 */
+                border-radius: 50%;
+                box-shadow: 0 0 10px #00ff00; /* 发光效果 */
+            }
+        /* 隐藏第二个轮播的左右控制按钮 */
+        #carouselExampleInterval2 .carousel-control-prev,
+        #carouselExampleInterval2 .carousel-control-next {
+            display: none;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* 黑色覆盖层，带透明度 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+            .overlay .text {
+                color: white;
+                font-size: 5rem;
+                text-align: center;
+            }
+
+        .col-3:hover .overlay {
+            opacity: 1; /* 悬停时显示覆盖层 */
+        }
+
+        .pc {
+            margin-top: 100px;
+            padding-top: 100px;
+        }
+
+            .pc h1 {
+                font-size: 70px;
+                text-align: center;
+                color: white;
+                margin-bottom: 0;
+            }
+
+            .pc.mt-1 {
+                margin-top: 20px; /* 缩小 mt-5 类的上边距 */
+            }
+
+        .col-3 {
+            position: relative;
+            opacity: 1;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            flex: 0 0 25%;
+        }
+
+            .col-3:hover img {
+                transform: scale(1.05); /* 悬停时图片稍微放大 */
+            }
+
+            .col-3 img {
+                transition: transform 0.5s ease; /* 添加平滑的过渡效果 */
+            }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- nav start-->
+        <header-component></header-component>
+        <!-- nav end -->
+        <!-- carousel start -->
+        <!-- 第一個輪播 start -->
+        <div id="carouselExampleInterval"
+             class="carousel slide"
+             data-bs-ride="carousel">
+            <div class="pc mt-5">
+                <h1 class="mb-5">電競主機</h1>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="10000">
+                    <img src="image/ii1.jpg" class="d-block" alt="..." />
+                    <div class="carousel-caption">
+                        <h1>歡迎來到 Fat4Fun</h1>
+                        <p>探索我們的最新商品和優惠活動</p>
+                        <a href="#" class="btn btn-primary">立即購買</a>
+                    </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="image/ii2.jpg" class="d-block w-100" alt="..." />
+                    <div class="carousel-caption">
+                        <h1>歡迎來到 Fat4Fun</h1>
+                        <p>探索我們的最新商品和優惠活動</p>
+                        <a href="#" class="btn btn-primary">立即購買</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/ii3.jpg" class="d-block w-100" alt="..." />
+                    <div class="carousel-caption">
+                        <h1>歡迎來到 Fat4Fun</h1>
+                        <p>探索我們的最新商品和優惠活動</p>
+                        <a href="#" class="btn btn-primary">立即購買</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 左右按钮控制 start -->
+            <button class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#carouselExampleInterval"
+                    data-bs-slide="prev">
+                <img src="image/LOGO.jpg"
+                     alt="Previous"
+                     style="width: 50px; height: 50px" />
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#carouselExampleInterval"
+                    data-bs-slide="next">
+                <img src="image/LOGO.jpg"
+                     alt="Next"
+                     style="width: 50px; height: 50px" />
+                <span class="visually-hidden">Next</span>
+            </button>
+            <!-- 左右按钮控制 end -->
+        </div>
+        <!-- 第一個輪播 END -->
+
+        <div class="pc mt-1" style="margin-top: 20px">
+            <h1 class="mb-5">電競週邊</h1>
+        </div>
+
+        <!-- 第二個輪播 start -->
+        <div id="carouselExampleInterval2"
+             class="carousel slide"
+             data-bs-ride="false">
+            <div class="carousel-inner">
+                <div class="row">
+                    <div class="col-3 position-relative">
+                        <img src="image/a8.jpg" class="d-block w-100" alt="..." />
+                        <div class="overlay">
+                            <p class="text">硬碟</p>
+                        </div>
+                    </div>
+                    <div class="col-3 position-relative">
+                        <img src="image/a1.jpg" class="d-block w-100" alt="..." />
+                        <div class="overlay">
+                            <p class="text">記憶體</p>
+                        </div>
+                    </div>
+                    <div class="col-3 position-relative">
+                        <img src="image/a2.jpg" class="d-block w-100" alt="..." />
+                        <div class="overlay">
+                            <p class="text">處理器</p>
+                        </div>
+                    </div>
+                    <div class="col-3 position-relative">
+                        <img src="image/a3.jpg" class="d-block w-100" alt="..." />
+                        <div class="overlay">
+                            <p class="text">顯示卡</p>
+                        </div>
+                    </div>
+                    <div class="col-3 position-relative">
+                        <img src="image/a4.jpg" class="d-block w-100" alt="..." />
+                        <div class="overlay">
+                            <p class="text">耳機</p>
+                        </div>
+                    </div>
+                    <div class="col-3 position-relative">
+                        <img src="image/a5.jpg" class="d-block w-100" alt="..." />
+                        <div class="overlay">
+                            <p class="text">方向盤</p>
+                        </div>
+                    </div>
+                    <div class="col-3 position-relative">
+                        <img src="image/a6.jpg" class="d-block w-100" alt="..." />
+                        <div class="overlay">
+                            <p class="text">滑鼠</p>
+                        </div>
+                    </div>
+                    <div class="col-3 position-relative">
+                        <img src="image/a7.jpg" class="d-block w-100" alt="..." />
+                        <div class="overlay">
+                            <p class="text">鍵盤</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" id="prevBtn">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" id="nextBtn">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <!-- 第二個輪播 END -->
+        <!-- carousel end -->
+        <!-- footer start-->
+        <footer-component></footer-component>
+        <!-- footer end -->
+    </div>
+</body>
+
+    <scrip type="module">
+    // 创建 Vue 实例
+    const config = {
+        setup() {
+            return {};
+        },
+    };
+
+    const app = Vue.createApp();
+
+
+    import { HeaderComponent, FooterComponent } from "./shared-components.js";
+    app.component("header-component", HeaderComponent);
+    app.component("footer-component", FooterComponent);
+
+    // 将 Vue 实例挂载到 #app
+    app.mount("#app");
+</scrip>
+</html>
