@@ -6,7 +6,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Images
+    public partial class Image
     {
         public int Id { get; set; }
 
@@ -21,6 +21,6 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         public DateTime CreateDate { get; set; }
 
-        public virtual Products Products { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

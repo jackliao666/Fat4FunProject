@@ -189,10 +189,10 @@
                       <select id="priceSort"
                               class="form-select"
                               v-model="selectedPriceSort"
-                              @change="filterProducts">
-                          <option value="">默認排序</option>
-                          <option value="asc">價格：低到高</option>
-                          <option value="desc">價格：高到低</option>
+                              @change="filterProducts">          
+                          <option value="name">默認排序</option>
+                          <option value="price_asc">價格：低到高</option>
+                          <option value="price_desc">價格：高到低</option>
                       </select>
                   </div>
                   <div class="col-md-2">
@@ -201,10 +201,11 @@
                               v-model="selectedBrand"
                               @change="filterProducts">
                           <option value="">所有品牌</option>
-                          <option value="ASUS">ASUS-華碩</option>
-                          <option value="MSI">MSI-微星</option>
-                          <option value="ACER">ACER-宏碁</option>
-                          <option value="GIGABYTE">GIGABYTE-技嘉</option>
+                          <option value="華碩">ASUS-華碩</option>
+                          <option value="微星">MSI-微星</option>
+                          <option value="宏碁">ACER-宏碁</option>
+                          <option value="技嘉">GIGABYTE-技嘉</option>
+                      
                       </select>
                   </div>
                   <div class="col-md-2">
@@ -246,7 +247,7 @@
                           <p class="card-text">{{ product.description }}</p>
                           <p class="card-brand">品牌: {{ product.brand }}</p>
 
-                          <!-- 使用规格中的第一个价格 -->
+                          
                           <p class="card-price">價格: ${{ product.specs[0].price }}</p>
 
                           <!-- 顯示默認規格 -->
@@ -265,7 +266,7 @@
                       <li class="page-item" :class="{ disabled: currentPage === 1 }">
                           <a class="page-link"
                              href="#"
-                             @click.prevent="setCurrentPage(currentPage - 1)">Previous</a>
+                             @click.prevent="setCurrentPage(currentPage - 1)">上一頁</a>
                       </li>
                       <li class="page-item"
                           v-for="page in totalPages"
@@ -279,7 +280,7 @@
                           :class="{ disabled: currentPage === totalPages }">
                           <a class="page-link"
                              href="#"
-                             @click.prevent="setCurrentPage(currentPage + 1)">Next</a>
+                             @click.prevent="setCurrentPage(currentPage + 1)">下一頁</a>
                       </li>
                   </ul>
               </nav>
@@ -293,30 +294,31 @@
                   return {
                       selectedSubcategory: "",
                       selectedBrand: "",
-                      selectedPriceSort: "",
+                      selectedPriceSort: "name",
                       minPrice: null,
                       maxPrice: null,
                       selectedCategory: "",
                       selectedSubCategory: "",
                       subOptions: [],
-                      series: [], // 分类系列数据
-                      products: [], // 全部商品数据
-                      filteredProducts: [], // 已过滤的商品数据
-                      currentPage: 1, // 当前页码
-                      itemsPerPage: 10, // 每页显示商品数量
+                      series: [], // 分類系列數據
+                      products: [], // 全部商品數據
+                      filteredProducts: [], // 已過濾商品數據
+                      currentPage: 1, // 當前頁碼
+                      itemsPerPage: 10, // 每頁顯示商品數量
                   };
               },
               mounted() {
-                  // 加载商品数据
-                  fetch("/api/products")
+                  // 加載商品數據
+                 
+                  fetch("/api/products/GetProducts?categoryName=PC")
                       .then((response) => response.json())
                       .then((data) => {
                           this.products = data;
-                          this.filteredProducts = data; // 初始化显示所有商品
+                          this.filteredProducts = data; // 初始化顯示所有商品               
                       })
                       .catch((error) => console.error("Error loading products:", error));
 
-                  // 加载系列数据
+                  // 加載系列數據
                   fetch("series.json")
                       .then((response) => response.json())
                       .then((data) => {
@@ -325,13 +327,13 @@
                       .catch((error) => console.error("Error loading series:", error));
               },
               computed: {
-                  // 返回当前页显示的商品
+                  // 返回當前顯示的商品
                   paginatedProducts() {
                       const start = (this.currentPage - 1) * this.itemsPerPage;
                       const end = start + this.itemsPerPage;
                       return this.filteredProducts.slice(start, end);
                   },
-                  // 计算总页数
+                 //計算總頁數
                   totalPages() {
                       return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
                   },
@@ -344,16 +346,16 @@
 
                   updateSubOptions() {
                       if (this.selectedCategory === "harddrive") {
-                          this.subOptions = ["1TB", "2TB", "4TB"];
+                          this.subOptions = ["1T", "2T", "4T"];
                       } else if (this.selectedCategory === "memory") {
                           this.subOptions = ["8G", "16G", "32G"];
                       } else if (this.selectedCategory === "gpu") {
-                          this.subOptions = ["RTX3060", "RTX4060", "RTX4070", "RTX4080"];
+                          this.subOptions = ["RTX3060", "RTX3070", "RTX3080"];
                       } else {
                           this.subOptions = [];
                       }
-                      this.selectedSubCategory = ""; // 重置已选择的子类别
-                      this.filterProducts(); // 调用过滤函数重新筛选商品
+                      this.selectedSubCategory = ""; 
+                      this.filterProducts(); 
                   },
 
                   filterProducts() {
@@ -378,21 +380,77 @@
                                       spec[categoryKey] === this.selectedSubCategory;
                               }
 
-                              return matchesMinPrice && matchesMaxPrice && matchesSubCategory;
+
+                              // 檢查是否需要 Intel 或 AMD 特定的過濾
+                              const isIntel = this.series.some(series => series.name === "Intel");
+                              const isAMD = this.series.some(series => series.name === "AMD");
+
+                              if (isIntel && this.selectedSubcategory === "Intel") {
+                                  return matchesMinPrice && matchesMaxPrice && matchesSubCategory && spec.specifications.includes("I");
+                              } else if (isAMD && this.selectedSubcategory === "AMD") {
+                                  return matchesMinPrice && matchesMaxPrice && matchesSubCategory && spec.specifications.includes("R");
+                              } else {
+                                  return matchesMinPrice && matchesMaxPrice && matchesSubCategory;
+                              }
                           });
 
                           return matchesSubcategory && matchesBrand && matchesSpecs;
                       });
+                     
 
                       // 根据价格排序
-                      if (this.selectedPriceSort === "asc") {
-                          products.sort((a, b) => a.specs[0].price - b.specs[0].price);
-                      } else if (this.selectedPriceSort === "desc") {
-                          products.sort((a, b) => b.specs[0].price - a.specs[0].price);
-                      }
+                      //if (this.selectedPriceSort === "price_asc") {
+                      //    products.sort((a, b) => a.specs[0].price - b.specs[0].price);
+                      //} else if (this.selectedPriceSort === "price_desc") {
+                      //    products.sort((a, b) => b.specs[0].price - a.specs[0].price);
+                      //}
+                      // 處理排序
+                      //if (this.selectedPriceSort === "price_asc") {
+                      //    products.sort((a, b) => a.specs[0].price - b.specs[0].price);
+                      //} else if (this.selectedPriceSort === "price_desc") {
+                      //    products.sort((a, b) => b.specs[0].price - a.specs[0].price);
+                      //} else {
+                      //    // 默認排序：根據產品名稱排序
+                      //    products.sort((a, b) => a.name.localeCompare(b.name));
+                      //}
+                      
 
-                      this.filteredProducts = products;
+                      const categoryName = "PC";
+                      const brand = this.selectedBrand;
+                      const maxPrice = this.maxPrice;
+                      const minPrice = this.minPrice;
+                      const category = this.selectedCategory;
+                      const subCategory = this.selectedSubCategory;
+                      const sortPrice = this.selectedPriceSort;
+
+                      // 創建一個包含所有參數的對象
+                      const params = {
+                          brand: brand,
+                          categoryName: categoryName,
+                          maxPrice: maxPrice,
+                          minPrice: minPrice,
+                          key: category,
+                          value: subCategory,
+                          sort:sortPrice
+                      };
+
+                      // 將有效的參數轉換成查詢字串
+                      const queryString = Object.keys(params)
+                          .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '') // 過濾掉未定義、null 和空字串的參數
+                          .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`) // 將有效參數轉換成查詢參數
+                          .join('&');
+
+                      // 發送帶有動態查詢參數的請求
+                      fetch(`/api/products/GetProducts?${queryString}`)
+                          .then((response) => response.json())
+                          .then((data) => {
+                              this.products = data;
+                              this.filteredProducts = data;               
+                          })
+                          .catch((error) => console.error("Error loading products:", error));
                   },
+
+
 
                   setCurrentPage(page) {
                       if (page >= 1 && page <= this.totalPages) {
@@ -404,12 +462,21 @@
                       window.location.href = `PcDetail.html?id=${productId}`;
                   },
 
-                  // 搜索关键字过滤
+                  
                   handleSearch(query) {
                       if (query) {
-                          this.filteredProducts = this.products.filter((product) =>
-                              product.name.toLowerCase().includes(query.toLowerCase())
-                          );
+                          this.filteredProducts = this.products.filter((product) => {
+                              // 檢查產品名稱是否包含搜尋關鍵字
+                              const matchesName = product.name.toLowerCase().includes(query.toLowerCase());
+
+                              // 檢查產品的任意規格是否包含搜尋關鍵字
+                              const matchesSpecs = product.specs.some((spec) =>
+                                  spec.name.toLowerCase().includes(query.toLowerCase())
+                              );
+
+                              // 只要名稱或規格匹配就返回 true
+                              return matchesName || matchesSpecs;
+                          });
                       } else {
                           this.filteredProducts = this.products;
                       }

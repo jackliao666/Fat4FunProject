@@ -8,21 +8,18 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Data.Entity;
 
-
 namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 {
-	
-	public class ProductsApiController : ApiController
-	{
+
+	public class DevicesApiController : ApiController
+    {
 		private AppDbContext db = new AppDbContext();
 
-		// GET: api/Products
-		[Route("api/products/GetProducts")]
+		[Route("api/device/GetProducts")]
 		[HttpGet]
-		public IHttpActionResult GetProducts(int? maxPrice = null, int? minPrice = null, string brand = null,
-			string categoryName = null, string key = null, string value = null,string sort = null)
-		{
-				var products = db.Products
+		public IHttpActionResult GetProduct(int? maxPrice = null, int? minPrice = null, string brand = null, string categoryName = null, string key = null, string value = null)
+        {
+			var products = db.Products
 				.Include(p => p.Brand)
 				.Include(p => p.ProductCategory)
 				.Include(p => p.ProductSkus.Select(s => s.SkuItems))
@@ -42,7 +39,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 						Price = s.Price,
 						Sale = s.Sale,
 						SkuItems = s.SkuItems.Select(i => new SkuItemVm
-						{ 
+						{
 							Key = i.key,
 							Value = i.value,
 							SkuPrice = i.Price
@@ -70,25 +67,8 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 			{
 				products = products.Where(p => p.Specs.Any(s => s.Price >= minPrice.Value)).ToList();
 			}
-			// 排序邏輯
-			if (string.IsNullOrEmpty(sort) || sort == "name")
-			{
-				// 默認按照名稱排序
-				products = products.OrderBy(p => p.Name).ToList();
-			}
-			else if (sort == "price_asc")
-			{
-				// 按價格升序排序
-				products = products.OrderBy(p => p.Specs.Min(s => s.Price)).ToList();
-			}
-			else if (sort == "price_desc")
-			{
-				// 按價格降序排序
-				products = products.OrderByDescending(p => p.Specs.Max(s => s.Price)).ToList();
-			}
+
 			return Ok(products);
-			
-			
 		}
-	}
+    }
 }

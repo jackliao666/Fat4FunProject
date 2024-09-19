@@ -12,43 +12,38 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 		{
 		}
 
-		public virtual DbSet<Brands> Brands { get; set; }
-		public virtual DbSet<Images> Images { get; set; }
-		public virtual DbSet<ProductCategories> ProductCategories { get; set; }
-		public virtual DbSet<Products> Products { get; set; }
-		public virtual DbSet<ProductSkus> ProductSkus { get; set; }
-		public virtual DbSet<SkuItems> SkuItems { get; set; }
+		public virtual DbSet<Brand> Brands { get; set; }
+		public virtual DbSet<Image> Images { get; set; }
+		public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+		public virtual DbSet<Product> Products { get; set; }
+		public virtual DbSet<ProductSku> ProductSkus { get; set; }
+		public virtual DbSet<SkuItem> SkuItems { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Brands>()
+			modelBuilder.Entity<Brand>()
 				.HasMany(e => e.Products)
-				.WithRequired(e => e.Brands)
-				.HasForeignKey(e => e.BrandId)
+				.WithRequired(e => e.Brand)
 				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<ProductCategories>()
+			modelBuilder.Entity<ProductCategory>()
 				.HasMany(e => e.Products)
-				.WithRequired(e => e.ProductCategories)
-				.HasForeignKey(e => e.ProductCategoryId)
+				.WithRequired(e => e.ProductCategory)
 				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<Products>()
+			modelBuilder.Entity<Product>()
 				.HasMany(e => e.Images)
-				.WithRequired(e => e.Products)
-				.HasForeignKey(e => e.ProductId)
+				.WithRequired(e => e.Product)
 				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<Products>()
+			modelBuilder.Entity<Product>()
 				.HasMany(e => e.ProductSkus)
-				.WithRequired(e => e.Products)
-				.HasForeignKey(e => e.ProductId)
+				.WithRequired(e => e.Product)
 				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<ProductSkus>()
+			modelBuilder.Entity<ProductSku>()
 				.HasMany(e => e.SkuItems)
-				.WithRequired(e => e.ProductSkus)
-				.HasForeignKey(e => e.ProductSkuId)
+				.WithRequired(e => e.ProductSku)
 				.WillCascadeOnDelete(false);
 		}
 	}

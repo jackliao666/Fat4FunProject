@@ -160,12 +160,10 @@
             <p class="product-brand">品牌: {{ product.brand }}</p>
             <div class="product-price mb-3">
               <span class="current-price"
-                >${{product.specs[0].sale + Number(selectedSpec?.value ??
+                >${{product.specs[0].sale + Number(selectedSpec?.skuPrice ??
                 0)}}</span
               >
-              <span class="original-price" v-if="product.specs?.[0]?.price"
-                >${{ product.specs[0].price }}</span
-              >
+              <span class="original-price" v-if="product.specs?.[0]?.price">${{ product.specs[0].price }}</span>
             </div>
             <div class="product-description mb-3">
               <p>{{ product.description }}</p>
@@ -188,12 +186,10 @@
                   @change="updatePrice"
                 >
                   <option :value="undefined">基本款</option>
-                  <option
-                    v-for="item in product.specs[0].skuItems"
-                    :key="item.key"
-                    :value="item"
-                  >
-                    配置： {{item.key}} / 價格： {{item.value}}
+                  <option v-for="item in product.specs[0].skuItems"
+                          :key="item.value"
+                          :value="item">
+                      配置： {{item.value}} / 價格： {{item.skuPrice}}
                   </option>
                 </select>
               </div>
@@ -240,7 +236,7 @@
           // 从 localStorage 中获取商品数据
           // const products = JSON.parse(localStorage.getItem("products"));
           // 加载商品数据
-          fetch("/api/products")
+            fetch("/api/products/GetProducts")
             .then((response) => response.json())
             .then((products) => {
               this.product = products.find((p) => p.id == productId);
@@ -278,39 +274,43 @@
           selectImage(image) {
             this.selectedImage = image;
           },
-          updatePrice() {
+            updatePrice() {
+                
             // 更新价格和规格时，不需要额外操作，v-model 会自动处理
           },
-          addToCart() {
-            const item = {
-              id: this.product.id,
-              name: this.product.name,
-              price: this.selectedSpec.price,
-              quantity: 1,
-              image: this.product.image,
-              spec: this.selectedSpec, // 保存选中的规格
-            };
+              addToCart() {
+                  const total =
+                      this.product.specs[0].sale +
+                      Number(this.selectedSpec?.value ?? 0);
+                  const item = {
+                      id: this.product.id,
+                      name: this.product.name,
+                      price: total,
+                      quantity: 1,
+                      image: this.product.image,
+                      spec: this.selectedSpec, // 保存选中的规格
+                  };
+                  console.log(item);
+                  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                  const existingItem = cart.find(
+                      (cartItem) =>
+                          cartItem.id === item.id && cartItem.spec === item.spec
+                  );
+                  if (existingItem) {
+                      existingItem.quantity++;
+                  } else {
+                      cart.push(item);
+                  }
 
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
-            const existingItem = cart.find(
-              (cartItem) =>
-                cartItem.id === item.id && cartItem.spec === item.spec
-            );
-            if (existingItem) {
-              existingItem.quantity++;
-            } else {
-              cart.push(item);
-            }
+                  localStorage.setItem("cart", JSON.stringify(cart));
 
-            localStorage.setItem("cart", JSON.stringify(cart));
-
-            alert("商品已加入購物車");
-            window.location.href = "/card03.html";
+                  alert("商品已加入購物車");
+                  // window.location.href = "/card03.html";
+              },
+              addToWishlist() {
+                  alert("已加入收藏");
+              },
           },
-          addToWishlist() {
-            alert("已加入收藏");
-          },
-        },
       });
 
       app.component("header-component", HeaderComponent);
