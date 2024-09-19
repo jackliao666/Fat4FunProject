@@ -39,8 +39,8 @@ const HeaderComponent = {
             <li class="nav-item col-3">
               <a
                 class="nav-link"
-                :class="{'active-link': isActiveLink('#')}"
-                href="#"
+                :class="{'active-link': isActiveLink('Hots.html')}"
+                href="Hots.html"
                 >熱門商品</a
               >
             </li>

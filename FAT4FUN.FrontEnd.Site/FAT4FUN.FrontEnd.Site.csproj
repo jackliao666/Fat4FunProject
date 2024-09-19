@@ -215,6 +215,7 @@
     <Content Include="html\card03.html" />
     <Content Include="html\Devices.html" />
     <Content Include="html\DevicesDetail.html" />
+    <Content Include="html\Hots.html" />
     <Content Include="html\image\a1.jpg" />
     <Content Include="html\image\a1.webp" />
     <Content Include="html\image\a2.jpg" />
