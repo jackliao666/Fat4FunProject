@@ -11,8 +11,8 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="NavFooter.css" />
-    <script src="https://unpkg.com/vue@3"></script>
-    <script src="shared-components.js"></script>
+    <script src="../Scripts/vue.global.js"></script>
+    
 </head>
   <body>
     <div id="app">
@@ -24,8 +24,8 @@
       <footer-component></footer-component>
       <!-- footer end -->
     </div>
-    <script>
-
+    <script type="module">
+        import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
         // 创建 Vue 实例
         const config = {
             setup() {
