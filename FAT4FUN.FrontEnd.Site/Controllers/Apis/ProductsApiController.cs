@@ -20,7 +20,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 		[Route("api/products/GetProducts")]
 		[HttpGet]
 		public IHttpActionResult GetProducts(int? maxPrice = null, int? minPrice = null, string brand = null,
-			string categoryName = null, string key = null, string value = null,string sort = null)
+			string categoryName = null, string key = null, string value = null,string sort = null,string accordion = null)
 		{
 				var products = db.Products
 				.Include(p => p.Brand)
@@ -86,6 +86,20 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 				// 按價格降序排序
 				products = products.OrderByDescending(p => p.Specs.Max(s => s.Price)).ToList();
 			}
+			if (!string.IsNullOrEmpty(accordion))
+			{
+				if (accordion.Equals("INTEL", StringComparison.OrdinalIgnoreCase))
+				{
+					// 筛选规格中 value 以 "I" 开头的产品（INTEL 系列）
+					products = products.Where(p => p.Specs.Any(s => s.SkuItems.Any(i => i.Value.StartsWith("I")))).ToList();
+				}
+				else if (accordion.Equals("AMD", StringComparison.OrdinalIgnoreCase))
+				{
+					// 筛选规格中 value 以 "R" 开头的产品（AMD 系列）
+					products = products.Where(p => p.Specs.Any(s => s.SkuItems.Any(i => i.Value.StartsWith("R")))).ToList();
+				}
+			}
+
 			return Ok(products);
 			
 			

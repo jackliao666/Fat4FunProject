@@ -78,16 +78,17 @@
         gap: 1.5rem;
         padding: 1.5rem;
       }
-      .card {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        border: none;
-        border-radius: 8px;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* 在鼠标悬停时显示手指 */
+        }
       .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -124,10 +125,28 @@
         font-weight: bold;
         color: #28a745;
       }
-      .btn-add-to-cart {
+        /* 愛心按鈕樣式 */
+        .btn-wishlist {
+            padding: 0.25rem 0.5rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc3545; /* 愛心按鈕紅色 */
+            border-color: #dc3545;
+            
+        }
+
+        /* 加入購物車按鈕樣式 */
+        .btn-add-to-cart {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+            
+        }
+      /*.btn-add-to-cart {
         width: 100%;
         margin-top: 0.5rem;
-      }
+      }*/
       .pagination {
         margin-top: auto;
       }
@@ -148,8 +167,8 @@
                               :data-bs-target="'#collapse' + index"
                               aria-expanded="false"
                               :aria-controls="'collapse' + index"
-                              @click="selectedAccordion = index"
-                              :class="{'active-accordion': selectedAccordion === index}">
+                              @click="setAccordion(item.name)"
+                              :class="{'active-accordion': selectedAccordion === item.name}">
                           {{ item.name }}
                       </button>
                   </h2>
@@ -159,14 +178,14 @@
                       <div class="accordion-body">
                           <ul>
                               <li v-for="sub in item.subcategories" :key="sub.name">
-                                  <a href="#" @click="filterBySubcategory(sub.name)">{{ sub.name }}</a>
+                                  <a href="#"@click="setAccordion(sub.name)">{{ sub.name }}</a>
                               </li>
                           </ul>
                       </div>
                   </div>
               </div>
           </div>
-
+          
           <div class="content">
               <div class="row mb-3">
                   <div class="col-md-2">
@@ -253,11 +272,20 @@
                           <!-- 顯示默認規格 -->
                           <p class="card-specs">規格: {{ product.specs[0].name }}</p>
 
-                          <button class="btn btn-primary btn-add-to-cart"
-                                  @click.stop="addToCart(product)">
-                              加入購物車
-                          </button>
-                      </div>
+                          <div class="d-flex justify-content-between ">
+                              <!-- 愛心按鈕 -->
+                              <button class="btn btn-outline-danger btn-wishlist me-3" @click.stop="addToWishlist">
+                                  <i class="fas fa-heart"></i>
+                              </button>
+
+                              <!-- 加入購物車按鈕 -->
+                             
+                                  <button class="btn btn-primary btn-add-to-cart " @click.stop="addToCart(product)">
+                                      加入購物車
+                                  </button>
+                                
+                              </div>
+                          </div>
                   </div>
               </div>
 
@@ -299,6 +327,7 @@
                       maxPrice: null,
                       selectedCategory: "",
                       selectedSubCategory: "",
+                      selectedAccordion:"",
                       subOptions: [],
                       series: [], // 分類系列數據
                       products: [], // 全部商品數據
@@ -339,10 +368,21 @@
                   },
               },
               methods: {
+                  setAccordion(seriesName) {
+                      if (seriesName.includes("INTEL系列")) {
+                          this.selectedAccordion = "INTEL";
+                      } else if (seriesName.includes("AMD系列")) {
+                          this.selectedAccordion = "AMD";
+                      } else {
+                          this.selectedAccordion = null;
+                      }
+                      this.filterProducts(); // 触发过滤，获取符合条件的产品
+                  },
                   filterBySubcategory(subcategory) {
                       this.selectedSubcategory = subcategory;
                       this.filterProducts();
                   },
+                  
 
                   updateSubOptions() {
                       if (this.selectedCategory === "harddrive") {
@@ -381,17 +421,7 @@
                               }
 
 
-                              // 檢查是否需要 Intel 或 AMD 特定的過濾
-                              const isIntel = this.series.some(series => series.name === "Intel");
-                              const isAMD = this.series.some(series => series.name === "AMD");
-
-                              if (isIntel && this.selectedSubcategory === "Intel") {
-                                  return matchesMinPrice && matchesMaxPrice && matchesSubCategory && spec.specifications.includes("I");
-                              } else if (isAMD && this.selectedSubcategory === "AMD") {
-                                  return matchesMinPrice && matchesMaxPrice && matchesSubCategory && spec.specifications.includes("R");
-                              } else {
-                                  return matchesMinPrice && matchesMaxPrice && matchesSubCategory;
-                              }
+                              
                           });
 
                           return matchesSubcategory && matchesBrand && matchesSpecs;
@@ -422,6 +452,7 @@
                       const category = this.selectedCategory;
                       const subCategory = this.selectedSubCategory;
                       const sortPrice = this.selectedPriceSort;
+                      const accordion = this.selectedAccordion;
 
                       // 創建一個包含所有參數的對象
                       const params = {
@@ -431,7 +462,8 @@
                           minPrice: minPrice,
                           key: category,
                           value: subCategory,
-                          sort:sortPrice
+                          sort: sortPrice,
+                          accordion: this.selectedAccordion
                       };
 
                       // 將有效的參數轉換成查詢字串
@@ -439,7 +471,7 @@
                           .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '') // 過濾掉未定義、null 和空字串的參數
                           .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`) // 將有效參數轉換成查詢參數
                           .join('&');
-
+                      console.log(accordion)
                       // 發送帶有動態查詢參數的請求
                       fetch(`/api/products/GetProducts?${queryString}`)
                           .then((response) => response.json())
@@ -481,7 +513,47 @@
                           this.filteredProducts = this.products;
                       }
                   },
+                  addToCart(product) {
+                      const total = product.specs[0].sale; // 獲取specs[0].sale
+                      const item = {
+                          id: product.id,
+                          name: product.name,
+                          price: total, // 使用 sale 作為價格
+                          quantity: 1,
+                          image: product.image,
+                          spec:product.specs[0].name
+                           
+                      };
+                      
+
+                      // 獲得本地存儲的購物車
+                      
+                      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                     
+
+                      // 檢查購物車中中是否已经有相同商品和相同規格
+                      const existingItem = cart.find(
+                          (cartItem) =>
+                              cartItem.id === item.id && cartItem.spec === item.spec
+                      );
+
+                      if (existingItem) {
+                          existingItem.quantity++; // 如果存在相同商品，就增加數量
+                      } else {
+                          cart.push(item); // 如果不存在，則新增該商品到購物車
+                      }
+                      
+                      // 將更新後的購物車保存到本地存儲
+                      localStorage.setItem("cart", JSON.stringify(cart));
+                     
+                      alert("商品已加入購物車");
+                  },
+                  addToWishlist() {
+                      alert("已加入收藏");
+                  },
+              
               },
+
           });
 
           app.component("header-component", HeaderComponent);
