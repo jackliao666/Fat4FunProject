@@ -13,7 +13,9 @@ JK
 	add ../ViewModels/BrandVm,ImageVm,ProductCategoryVm,
 		ProductSkuVm, ProductVm,SkuItemVm	
 	add Index.html,Pc.html,PcDetail.html, Device.html,
-		DeviceDetail.html,card03.html,vueNavFooter.html,Hots.html
+		DeviceDetail.html,card03.html,vueNavFooter.html,Hots.html,
+		Login.html,forgot the password.html,rest-password.html,Sign Up.html,
+		verify-code.html
     add series.json
 
 

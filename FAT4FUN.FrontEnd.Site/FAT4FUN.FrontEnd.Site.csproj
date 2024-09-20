@@ -212,6 +212,11 @@
     <Content Include="Content\NavFooter.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="html\Login.html" />
+    <Content Include="html\forget the password.html" />
+    <Content Include="html\verify-code.html" />
+    <Content Include="html\reset-password.html" />
+    <Content Include="html\Sign up.html" />
     <Content Include="html\card03.html" />
     <Content Include="html\Devices.html" />
     <Content Include="html\DevicesDetail.html" />
@@ -238,6 +243,7 @@
     <Content Include="html\image\bg1.webp" />
     <Content Include="html\image\bg2.jpg" />
     <Content Include="html\image\bg2.webp" />
+    <Content Include="html\image\bgm-monkey.jpg" />
     <Content Include="html\image\cart.jpg" />
     <Content Include="html\image\ii1.jpg" />
     <Content Include="html\image\ii1.webp" />

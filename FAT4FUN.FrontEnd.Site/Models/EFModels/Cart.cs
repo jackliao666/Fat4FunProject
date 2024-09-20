@@ -12,11 +12,11 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         public int? UserId { get; set; }
 
-        public int ProuctsId { get; set; }
+        public int ProductSkuId { get; set; }
 
         public int Qty { get; set; }
 
-        public virtual Product Product { get; set; }
+        public virtual ProductSku ProductSku { get; set; }
 
         public virtual User User { get; set; }
     }

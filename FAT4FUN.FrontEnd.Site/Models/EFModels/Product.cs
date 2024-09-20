@@ -11,10 +11,8 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Product()
         {
-            Carts = new HashSet<Cart>();
             Images = new HashSet<Image>();
             MemberFollowLists = new HashSet<MemberFollowList>();
-            OrderItems = new HashSet<OrderItem>();
             ProductSkus = new HashSet<ProductSku>();
         }
 
@@ -42,16 +40,10 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         public virtual Brand Brand { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cart> Carts { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Image> Images { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MemberFollowList> MemberFollowLists { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
 
         public virtual ProductCategory ProductCategory { get; set; }
 

@@ -90,7 +90,7 @@ const HeaderComponent = {
           <a href="Member.html" class="ms-5 btn btn-link">
             <i class="bi bi-person-circle"></i>
           </a>
-          <a href="Register.html" class="ms-5 btn btn-link">
+          <a href="Login.html" class="ms-5 btn btn-link">
             <i class="bi bi-box-arrow-in-right"></i>
           </a>
           <a href="card03.html" class="ms-5 btn btn-link">
