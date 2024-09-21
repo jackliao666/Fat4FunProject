@@ -184,7 +184,9 @@
     <Compile Include="Models\EFModels\sysdiagram.cs" />
     <Compile Include="Models\EFModels\User.cs" />
     <Compile Include="Models\ViewModels\BrandVm.cs" />
+    <Compile Include="Models\ViewModels\CartVm.cs" />
     <Compile Include="Models\ViewModels\ImageVm.cs" />
+    <Compile Include="Models\ViewModels\MemberFollowListVm.cs" />
     <Compile Include="Models\ViewModels\ProductCategoryVm.cs" />
     <Compile Include="Models\ViewModels\ProductSkuVm.cs" />
     <Compile Include="Models\ViewModels\ProductVm.cs" />
