@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fat4Fun-Hots</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="../Content/NavFooter.css" />
+    <script src="../Scripts/vue.global.js"></script>
+    <style>
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 固定为5列 */
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding: 1rem;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+            color: #6c757d;
+            flex-grow: 1;
+        }
+
+        .card-brand,
+        .card-price {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-brand {
+            color: #007bff;
+        }
+
+        .card-price {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .btn-wishlist {
+            padding: 0.25rem 0.5rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-add-to-cart {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+  
+  <body>
+      <div id="app">
+          <!-- nav start-->
+          <header-component></header-component>
+          <!-- nav end -->
+          <!-- 热门商品展示 -->
+          <div class="card-container " style="margin-top: 150px; ">
+              <div class="card"
+                   v-for="product in paginatedProducts"
+                   :key="product.id"
+                   @click="goToPcDetail(product.id)">
+                  <img :src="product.image" class="card-img-top" :alt="product.name" />
+                  <div class="card-body">
+                      <h5 class="card-title">{{ product.name }}</h5>
+                      <p class="card-text">{{ product.description }}</p>
+                      <p class="card-brand">品牌: {{ product.brand }}</p>
+                      <p class="card-price">價格: ${{ product.specs[0].price }}</p>
+                      <p class="card-specs">規格: {{ product.specs[0].name }}</p>
+                      <div class="d-flex justify-content-between ">
+                          <!-- 愛心按鈕 -->
+                          <button class="btn btn-outline-danger btn-wishlist me-3" @click.stop="addToWishlist">
+                              <i class="fas fa-heart"></i>
+                          </button>
+
+                          <!-- 加入購物車按鈕 -->
+
+                          <button class="btn btn-primary btn-add-to-cart " @click.stop="addToCart(product)">
+                              加入購物車
+                          </button>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
+          <!-- footer start-->
+          <footer-component></footer-component>
+          <!-- footer end -->
+      </div>
+
+    <script type="module">
+        import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
+
+      const app = Vue.createApp({
+        data() {
+          return {
+            products: [], // 存储热门商品
+            filteredProducts: [],
+            currentPage: 1,
+            pageSize: 10,
+          };
+        },
+        mounted() {
+          this.fetchTopProducts(); // 获取热门商品
+        },
+        computed: {
+          paginatedProducts() {
+            const start = (this.currentPage - 1) * this.pageSize;
+            const end = start + this.pageSize;
+            return this.filteredProducts.slice(start, end);
+          },
+          totalPages() {
+            return Math.ceil(this.filteredProducts.length / this.pageSize);
+          },
+        },
+        methods: {
+          fetchTopProducts() {
+            fetch("/api/products/GetTopProducts")
+              .then((response) => response.json())
+              .then((data) => {
+                this.products = data;
+                this.filteredProducts = data;
+              })
+              .catch((error) =>
+                console.error("Error loading top products:", error)
+              );
+          },
+          goToPcDetail(productId) {
+            window.location.href = `PcDetail.html?id=${productId}`;
+          },
+          addToCart(product) {
+            const item = {
+              id: product.id,
+              name: product.name,
+              price: product.specs[0].price,
+              quantity: 1,
+            };
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.push(item);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert("商品已加入購物車");
+          },
+          addToWishlist() {
+            alert("已加入收藏清單");
+          },
+        },
+      });
+
+      app.component("header-component", HeaderComponent);
+      app.component("footer-component", FooterComponent);
+      app.mount("#app");
+    </script>
+  </body>
+</html>

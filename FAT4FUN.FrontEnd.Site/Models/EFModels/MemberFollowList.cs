@@ -10,7 +10,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
     {
         public int Id { get; set; }
 
-        public int MemberId { get; set; }
+        public int UserId { get; set; }
 
         public int ProductId { get; set; }
 
@@ -19,5 +19,9 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         public string Name { get; set; }
 
         public DateTime CreateDate { get; set; }
+
+        public virtual Product Product { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

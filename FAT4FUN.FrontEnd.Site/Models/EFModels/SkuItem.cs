@@ -20,6 +20,8 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         [StringLength(50)]
         public string value { get; set; }
 
+        public int? Price { get; set; }
+
         public virtual ProductSku ProductSku { get; set; }
     }
 }

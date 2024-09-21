@@ -1,0 +1,31 @@
+[
+  {
+    "name": "華碩 ASUS",
+    "subcategories": [
+      { "name": "INTEL系列" },
+      { "name": "AMD系列" }
+      
+    ]
+  },
+  {
+    "name": "技嘉 GIGABYTE",
+    "subcategories": [
+      { "name": "INTEL系列" },
+      { "name": "AMD系列" }
+    ]
+  },
+  {
+    "name": "微星 MSI",
+    "subcategories": [
+      { "name": "INTEL系列" },
+      { "name": "AMD系列" }
+    ]
+  },
+  {
+    "name": "宏碁 ACER",
+    "subcategories": [
+      { "name": "INTEL系列" },
+      { "name": "AMD系列" }
+    ]
+  }
+]

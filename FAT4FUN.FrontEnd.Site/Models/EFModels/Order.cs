@@ -16,7 +16,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         public int Id { get; set; }
 
-        public int MemberId { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -36,8 +36,6 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         [StringLength(50)]
         public string ShippingAddress { get; set; }
 
-        public bool Invoice { get; set; }
-
         public bool Status { get; set; }
 
         public DateTime CreateDate { get; set; }
@@ -46,5 +44,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderItem> OrderItems { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="FAT4FUN.BackEnd.Site.WebApiApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="FAT4FUN.BackEnd.Site.MvcApplication" Language="C#" %>

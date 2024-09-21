@@ -12,6 +12,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         public Product()
         {
             Images = new HashSet<Image>();
+            MemberFollowLists = new HashSet<MemberFollowList>();
             ProductSkus = new HashSet<ProductSku>();
         }
 
@@ -40,6 +41,9 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Image> Images { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MemberFollowList> MemberFollowLists { get; set; }
 
         public virtual ProductCategory ProductCategory { get; set; }
 
