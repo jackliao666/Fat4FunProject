@@ -7,7 +7,7 @@ JK
 	add ../Content/NavFooter.css
 	add image
 
-[working on]商品頁面
+[v]PC商品頁面
 	add ProductApiControllers
 	add DevicesApiControllers
 	add ../ViewModels/BrandVm,ImageVm,ProductCategoryVm,
@@ -17,6 +17,8 @@ JK
 		Login.html,forgot the password.html,rest-password.html,Sign Up.html,
 		verify-code.html
     add series.json
+[working on]Device商品頁面
+	
 	
 
 

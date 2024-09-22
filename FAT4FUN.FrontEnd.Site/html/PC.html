@@ -497,9 +497,13 @@
                       }
                   },
   
-                  checkToCart(SkuId) {
+                  checkToCart(SkuId,SkuItemId) {
                       const userId = 3; // 假設當前用戶 ID 為 3
-                      return fetch(`/api/products/QueryCart?UserId=${userId}&SkuId=${SkuId}`)
+                      return fetch(`/api/products/QueryCart?UserId=${userId}&ProductSkuId=${SkuId}&SkuItemId=${SkuItemId}`, {
+                          headers: {
+                              'Content-Type': 'application/json'
+                          }
+                      })        
                           .then((response) => response.json())
                           .then((exists) => {
                               return exists; // 返回 true 或 false
@@ -511,21 +515,21 @@
                   },
 
                   // 用來新增商品或更新商品數量到購物車
-                  addToCart(product) {
+                  addToCart(product) {                  
                       const SkuId = product.specs[0].id; // 取得 SkuId
-
-                      // 檢查商品是否存在於嘔務車
-                      this.checkToCart(SkuId)
+                      const SkuItemId = null; // 取得 SkuItemId
+                      // 檢查商品是否存在於購物車
+                      this.checkToCart(SkuId,SkuItemId)
                           .then((exists) => {
                               const item = {
                                   UserId: 3, // 假設用戶ID為3
                                   ProductSkuId: SkuId,
+                                  ProductSkuItemId: SkuItemId,
                                   Qty: 1 // 默認數量為1
                               };
 
                               if (exists) {
-                                  //如果商品存在購物車中，更新數量
-                                  console.log("商品已存在購物車中，更新數量");
+                                  //如果商品存在購物車中，更新數量                             
                                   // 呼叫saveToCart，將商品發送到後端
                                   fetch("/api/products/SaveToCart", {
                                       method: "POST",
@@ -536,7 +540,7 @@
                                   })
                                       .then((response) => response.json())
                                       .then((data) => {
-                                          console.log("購物車中商品數量已更新:", data);
+                                          
                                           Swal.fire({
                                               //position: "top-end",
                                               icon: "info",
@@ -549,8 +553,7 @@
                                       .catch((error) => console.error("Error updating item in cart:", error));
 
                               } else {
-                                  // 如果商品不存在購物車中 就新增商品到購物車
-                                  console.log("商品不存在購物車中,請新增商品");
+                                  // 如果商品不存在購物車中 就新增商品到購物車                      
                                   fetch("/api/products/SaveToCart", {
                                       method: "POST",
                                       headers: {
@@ -560,7 +563,7 @@
                                   })
                                       .then((response) => response.json())
                                       .then((data) => {
-                                          console.log("商品已成功加入購物車:", data);
+                                          
                                           Swal.fire({
                                               //position: "top-end",
                                               icon: "success",
@@ -604,7 +607,7 @@
                               if (exists) {
                                   Swal.fire({
                                       //position: "top-end",
-                                      icon: "error",
+                                      icon: "info",
                                       title: "商品已在追蹤清單中",
                                       showConfirmButton: false,
                                       timer: 1500

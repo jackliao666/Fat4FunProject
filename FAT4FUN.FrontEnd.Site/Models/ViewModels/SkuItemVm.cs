@@ -7,6 +7,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.ViewModels
 {
 	public class SkuItemVm
 	{
+		public int Id { get; set; }
 		public string Key { get; set; }
 		public List<string> KeyList 
 		{

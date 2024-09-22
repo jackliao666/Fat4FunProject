@@ -13,11 +13,9 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         public int ProductId { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
+        public string Path { get; set; }
 
-        [StringLength(200)]
-        public string FileName { get; set; }
+        public int Sort { get; set; }
 
         public DateTime CreateDate { get; set; }
 

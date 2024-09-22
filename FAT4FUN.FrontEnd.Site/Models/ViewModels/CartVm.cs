@@ -9,6 +9,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.ViewModels
     {
         public int UserId { get; set; }
         public int ProductSkuId { get; set; }
+        public int? SkuItemId { get; set; }
         public int Qty { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 					Description = p.Description,
 					CategoryName = p.ProductCategory.CategoryName,
 					Brand = p.Brand.Name,
-					Image = p.Images.FirstOrDefault().FileName, // 假設你只需要第一張圖片
+					Image = p.Images.FirstOrDefault().Path, // 假設你只需要第一張圖片
 					Specs = p.ProductSkus.Select(s => new ProductSkuVm
 					{
 						Name = s.Name,
