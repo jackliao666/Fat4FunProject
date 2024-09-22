@@ -38,3 +38,21 @@ TOM
 =======================================
 Santiago
 [V] 後台頁面設計
+
+[working] 實作登入登出功能
+	只有帳密正確且開通會員才允許登入
+	modify web.config, add <authentication mode="Forms">
+	add LoginVm, LoginDto
+
+	** 安裝 AutoMapper package
+		add Models/MappingProfile.cs
+		modify Global.asax.cs , add Mapper config
+
+	modify UsersController, add Login, Logout Actions
+		add Login.cshtml
+	modify _Layout.cshtml, add Login, Logout links
+	modify 將 About 改成需要登入才能檢視
+
+	modify UserService , IUserRepository, 新增 Login 相關成員
+	
+	目前進度=> UsersController  IUserRepository  UserServer部分 

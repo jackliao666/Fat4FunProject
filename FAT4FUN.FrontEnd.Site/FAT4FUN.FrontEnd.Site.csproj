@@ -181,7 +181,6 @@
     <Compile Include="Models\EFModels\ProductSku.cs" />
     <Compile Include="Models\EFModels\Role.cs" />
     <Compile Include="Models\EFModels\SkuItem.cs" />
-    <Compile Include="Models\EFModels\sysdiagram.cs" />
     <Compile Include="Models\EFModels\User.cs" />
     <Compile Include="Models\ViewModels\BrandVm.cs" />
     <Compile Include="Models\ViewModels\ImageVm.cs" />

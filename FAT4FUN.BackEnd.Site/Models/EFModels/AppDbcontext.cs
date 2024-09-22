@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 
-namespace FAT4FUN.FrontEnd.Site.Models.EFModels
+namespace FAT4FUN.BackEnd.Site.Models.EFModels
 {
-    public partial class AppDbContext : DbContext
+    public partial class AppDbcontext : DbContext
     {
-        public AppDbContext()
-            : base("name=AppDbContext")
+        public AppDbcontext()
+            : base("name=AppDbcontext")
         {
         }
 

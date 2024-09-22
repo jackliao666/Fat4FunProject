@@ -9,6 +9,9 @@ namespace FAT4FUN.BackEnd.Site.Controllers
     public class TablesController : Controller
     {
         // GET: Tables
+
+        
+        
         public ActionResult Index()
         {
             return View();

@@ -1,4 +1,4 @@
-namespace FAT4FUN.FrontEnd.Site.Models.EFModels
+namespace FAT4FUN.BackEnd.Site.Models.EFModels
 {
     using System;
     using System.Collections.Generic;
