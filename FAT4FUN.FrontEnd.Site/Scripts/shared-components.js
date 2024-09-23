@@ -110,6 +110,7 @@ const HeaderComponent = {
             this.$emit("search", this.searchQuery); // 通过事件传递搜索关键字
         },
         isActiveLink(pathname) {
+        
             return window.location.pathname.includes(pathname);
         },
     },

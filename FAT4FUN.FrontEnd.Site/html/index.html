@@ -207,20 +207,20 @@
                 <h1 class="mb-5">電競主機</h1>
             </div>
             <div class="carousel-inner">
-                <div class="carousel-item active" data-bs-interval="10000">
+                <div class="carousel-item active" data-bs-interval="5000">
                     <img src="image/ii1.jpg" class="d-block" alt="..." />
                     <div class="carousel-caption">
                         <h1>歡迎來到 Fat4Fun</h1>
                         <p>探索我們的最新商品和優惠活動</p>
-                        <a href="#" class="btn btn-primary">立即購買</a>
+                        <!--<a href="#" class="btn btn-primary">立即購買</a>-->
                     </div>
                 </div>
-                <div class="carousel-item" data-bs-interval="2000">
+                <div class="carousel-item" data-bs-interval="5000">
                     <img src="image/ii2.jpg" class="d-block w-100" alt="..." />
                     <div class="carousel-caption">
                         <h1>歡迎來到 Fat4Fun</h1>
                         <p>探索我們的最新商品和優惠活動</p>
-                        <a href="#" class="btn btn-primary">立即購買</a>
+                        <!--<a href="#" class="btn btn-primary">立即購買</a>-->
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -228,7 +228,7 @@
                     <div class="carousel-caption">
                         <h1>歡迎來到 Fat4Fun</h1>
                         <p>探索我們的最新商品和優惠活動</p>
-                        <a href="#" class="btn btn-primary">立即購買</a>
+                        <!--<a href="#" class="btn btn-primary">立即購買</a>-->
                     </div>
                 </div>
             </div>
@@ -265,49 +265,49 @@
              data-bs-ride="false">
             <div class="carousel-inner">
                 <div class="row">
-                    <div class="col-3 position-relative">
+                    <div class="col-3 position-relative" @click="goToProduct('硬碟')">
                         <img src="image/a8.jpg" class="d-block w-100" alt="..." />
                         <div class="overlay">
                             <p class="text">硬碟</p>
                         </div>
                     </div>
-                    <div class="col-3 position-relative">
+                    <div class="col-3 position-relative"@click="goToProduct('記憶體')">
                         <img src="image/a1.jpg" class="d-block w-100" alt="..." />
                         <div class="overlay">
                             <p class="text">記憶體</p>
                         </div>
                     </div>
-                    <div class="col-3 position-relative">
+                    <div class="col-3 position-relative"@click="goToProduct('處理器')">
                         <img src="image/a2.jpg" class="d-block w-100" alt="..." />
                         <div class="overlay">
                             <p class="text">處理器</p>
                         </div>
                     </div>
-                    <div class="col-3 position-relative">
+                    <div class="col-3 position-relative"@click="goToProduct('顯示卡')">
                         <img src="image/a3.jpg" class="d-block w-100" alt="..." />
                         <div class="overlay">
                             <p class="text">顯示卡</p>
                         </div>
                     </div>
-                    <div class="col-3 position-relative">
+                    <div class="col-3 position-relative"@click="goToProduct('耳機')">
                         <img src="image/a4.jpg" class="d-block w-100" alt="..." />
                         <div class="overlay">
                             <p class="text">耳機</p>
                         </div>
                     </div>
-                    <div class="col-3 position-relative">
+                    <div class="col-3 position-relative"@click="goToProduct('方向盤')">
                         <img src="image/a5.jpg" class="d-block w-100" alt="..." />
                         <div class="overlay">
                             <p class="text">方向盤</p>
                         </div>
                     </div>
-                    <div class="col-3 position-relative">
+                    <div class="col-3 position-relative"@click="goToProduct('滑鼠')">
                         <img src="image/a6.jpg" class="d-block w-100" alt="..." />
                         <div class="overlay">
                             <p class="text">滑鼠</p>
                         </div>
                     </div>
-                    <div class="col-3 position-relative">
+                    <div class="col-3 position-relative"@click="goToProduct('鍵盤')">
                         <img src="image/a7.jpg" class="d-block w-100" alt="..." />
                         <div class="overlay">
                             <p class="text">鍵盤</p>
@@ -328,23 +328,25 @@
         <!-- carousel end -->
         <!-- footer start-->
         <footer-component></footer-component>
-        <!-- footer end -->
+    <!-- footer end -->
     </div>
+    
+    
+    
     <script type="module">
-       
-        const config = {
-            setup() {
-                return {};
-            },
-        };
-
-        const app = Vue.createApp();
-
         import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
+        const app = Vue.createApp({
+            methods: {
+                goToProduct(categoryName) {
+                    window.location.href = `Devices.html?categoryname=${encodeURIComponent(categoryName)}`;
+                }
+            }
+        });
+
         app.component("header-component", HeaderComponent);
         app.component("footer-component", FooterComponent);
 
-   
+
         app.mount("#app");
     </script>
 </body>

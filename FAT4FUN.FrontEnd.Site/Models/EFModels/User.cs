@@ -47,6 +47,11 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         public bool Status { get; set; }
 
+        public bool? IsConfirmde { get; set; }
+
+        [StringLength(50)]
+        public string ConfirmCode { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifyDate { get; set; }

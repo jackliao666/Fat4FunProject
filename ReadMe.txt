@@ -17,8 +17,8 @@ JK
 		Login.html,forgot the password.html,rest-password.html,Sign Up.html,
 		verify-code.html
     add series.json
-[working on]Device商品頁面
-	
+[v]Device商品頁面
+
 	
 
 

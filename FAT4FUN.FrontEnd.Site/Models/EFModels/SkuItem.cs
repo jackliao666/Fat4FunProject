@@ -12,6 +12,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         public SkuItem()
         {
             Carts = new HashSet<Cart>();
+            OrderItems = new HashSet<OrderItem>();
         }
 
         public int Id { get; set; }
@@ -30,6 +31,9 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Carts { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
 
         public virtual ProductSku ProductSku { get; set; }
     }

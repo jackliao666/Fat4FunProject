@@ -90,6 +90,10 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
                 .IsUnicode(false);
 
             modelBuilder.Entity<User>()
+                .Property(e => e.ConfirmCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<User>()
                 .HasMany(e => e.MemberFollowLists)
                 .WithRequired(e => e.User)
                 .WillCascadeOnDelete(false);

@@ -155,9 +155,9 @@
             font-size: 0.85rem;
         }
         /*.btn-add-to-cart {
-          width: 100%;
-          margin-top: 0.5rem;
-        }*/
+  width: 100%;
+  margin-top: 0.5rem;
+}*/
         .pagination {
             margin-top: auto;
         }
@@ -231,39 +231,44 @@
                             v-model="selectedBrand"
                             @change="filterProducts">
                         <option value="">所有品牌</option>
-                        <option value="華碩">ASUS-華碩</option>
-                        <option value="微星">MSI-微星</option>
-                        <option value="宏碁">ACER-宏碁</option>
-                        <option value="技嘉">GIGABYTE-技嘉</option>
+                        <option value="羅技">Logitech-羅技</option>
+                        <option value="海盜船">Corsair-海盜船</option>
+                        <option value="雷蛇">Razer-雷蛇</option>
+                        <option value="INTEL">INTEL-酷睿</option>
+                        <option value="AMD">AMD-銳龍</option>
+                        <option value="金士頓">Kingston-金士頓</option>
+                        <option value="美光">Micron-美光</option>
 
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <select id="categorySelect"
-                            class="form-select"
-                            v-model="selectedCategory"
-                            @change="updateSubOptions">
-                        <option value="">選擇類別</option>
-                        <option value="harddrive">硬碟</option>
-                        <option value="memory">記憶體</option>
-                        <option value="gpu">顯示卡</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select id="subCategorySelect"
-                            class="form-select"
-                            v-model="selectedSubCategory"
-                            @change="filterProducts">
-                        <option value="">請先選擇類別</option>
-                        <option v-for="option in subOptions"
-                                :key="option"
-                                :value="option">
-                            {{ option }}
-                        </option>
-                    </select>
-                </div>
+                <!--<div class="col-md-2">
+                        <select id="categorySelect"
+                                class="form-select"
+                                v-model="selectedCategory"
+                                @change="updateSubOptions">
+                            <option value="">選擇類別</option>
+                            <option value="harddrive">硬碟</option>
+                            <option value="memory">記憶體</option>
+                            <option value="gpu">顯示卡</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="subCategorySelect"
+                                class="form-select"
+                                v-model="selectedSubCategory"
+                                @change="filterProducts">
+                            <option value="">請先選擇類別</option>
+                            <option v-for="option in subOptions"
+                                    :key="option"
+                                    :value="option">
+                                {{ option }}
+                            </option>
+                        </select>
+                    </div>
+                </div>-->
+
+
             </div>
-
             <div class="card-container" style="flex-grow: 1">
                 <div class="card"
                      v-for="product in paginatedProducts"
@@ -341,9 +346,17 @@
                 };
             },
             mounted() {
-                // 加載商品數據
+                // 解析 URL 查询参数
+                const params = new URLSearchParams(window.location.search);
+                const categoryName = params.get('categoryname') || ''; // 获取类别名称，默认为空字符串
 
-                fetch("/api/products/GetProducts?categoryName=PC")
+                // 如果 categoryName 存在，发起带有类别过滤的 API 请求
+                let apiUrl = '/api/products/GetListProducts';
+                if (categoryName) {
+                    apiUrl += `?CategoryName=${encodeURIComponent(categoryName)}`;
+                }
+                // 加載商品數據
+                fetch(apiUrl)
                     .then((response) => response.json())
                     .then((data) => {
                         this.products = data;
@@ -352,7 +365,7 @@
                     .catch((error) => console.error("Error loading products:", error));
 
                 // 加載系列數據
-                fetch("series.json")
+                fetch("series2.json")
                     .then((response) => response.json())
                     .then((data) => {
                         this.series = data;
@@ -371,34 +384,17 @@
                     return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
                 },
             },
+
             methods: {
+
                 setAccordion(seriesName) {
-                    if (seriesName.includes("INTEL系列")) {
-                        this.selectedAccordion = "INTEL";
-                    } else if (seriesName.includes("AMD系列")) {
-                        this.selectedAccordion = "AMD";
-                    } else {
-                        this.selectedAccordion = null;
-                    }
-                    this.filterProducts(); // 触发过滤，获取符合条件的产品
-                },
-                filterBySubcategory(subcategory) {
-                    this.selectedSubcategory = subcategory;
+                    this.selectedAccordion = seriesName;
                     this.filterProducts();
                 },
 
 
-                updateSubOptions() {
-                    if (this.selectedCategory === "harddrive") {
-                        this.subOptions = ["1T", "2T", "4T"];
-                    } else if (this.selectedCategory === "memory") {
-                        this.subOptions = ["8G", "16G", "32G"];
-                    } else if (this.selectedCategory === "gpu") {
-                        this.subOptions = ["RTX3060", "RTX3070", "RTX3080"];
-                    } else {
-                        this.subOptions = [];
-                    }
-                    this.selectedSubCategory = "";
+                filterBySubcategory(subcategory) {
+                    this.selectedSubcategory = subcategory;
                     this.filterProducts();
                 },
 
@@ -431,7 +427,7 @@
                         return matchesSubcategory && matchesBrand && matchesSpecs;
                     });
 
-                    const categoryName = "PC";
+                    const categoryName = null;
                     const brand = this.selectedBrand;
                     const maxPrice = this.maxPrice;
                     const minPrice = this.minPrice;
@@ -459,7 +455,7 @@
                         .join('&');
                     //console.log(accordion)
                     // 發送帶有動態查詢參數的請求
-                    fetch(`/api/products/GetProducts?${queryString}`)
+                    fetch(`/api/products/GetListProducts?${queryString}`)
                         .then((response) => response.json())
                         .then((data) => {
                             this.products = data;
@@ -474,8 +470,8 @@
                     }
                 },
 
-                goToPcDetail(productId) {
-                    window.location.href = `PcDetail.html?id=${productId}`;
+                goToDeviceDetail(productId) {
+                    window.location.href = `DeviceDetail.html?id=${productId}`;
                 },
 
                 handleSearch(query) {
@@ -652,7 +648,7 @@
                                 console.error("Failed to update product look");
                             } else {
                                 // 成功更新後跳轉到產品詳情頁
-                                window.location.href = `PcDetail.html?id=${productId}`;
+                                window.location.href = `DevicesDetail.html?id=${productId}`;
                             }
                         })
                         .catch(error => {
@@ -667,5 +663,6 @@
 
         app.mount("#app");
     </script>
+    
 </body>
 </html>
