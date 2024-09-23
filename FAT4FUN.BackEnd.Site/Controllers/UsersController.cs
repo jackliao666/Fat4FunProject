@@ -28,7 +28,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return View();
         }
         
-        [Authorize]
+       
         [HttpPost]
         public ActionResult Register(RegisterVm vm)
         {
@@ -42,7 +42,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
 
             return View("RegisterConfirm"); // 顯示 RegisterConfirm 網頁內容,不必有action
-            // return RedirectToAction("RegisterConfirm"); //如果想要轉到某 action 就這麼寫
+            /*return RedirectToAction("RegisterConfirm");*/ //如果想要轉到某 action 就這麼寫
 
         }
 
@@ -82,13 +82,9 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         public ActionResult ActiveRegister(int? userId, string confirmCode)
         {
-            if (!userId.HasValue)
-            {
-                ModelState.AddModelError(string.Empty, "User ID is required.");
-                return View();
-            }
 
             Result result = HandleActiveRegister(userId.Value, confirmCode);
+
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError(string.Empty, result.ErrorMessage);

@@ -51,7 +51,7 @@ Santiago
 		modify _Layout.cshtml , add Register link
 
 [V] 實作 新會員 Email 確認功能
-	信裡的網址,為 https://.../Users/ActiveRegister?memberId=5&confirmCode=4a012d1a0ad347cabc2f6b56d3b4dbbe
+	信裡的網址,為 https://.../Users/ActiveRegister?userId=6&confirmCode=8ccaeca6cb2e47648be23f9514290d75
 	modify MembersController , add ActiveRegister Action
 		update isConfirm=1, confirmCode=null
 	add ActiveRegister.cshtml

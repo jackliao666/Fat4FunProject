@@ -73,7 +73,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
 
             //將密碼雜湊後比對
             string hashPassword = HashUtility.ToSHA256(dto.Password);
-            bool isPasswordCorrect = (hashPassword.CompareTo(user.EncryptedPassword) == 0);
+            bool isPasswordCorrect = (hashPassword.CompareTo(user.Password) == 0);
 
             //回傳
             return isPasswordCorrect ? Result.Success() : Result.Fail("帳號或密碼錯誤");
