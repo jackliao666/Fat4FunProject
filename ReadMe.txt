@@ -18,6 +18,7 @@ JK
 		verify-code.html
     add series.json
 [v]Device商品頁面
+[v]Hots商品頁面
 
 	
 
