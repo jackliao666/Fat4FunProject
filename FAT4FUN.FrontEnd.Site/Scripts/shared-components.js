@@ -93,7 +93,7 @@ const HeaderComponent = {
           <a href="Login.html" class="ms-5 btn btn-link">
             <i class="bi bi-box-arrow-in-right"></i>
           </a>
-          <a href="card03.html" class="ms-5 btn btn-link">
+          <a href="cart.html" class="ms-5 btn btn-link">
             <i class="bi bi-cart"></i>
           </a>
         </div>

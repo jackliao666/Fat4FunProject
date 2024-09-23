@@ -162,7 +162,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\Apis\CartsApiController.cs" />
     <Compile Include="Controllers\Apis\DevicesApiController.cs" />
+    <Compile Include="Controllers\Apis\ProductApiController.cs" />
     <Compile Include="Controllers\Apis\ProductsApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -183,13 +185,19 @@
     <Compile Include="Models\EFModels\SkuItem.cs" />
     <Compile Include="Models\EFModels\sysdiagram.cs" />
     <Compile Include="Models\EFModels\User.cs" />
+    <Compile Include="Models\Infra\HashUtility.cs" />
     <Compile Include="Models\ViewModels\BrandVm.cs" />
+    <Compile Include="Models\ViewModels\CartVm.cs" />
+    <Compile Include="Models\ViewModels\CheckoutVm.cs" />
     <Compile Include="Models\ViewModels\ImageVm.cs" />
+    <Compile Include="Models\ViewModels\MemberFollowListVm.cs" />
     <Compile Include="Models\ViewModels\ProductCategoryVm.cs" />
     <Compile Include="Models\ViewModels\ProductSkuVm.cs" />
     <Compile Include="Models\ViewModels\ProductVm.cs" />
     <Compile Include="Models\ViewModels\SkuItemVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Models\Product\DtoProduct.cs" />
+    <Compile Include="Services\ProductService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -214,10 +222,12 @@
     <Content Include="Global.asax" />
     <Content Include="html\Login.html" />
     <Content Include="html\forget the password.html" />
+    <Content Include="html\NavFooter.css" />
+    <Content Include="html\shared-components.js" />
     <Content Include="html\verify-code.html" />
     <Content Include="html\reset-password.html" />
     <Content Include="html\Sign up.html" />
-    <Content Include="html\card03.html" />
+    <Content Include="html\cart.html" />
     <Content Include="html\Devices.html" />
     <Content Include="html\DevicesDetail.html" />
     <Content Include="html\Hots.html" />
@@ -268,6 +278,7 @@
     <Content Include="html\index.html" />
     <Content Include="html\PC.html" />
     <Content Include="html\PcDetail.html" />
+    <Content Include="html\vue.global.js" />
     <Content Include="html\vueNavFooter.html" />
     <Content Include="Scripts\shared-components.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
