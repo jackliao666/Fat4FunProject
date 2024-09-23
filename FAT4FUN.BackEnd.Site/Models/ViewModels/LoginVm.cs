@@ -8,7 +8,7 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
 {
     public class LoginVm
     {
-        [Display(Name ="帳號")]
+        [Display(Name = "帳號")]
         [Required]
         public string Account { get; set; }
 

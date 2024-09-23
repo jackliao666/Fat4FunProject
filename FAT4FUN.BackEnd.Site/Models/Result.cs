@@ -23,6 +23,5 @@ namespace FAT4FUN.BackEnd.Site.Models
                 ErrorMessage = errorMessage
             };
         }
-
     }
 }

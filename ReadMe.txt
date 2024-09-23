@@ -39,7 +39,24 @@ TOM
 Santiago
 [V] 後台頁面設計
 
-[working] 實作登入登出功能
+[V] add 註冊新會員
+	add /Models/Infra/HashUtility.cs
+	add Appsetting, key=.......
+
+	[V] 實作註冊功能
+		add RegisterVm
+		add 擴充方法 ToUser(RegisterVm)
+		add UsersContorller , Register Action
+			add Register.cshtml , RegisterConfirm.cshtml (不必寫 action)
+		modify _Layout.cshtml , add Register link
+
+[V] 實作 新會員 Email 確認功能
+	信裡的網址,為 https://.../Users/ActiveRegister?memberId=5&confirmCode=4a012d1a0ad347cabc2f6b56d3b4dbbe
+	modify MembersController , add ActiveRegister Action
+		update isConfirm=1, confirmCode=null
+	add ActiveRegister.cshtml
+
+[Working on] 實作登入登出功能
 	只有帳密正確且開通會員才允許登入
 	modify web.config, add <authentication mode="Forms">
 	add LoginVm, LoginDto
@@ -55,4 +72,3 @@ Santiago
 
 	modify UserService , IUserRepository, 新增 Login 相關成員
 	
-	目前進度=> UsersController  IUserRepository  UserServer部分 

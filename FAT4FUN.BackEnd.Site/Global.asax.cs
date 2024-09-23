@@ -1,4 +1,4 @@
-ï»¿using AutoMapper;
+using AutoMapper;
 using FAT4FUN.BackEnd.Site.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Web.Routing;
 
 namespace FAT4FUN.BackEnd.Site
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class WebApiApplication : System.Web.HttpApplication
     {
         public static IMapper _mapper;
         protected void Application_Start()
@@ -24,17 +24,14 @@ namespace FAT4FUN.BackEnd.Site
 
 
 
-            //AutoMapper é…ç½®
+
             var config = new MapperConfiguration(cfg =>
             {
-                //ä½¿ç”¨ MappingProfile ä¾†è¨­å®šå°æ‡‰é—œä¿‚
+                //¨Ï¥Î MappingProfile ¨Ó³]©w¹ïÀ³Ãö«Y
                 cfg.AddProfile<MappingProfile>();
             });
 
             _mapper = config.CreateMapper();
-
-
         }
-
     }
 }

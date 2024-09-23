@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace FAT4FUN.BackEnd.Site.Models.EFModels
 {
-    public partial class AppDbcontext : DbContext
+    public partial class AppDbContext : DbContext
     {
-        public AppDbcontext()
-            : base("name=AppDbcontext")
+        public AppDbContext()
+            : base("name=AppDbContext")
         {
         }
 
@@ -31,6 +31,10 @@ namespace FAT4FUN.BackEnd.Site.Models.EFModels
                 .HasMany(e => e.Products)
                 .WithRequired(e => e.Brand)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<OrderItem>()
+                .Property(e => e.SkuItemName)
+                .IsFixedLength();
 
             modelBuilder.Entity<Order>()
                 .Property(e => e.No)
