@@ -1,4 +1,5 @@
 ﻿using FAT4FUN.BackEnd.Site.Models.Dtos;
+using FAT4FUN.BackEnd.Site.Models.EFModels;
 using FAT4FUN.BackEnd.Site.Models.Infra;
 using FAT4FUN.BackEnd.Site.Models.Interfaces;
 using FAT4FUN.BackEnd.Site.Models.Repositories;
@@ -12,9 +13,11 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
     public class UserService
     {
         private IUserRepository _repo;
+        private readonly AppDbContext _db;
         public UserService() 
         {
             _repo = new UserRepository();
+            _db = new AppDbContext();
         }
 
         public UserService (IUserRepository repo)
@@ -57,6 +60,24 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             }
 
             _repo.Active(userId);
+        }
+
+        public Result GetUserRole(string account)
+        {
+            //根據帳號查詢使用者
+            var user  = _db.Users.FirstOrDefault(x => x.Account == account);
+            if (user == null )
+            {
+                return Result.Fail("無此使用者");
+            }
+
+            //查詢該使用者權限
+            var role =  _db.Roles.FirstOrDefault(r => r.UserId == user.Id);
+            if (role == null)
+            {
+                return Result.Fail("此帳號無權限");
+            }
+            return Result.Success(role.Role1);
         }
 
         internal Result ValidateLogin(LoginDto dto)

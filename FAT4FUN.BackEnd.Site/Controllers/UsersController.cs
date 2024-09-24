@@ -1,5 +1,6 @@
 ﻿using FAT4FUN.BackEnd.Site.Models;
 using FAT4FUN.BackEnd.Site.Models.Dtos;
+using FAT4FUN.BackEnd.Site.Models.EFModels;
 using FAT4FUN.BackEnd.Site.Models.Services;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using System;
@@ -15,7 +16,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
     public class UsersController : Controller
     {
         // GET: Users
-        [Authorize]
+        
         public ActionResult Index()
         {
             return View();
@@ -30,7 +31,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
 
 
-        [Authorize]
+        [MyAuthorize(Functions = "0")]
         [HttpPost]
         public ActionResult Register(RegisterVm vm)
         {
@@ -59,19 +60,34 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         {
             if (ModelState.IsValid)
             {
+                var service = new UserService();
                 Result result = HandleLogin(vm);
+
                 if (result.IsSuccess)
                 {
+                    var roleResult = service.GetUserRole(vm.Account);
+
+                    if (!roleResult.IsSuccess)
+                    {
+                        // 如果獲取角色失敗，顯示錯誤訊息
+                        ModelState.AddModelError(string.Empty, roleResult.ErrorMessage);
+                        return View(vm);
+                    }
+                    
+                    // 獲取角色數據
+                    int userRole = (int)roleResult.Data;
+
+                    // 根據角色處理邏輯
+                    // 例如，將角色數據寫入 cookie 或其他處理邏輯
                     (string url, HttpCookie cookie) = ProcessLogin(vm.Account);
                     Response.Cookies.Add(cookie);
-                    return Redirect(url);
                 }
 
                 ModelState.AddModelError(
                     string.Empty,
                     result.ErrorMessage);
             }
-            return View(vm);
+            return View("Index");
         }
 
         public ActionResult Logout() 
@@ -99,8 +115,11 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         private (string url, HttpCookie cookie) ProcessLogin(string account)
         {
-            var roles = string.Empty; // 沒有用到角色權限,所以存入空白
-            
+            //var roles = string.Empty; // 沒有用到角色權限,所以存入空白
+            var service = new UserService();
+            int roleNumber = service.GetUserRole(account).Data as int? ?? 0; //取得角色數字(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 
+
+
             // 建立一張認證票
             var ticket =
                 new FormsAuthenticationTicket(
@@ -109,7 +128,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                     DateTime.Now,               //發行日
                     DateTime.Now.AddMinutes(30),    //到期日
                     false,                      //是否續存
-                    roles,                      //userData
+                    roleNumber.ToString(),      // 將角色數字存入 UserData
                     "/"                         //cookie位置
                     );
             
@@ -124,6 +143,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return (url, cookie);
 
         }
+
 
         private Result HandleLogin(LoginVm vm)
         {
@@ -193,6 +213,8 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             {
                 return Result.Fail(ex.Message);
             }
+
+            
         }
     }
 }

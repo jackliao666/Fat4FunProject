@@ -29,7 +29,8 @@ namespace FAT4FUN.BackEnd.Site.Models
 
         public bool IsInRole(string role)
         {
-            throw new NotImplementedException();
+            // 檢查是否角色在這個使用者的可用角色列表中
+            return _functions.Contains(role.ToLower());
         }
     }
 }
