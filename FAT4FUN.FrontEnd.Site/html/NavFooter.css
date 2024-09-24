@@ -1,0 +1,198 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: #000;
+}
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 让body至少和视口一样高 */
+}
+/* 自定义导航栏背景颜色 */
+.navbar-custom {
+  background-color: #343a40; /* 导航栏背景颜色 */
+}
+
+/* 自定义导航栏链接颜色 */
+.navbar-custom .nav-link {
+  color: #fff; /* 链接文本颜色 */
+  font-size: 1.5rem; /* 放大文字的大小 */
+}
+
+/* 自定义导航栏链接在 hover 时的颜色 */
+.navbar-custom .nav-link:hover {
+  color: #f8f9fa; /* 链接 hover 时的颜色 */
+}
+
+/* 自定义按钮颜色 */
+.navbar-custom .btn-link {
+  color: #fff; /* 按钮文本颜色 */
+  font-size: 1.5rem;
+}
+
+.navbar-custom .btn-link:hover {
+  color: #f8f9fa; /* 按钮 hover 时的颜色 */
+}
+.navbar {
+  height: 150px;
+  background-color: #302d29;
+  opacity: 0.9;
+}
+nav img {
+  height: 100px;
+  width: 100px;
+}
+
+/* 調整按鈕和輸入框 */
+form.d-flex.align-items-center {
+  margin-right: auto; /* 確保表單向左對齊 */
+}
+
+form.d-flex.align-items-center .form-control {
+  width: auto; /* 確保輸入框不佔滿整個空間 */
+}
+
+form.d-flex.align-items-center .btn {
+  margin: 0; /* 移除按鈕之間的多餘邊距 */
+}
+
+/* #carouselExampleInterval {
+  margin-top: 120px; 
+}
+
+.carousel-inner img {
+  width: 100%; 
+  height: auto; 
+  object-fit: cover; 
+}
+.carousel-caption {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  text-align: right;
+  right: 5%; 
+  left: auto; 
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  display: none;
+}
+
+.carousel-caption h1 {
+  font-size: 5rem;
+  font-weight: bold;
+}
+
+.carousel-caption p {
+  font-size: 3rem;
+}
+
+.carousel-caption .btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 2.5rem;
+}
+.carousel-inner {
+  overflow: hidden; 
+}
+.carousel-inner .row {
+  display: flex;
+  transition: transform 0.5s ease; 
+  width: calc(100% * 8 / 4);
+} */
+/* .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.overlay .text {
+  color: white;
+  font-size: 5rem;
+  text-align: center;
+} */
+
+/* .col-3:hover .overlay {
+  opacity: 1; 
+}
+.pc {
+  margin-top: 300px;
+  padding-top: 100px;
+}
+
+.pc h1 {
+  font-size: 70px;
+  text-align: center;
+  color: white;
+  margin-bottom: 0;
+}
+.col-3 {
+  position: relative;
+  opacity: 1;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  flex: 0 0 25%;
+}
+.col-3:hover img {
+  transform: scale(1.05); 
+}
+.col-3 img {
+  transition: transform 0.5s ease; 
+} */
+
+/* 页脚样式优化 */
+footer {
+  background-color: #343a40;
+  color: #fff;
+  padding: 20px 0; /* 添加一些垂直间距 */
+  text-align: center;
+  margin-top: auto; /* 确保页脚推到页面底部 */
+}
+
+footer .container {
+  max-width: 1200px;
+}
+
+footer h5 {
+  font-size: 1.25rem; /* 适中大小的标题 */
+  margin-bottom: 15px; /* 与内容保持间距 */
+}
+
+footer p {
+  font-size: 0.9rem; /* 略小的字体让内容显得更简洁 */
+}
+
+footer a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #f8f9fa; /* 悬停时颜色略亮 */
+}
+
+footer .social-icons a {
+  margin: 0 10px;
+  font-size: 1.75rem; /* 适中放大的图标 */
+}
+
+footer .social-icons a:hover {
+  color: #f8f9fa;
+}
+
+/* 页脚底部声明 */
+footer .bottom-info {
+  font-size: 0.8rem;
+  border-top: 1px solid #555; /* 分隔线 */
+  margin-top: 20px;
+  padding-top: 10px;
+  color: #aaa; /* 较浅的灰色 */
+}
