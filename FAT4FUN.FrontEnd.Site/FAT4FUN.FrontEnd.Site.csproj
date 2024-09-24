@@ -163,7 +163,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\Apis\CartsApiController.cs" />
-    <Compile Include="Controllers\Apis\DevicesApiController.cs" />
     <Compile Include="Controllers\Apis\ProductApiController.cs" />
     <Compile Include="Controllers\Apis\ProductsApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
