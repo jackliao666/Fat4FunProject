@@ -10,7 +10,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
     {
         public int Id { get; set; }
 
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
         public int ProductSkuId { get; set; }
 
