@@ -18,6 +18,11 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         [StringLength(50)]
         public string ProductName { get; set; }
 
+        public int? SkuItemId { get; set; }
+
+        [StringLength(50)]
+        public string SkuItemName { get; set; }
+
         public int Price { get; set; }
 
         public int Qty { get; set; }
@@ -27,5 +32,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         public virtual ProductSku ProductSku { get; set; }
 
         public virtual Order Order { get; set; }
+
+        public virtual SkuItem SkuItem { get; set; }
     }
 }

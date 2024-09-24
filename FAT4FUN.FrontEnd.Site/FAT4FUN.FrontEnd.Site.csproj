@@ -162,7 +162,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\Apis\DevicesApiController.cs" />
     <Compile Include="Controllers\Apis\ProductsApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -187,6 +186,7 @@
     <Compile Include="Models\ViewModels\CartVm.cs" />
     <Compile Include="Models\ViewModels\ImageVm.cs" />
     <Compile Include="Models\ViewModels\MemberFollowListVm.cs" />
+    <Compile Include="Models\ViewModels\ProdctImageVm.cs" />
     <Compile Include="Models\ViewModels\ProductCategoryVm.cs" />
     <Compile Include="Models\ViewModels\ProductSkuVm.cs" />
     <Compile Include="Models\ViewModels\ProductVm.cs" />
@@ -297,6 +297,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="html\series2.json" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

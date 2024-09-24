@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項�
 		ReadMe.txt = ReadMe.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT4FUN.BackEnd.Site", "FAT4FUN.BackEnd.Site\FAT4FUN.BackEnd.Site.csproj", "{87699F68-50E6-4C16-8776-B2C55EB65093}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT4FUN.Storage.Site", "FAT4FUN.Storage.Site\FAT4FUN.Storage.Site.csproj", "{6A031488-3695-4C03-A16C-0D82EB27A67E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +22,10 @@ Global
 		{BE2F72EF-6B28-49BE-A5B4-D85631400652}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE2F72EF-6B28-49BE-A5B4-D85631400652}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE2F72EF-6B28-49BE-A5B4-D85631400652}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87699F68-50E6-4C16-8776-B2C55EB65093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87699F68-50E6-4C16-8776-B2C55EB65093}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87699F68-50E6-4C16-8776-B2C55EB65093}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87699F68-50E6-4C16-8776-B2C55EB65093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A031488-3695-4C03-A16C-0D82EB27A67E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A031488-3695-4C03-A16C-0D82EB27A67E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A031488-3695-4C03-A16C-0D82EB27A67E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A031488-3695-4C03-A16C-0D82EB27A67E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
