@@ -1,4 +1,5 @@
-﻿using FAT4FUN.FrontEnd.Site.Models.EFModels;
+﻿using FAT4FUN.FrontEnd.Site.Models.Dto;
+using FAT4FUN.FrontEnd.Site.Models.EFModels;
 using FAT4FUN.FrontEnd.Site.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,78 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
             }
         }
 
+        [HttpPut]
+        [Route("api/carts/UpdateItemQty")]
+        public IHttpActionResult UpdateItemQty(CartDto dto)
+        {
+            //取得目前購物車主檔，若沒有，就立刻新增一筆並傳回
+            var cart = GetCartInfo(dto.UserId);
+            var cartItem = cart.CartItems.FirstOrDefault(ci => 
+                                ci.ProductSkuId == dto.ProductSkuId &&
+                            ci.SkuItemId == dto.SkuItemId);
+            if (cartItem == null) return BadRequest("請提供正確的購物車和商品資訊");
+            var newQty = dto.Qty;
+            
+            try
+            {                             
+
+                if (cartItem == null) return NotFound(); // 如果找不到對應的購物車項目，返回404
+
+                // 更新購物車項目的數量
+                if (newQty == 0)
+                {
+                    var entity = db.Carts.FirstOrDefault(ci => ci.Id == cartItem.Id);
+                    if (entity != null)
+                    {
+                        db.Carts.Remove(entity);
+                        db.SaveChanges(); // 確保保存變更
+                    }
+
+                }
+                else
+                {
+                    // 否則更新數量
+                    var cartItemInDb = db.Carts.FirstOrDefault(ci => ci.Id == cartItem.Id);
+                    cartItemInDb.Qty = newQty;  
+                    // 保存變更
+                    db.SaveChanges();
+                }
+
+                return Ok("商品數量已更新");
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex); // 返回 500 錯誤
+            }
+        }
+
+        [HttpDelete]
+        [Route("api/carts/RemoveItem")]
+        public IHttpActionResult RemoveItem(CartDto dto)
+        {
+            try
+            {
+                // 找到對應的購物車項目
+                var cartItem = db.Carts.FirstOrDefault(ci => ci.UserId == dto.UserId &&
+                                                              ci.ProductSkuId == dto.ProductSkuId &&
+                                                              ci.SkuItemId == dto.SkuItemId);
+
+                if (cartItem == null)
+                {
+                    return NotFound(); // 如果找不到對應的購物車項目，返回404
+                }
+
+                // 從數據庫中刪除該項目
+                db.Carts.Remove(cartItem);
+                db.SaveChanges(); // 確保保存變更
+
+                return Ok("商品已成功從購物車中移除");
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex); // 返回 500 錯誤
+            }
+        }
 
         private void AddCart(string account, int productSkuId, int qty, int? skuItemId = null, int? cartId = null)
         {
@@ -50,7 +123,6 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 
         private int CreateNewCart(string account)
         {
-            var db = new AppDbContext();
 
             var userId = GetUserIdByAccount(account); // 根據帳號獲取使用者 ID
             var newCart = new Cart
@@ -104,7 +176,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
             // 儲存變更
             db.SaveChanges();
         }
-
+            
         /// <summary>
         /// 取得目前購物車主檔，若沒有，就立刻新增一筆傳回
         /// </summary>
