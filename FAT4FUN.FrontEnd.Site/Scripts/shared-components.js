@@ -93,7 +93,7 @@ const HeaderComponent = {
           <a href="Login.html" class="ms-5 btn btn-link">
             <i class="bi bi-box-arrow-in-right"></i>
           </a>
-          <a href="card03.html" class="ms-5 btn btn-link">
+          <a href="cart.html" class="ms-5 btn btn-link">
             <i class="bi bi-cart"></i>
           </a>
         </div>
@@ -110,6 +110,7 @@ const HeaderComponent = {
             this.$emit("search", this.searchQuery); // 通过事件传递搜索关键字
         },
         isActiveLink(pathname) {
+        
             return window.location.pathname.includes(pathname);
         },
     },

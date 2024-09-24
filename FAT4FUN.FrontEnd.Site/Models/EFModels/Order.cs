@@ -36,6 +36,10 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         [StringLength(50)]
         public string ShippingAddress { get; set; }
 
+        [Required]
+        [StringLength(10)]
+        public string Phone { get; set; }
+
         public bool Status { get; set; }
 
         public DateTime CreateDate { get; set; }

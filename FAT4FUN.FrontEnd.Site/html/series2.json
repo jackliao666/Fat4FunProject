@@ -1,0 +1,44 @@
+[
+  {
+    "name": "羅技 Logitech",
+    "subcategories": [
+      { "name": "羅技鍵盤" },
+      { "name": "羅技滑鼠" },
+      { "name": "羅技方向盤" }
+    ]
+  },
+  {
+    "name": "海盜船 Corsair",
+    "subcategories": [
+      { "name": "海盜船鍵盤" }
+    ]
+  },
+  {
+    "name": "雷蛇 Razer",
+    "subcategories": [
+      { "name": "雷蛇鍵盤" },
+      { "name": "雷蛇滑鼠" },
+      { "name": "雷蛇耳機" }
+
+    ]
+  },
+  {
+    "name": "INTEL 酷睿",
+    "subcategories": [ { "name": "酷睿處理器" } ]
+  },
+  {
+    "name": "AMD 銳龍",
+    "subcategories": [ { "name": "銳龍處理器" } ]
+  },
+  {
+    "name": "金士頓 Kingston",
+    "subcategories": [ { "name": "金士頓記憶體" } ]
+  },
+  {
+    "name": "美光 Micron",
+    "subcategories": [
+      { "name": "美光記憶體" },
+      { "name": "美光硬碟" }
+    ]
+  }
+]

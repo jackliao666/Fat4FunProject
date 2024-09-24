@@ -1,13 +1,13 @@
 JK
-[v]«Ø¥ßEFModels
+[v]ï¿½Ø¥ï¿½EFModels
 	add/Models/EFModels/foler
-	«Ø¥ß AppDbContext, Connection String, Entity  Classes
+	ï¿½Ø¥ï¿½ AppDbContext, Connection String, Entity  Classes
 	add ../Scripts/vue.gobal.js
 	add ../Scripts/shared-components.js
 	add ../Content/NavFooter.css
 	add image
 
-[working on]°Ó«~­¶­±
+[v]PCï¿½Ó«~ï¿½ï¿½ï¿½ï¿½
 	add ProductApiControllers
 	add DevicesApiControllers
 	add ../ViewModels/BrandVm,ImageVm,ProductCategoryVm,
@@ -17,6 +17,9 @@ JK
 		Login.html,forgot the password.html,rest-password.html,Sign Up.html,
 		verify-code.html
     add series.json
+[v]Deviceï¿½Ó«~ï¿½ï¿½ï¿½ï¿½
+[v]Hotsï¿½Ó«~ï¿½ï¿½ï¿½ï¿½
+
 	
 
 
@@ -38,38 +41,38 @@ TOM
 
 =======================================
 Santiago
-[V] «á¥x­¶­±³]­p
+[V] ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½p
 
-[V] add µù¥U·s·|­û
+[V] add ï¿½ï¿½ï¿½Uï¿½sï¿½|ï¿½ï¿½
 	add /Models/Infra/HashUtility.cs
 	add Appsetting, key=.......
 
-	[V] ¹ê§@µù¥U¥\¯à
+	[V] ï¿½ï¿½@ï¿½ï¿½ï¿½Uï¿½\ï¿½ï¿½
 		add RegisterVm
-		add ÂX¥R¤èªk ToUser(RegisterVm)
+		add ï¿½Xï¿½Rï¿½ï¿½k ToUser(RegisterVm)
 		add UsersContorller , Register Action
-			add Register.cshtml , RegisterConfirm.cshtml (¤£¥²¼g action)
+			add Register.cshtml , RegisterConfirm.cshtml (ï¿½ï¿½ï¿½ï¿½ï¿½g action)
 		modify _Layout.cshtml , add Register link
 
-[V] ¹ê§@ ·s·|­û Email ½T»{¥\¯à
-	«H¸Ìªººô§},¬° https://.../Users/ActiveRegister?userId=6&confirmCode=fa229493609a47f0a404e09fc45a142e
+[V] ï¿½ï¿½@ ï¿½sï¿½|ï¿½ï¿½ Email ï¿½Tï¿½{ï¿½\ï¿½ï¿½
+	ï¿½Hï¿½Ìªï¿½ï¿½ï¿½},ï¿½ï¿½ https://.../Users/ActiveRegister?userId=6&confirmCode=fa229493609a47f0a404e09fc45a142e
 	modify MembersController , add ActiveRegister Action
 		update isConfirm=1, confirmCode=null
 	add ActiveRegister.cshtml
 
-[Working on] ¹ê§@µn¤Jµn¥X¥\¯à
-	¥u¦³±b±K¥¿½T¥B¶}³q·|­û¤~¤¹³\µn¤J
+[Working on] ï¿½ï¿½@ï¿½nï¿½Jï¿½nï¿½Xï¿½\ï¿½ï¿½
+	ï¿½uï¿½ï¿½ï¿½bï¿½Kï¿½ï¿½ï¿½Tï¿½Bï¿½}ï¿½qï¿½|ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½\ï¿½nï¿½J
 	modify web.config, add <authentication mode="Forms">
 	add LoginVm, LoginDto
 
-	** ¦w¸Ë AutoMapper package
+	** ï¿½wï¿½ï¿½ AutoMapper package
 		add Models/MappingProfile.cs
 		modify Global.asax.cs , add Mapper config
 
 	modify UsersController, add Login, Logout Actions
 		add Login.cshtml
 	modify _Layout.cshtml, add Login, Logout links
-	modify ±N About §ï¦¨»Ý­nµn¤J¤~¯àÀËµø
+	modify ï¿½N About ï¿½ï¦¨ï¿½Ý­nï¿½nï¿½Jï¿½~ï¿½ï¿½ï¿½Ëµï¿½
 
-	modify UserService , IUserRepository, ·s¼W Login ¬ÛÃö¦¨­û
+	modify UserService , IUserRepository, ï¿½sï¿½W Login ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	

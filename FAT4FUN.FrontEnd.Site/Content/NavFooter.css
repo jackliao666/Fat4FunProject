@@ -15,10 +15,10 @@ body {
 }
 
 /* 自定义导航栏链接颜色 */
-.navbar-custom .nav-link {
-  color: #fff; /* 链接文本颜色 */
-  font-size: 1.5rem; /* 放大文字的大小 */
-}
+    .navbar-custom .nav-link {
+        color: #fff; /* 链接文本颜色 */
+        font-size: 1.5rem; /* 放大文字的大小 */
+    }
 
 /* 自定义导航栏链接在 hover 时的颜色 */
 .navbar-custom .nav-link:hover {
@@ -195,4 +195,7 @@ footer .bottom-info {
   margin-top: 20px;
   padding-top: 10px;
   color: #aaa; /* 较浅的灰色 */
+}
+.navbar a.active-link {
+    color: rgb(255, 21, 0);
 }
