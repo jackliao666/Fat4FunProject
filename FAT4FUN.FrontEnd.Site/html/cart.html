@@ -330,8 +330,33 @@
                         console.error("There was a problem with the fetch operation:", error);
                     }
                 },
-                increaseQuantity(item) {
+               async increaseQuantity(item) {
                     item.qty++;
+
+                      // 呼叫 API 更新後端的購物車數量
+        const apiUrl = `https://localhost:44342/api/carts/updateQuantity`;
+                    try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    cartId: item.cartId, // 假設 cartId 是購物車 ID
+                    productSkuId: item.productSkuId, // 假設 productSkuId 是商品規格的 ID
+                    qty: item.qty, // 更新的數量
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            console.log("Quantity updated successfully", result);
+        } catch (error) {
+            console.error("There was a problem with the fetch operation:", error);
+        }
                     localStorage.setItem("cart", JSON.stringify(this.cartItems));
                 },
                 decreaseQuantity(item) {
