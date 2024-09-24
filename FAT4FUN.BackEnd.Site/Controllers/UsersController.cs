@@ -29,7 +29,8 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
 
-        
+
+        [Authorize]
         [HttpPost]
         public ActionResult Register(RegisterVm vm)
         {

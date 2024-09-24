@@ -171,6 +171,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomPrincipal.cs" />
     <Compile Include="Models\DAHelper.cs" />
     <Compile Include="Models\Dtos\LoginDto.cs" />
     <Compile Include="Models\Dtos\RegisterDto.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Models\Infra\HashUtility.cs" />
     <Compile Include="Models\Interfaces\IUserRepository.cs" />
     <Compile Include="Models\MappingProfile.cs" />
+    <Compile Include="Models\MyAuthorizeAttribute.cs" />
     <Compile Include="Models\Repositories\UserRepository.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\Services\UserService.cs" />
@@ -2076,6 +2078,7 @@
     <Content Include="Views\Users\RegisterConfirm.cshtml" />
     <Content Include="Views\Users\Login.cshtml" />
     <Content Include="Views\Users\ActiveRegister.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
