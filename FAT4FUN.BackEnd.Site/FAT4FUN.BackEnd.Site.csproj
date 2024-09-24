@@ -166,6 +166,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -174,7 +175,10 @@
     <Compile Include="Models\CustomPrincipal.cs" />
     <Compile Include="Models\DAHelper.cs" />
     <Compile Include="Models\Dtos\LoginDto.cs" />
+    <Compile Include="Models\Dtos\ProductDto.cs" />
+    <Compile Include="Models\Dtos\ProductSkuDto.cs" />
     <Compile Include="Models\Dtos\RegisterDto.cs" />
+    <Compile Include="Models\Dtos\SkuItemDto.cs" />
     <Compile Include="Models\Dtos\UserDto.cs" />
     <Compile Include="Models\EFModels\AppDbContext.cs" />
     <Compile Include="Models\EFModels\Brand.cs" />
@@ -193,10 +197,13 @@
     <Compile Include="Models\Interfaces\IUserRepository.cs" />
     <Compile Include="Models\MappingProfile.cs" />
     <Compile Include="Models\MyAuthorizeAttribute.cs" />
+    <Compile Include="Models\Repositories\ProductRepository.cs" />
     <Compile Include="Models\Repositories\UserRepository.cs" />
     <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\Services\ProductService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
     <Compile Include="Models\ViewModels\LoginVm.cs" />
+    <Compile Include="Models\ViewModels\ProductVm.cs" />
     <Compile Include="Models\ViewModels\RegisterVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -2079,6 +2086,8 @@
     <Content Include="Views\Users\Login.cshtml" />
     <Content Include="Views\Users\ActiveRegister.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Products\Index.cshtml" />
+    <Content Include="Views\Products\Create.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -19,7 +19,7 @@ JK
     add series.json
 [v]Device商品頁面
 [v]Hots商品頁面
-
+[working on]後台 商品管理
 	
 
 

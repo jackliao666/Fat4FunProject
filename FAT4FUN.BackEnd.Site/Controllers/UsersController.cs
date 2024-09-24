@@ -15,7 +15,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
     public class UsersController : Controller
     {
         // GET: Users
-        [Authorize]
+        //[Authorize]
         public ActionResult Index()
         {
             return View();
@@ -30,7 +30,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
 
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public ActionResult Register(RegisterVm vm)
         {
