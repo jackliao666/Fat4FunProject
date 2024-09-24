@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Principal;
+using System.Web;
+
+namespace FAT4FUN.BackEnd.Site.Models
+{
+    public class CustomPrincipal : IPrincipal
+    {
+        private string[] _functions;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <param name="functions"></param>能操作的功能 例如:"Book,User,Order"
+        public CustomPrincipal(IIdentity identity, string functions)
+        {
+            //將本使用者可以操作的功能分割成陣列,並且轉小寫,去除左右空白
+            _functions = functions.Split(',')
+                .Select(x => x.Trim().ToLower())
+                .ToArray();
+
+            this.Identity = identity;
+        }
+
+        public IIdentity Identity { get; private set; }
+
+        public bool IsInRole(string role)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
