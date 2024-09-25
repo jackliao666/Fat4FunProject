@@ -37,6 +37,7 @@ namespace FAT4FUN.BackEnd.Site.Models
                 string[] allowedFunctions = Functions.Split(',')
                                                       .Select(x => x.Trim().ToLower())
                                                       .ToArray();
+                
 
                 // 判斷目前使用者是否有上述功能權限
                 if (!allowedFunctions.Any(f => currentUser.IsInRole(f)))
@@ -47,7 +48,7 @@ namespace FAT4FUN.BackEnd.Site.Models
                             new { controller = "Users", action = "NoPermission" }
                         )
                     );
-                    return;
+                    
                 }
             }
             else

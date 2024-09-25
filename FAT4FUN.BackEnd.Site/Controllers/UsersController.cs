@@ -37,7 +37,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         new SelectListItem { Value = "5", Text = "Members" }
     };
 
-            ViewBag.Roles = roles;
+            ViewBag.Roles = new SelectList(roles, "Value", "Text");
             return View();
         }
 
@@ -47,6 +47,18 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         [HttpPost]
         public ActionResult Register(RegisterVm vm)
         {
+            var roles = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "0", Text = "Admin" },
+        new SelectListItem { Value = "1", Text = "Manager" },
+        new SelectListItem { Value = "2", Text = "Designer" },
+        new SelectListItem { Value = "3", Text = "Sales" },
+        new SelectListItem { Value = "4", Text = "Human Resources" },
+        new SelectListItem { Value = "5", Text = "Members" }
+    };
+
+            ViewBag.Roles = new SelectList(roles, "Value", "Text");
+
             if (!ModelState.IsValid) return View(vm);
             Result result = HandleRegister(vm);
             if (!result.IsSuccess)
@@ -129,7 +141,8 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         {
             //var roles = string.Empty; // 沒有用到角色權限,所以存入空白
             var service = new UserService();
-            int roleNumber = service.GetUserRole(account).Data as int? ?? 0; //取得角色數字(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 
+            int roleNumber = service.GetUserRole(account).Data as int? ?? 0; //取得角色數字
+            System.Diagnostics.Debug.WriteLine($"Role Number: {roleNumber}");
 
 
             // 建立一張認證票
@@ -140,7 +153,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                     DateTime.Now,               //發行日
                     DateTime.Now.AddMinutes(30),    //到期日
                     false,                      //是否續存
-                    roleNumber.ToString(),      // 將角色數字存入 UserData
+                    roleNumber.ToString(),      // 在 UserData 中存入角色數字
                     "/"                         //cookie位置
                     );
             
@@ -201,7 +214,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             //{
             //    RegisterDto dto = vm.ToDto();
             //    service.Register(dto);
-            //    service.AssignRole(dto.Id, dto.Role);
+            //    service.AssignRole(dto.Id, dto.Roles);
 
             //    return Result.Success();
             //}
@@ -210,23 +223,41 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             //{
             //    return Result.Fail(ex.Message);
             //}
+
+
             try
             {
-                RegisterDto dto = vm.ToDto(); // 將 ViewModel 轉換為 DTO
+                
+                RegisterDto dto = vm.ToDto();  // 將 ViewModel 轉換為 DTO
                 service.Register(dto);         // 呼叫服務層進行註冊操作
-
-                // 為使用者分配選中的角色
-                foreach (var role in vm.Roles)
-                {
-                    service.AssignRole(dto.Id, role); // 為使用者分配每個選中的角色
-                }
 
                 return Result.Success();
             }
-            catch (Exception ex)
+            catch (DbEntityValidationException ex)  // 捕捉資料庫驗證錯誤
             {
-                return Result.Fail(ex.Message);
+                // 輸出每個驗證錯誤的詳細訊息
+                foreach (var eve in ex.EntityValidationErrors)
+                {
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Property: {ve.PropertyName}, Error: {ve.ErrorMessage}");
+                    }
+                }
+                return Result.Fail("Validation error occurred during registration.");
             }
+            catch (DbUpdateException ex)  // 捕捉資料庫更新錯誤
+            {
+                // 輸出資料庫更新錯誤的詳細內部訊息
+                System.Diagnostics.Debug.WriteLine($"DB Update Error: {ex.InnerException?.Message}");
+                return Result.Fail("Database update error occurred during registration.");
+            }
+            catch (Exception ex)  // 捕捉其他所有錯誤
+            {
+                // 輸出一般錯誤的詳細內部訊息
+                System.Diagnostics.Debug.WriteLine($"General Error: {ex.InnerException?.Message ?? ex.Message}");
+                return Result.Fail("An error occurred during registration.");
+            }
+
 
         }
     }

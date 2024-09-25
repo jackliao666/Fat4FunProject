@@ -55,8 +55,8 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
         public bool Gender { get; set; }
 
         [Display(Name = "角色")]
-        [Required(ErrorMessage = "必須選擇一個或多個角色")]
-        public int Roles { get; set; } // 可選擇多個角色
+        [Required(ErrorMessage = "必須要給一個職位")]
+        public int Roles { get; set; } 
 
 
 

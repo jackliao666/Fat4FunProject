@@ -39,23 +39,37 @@ namespace FAT4FUN.BackEnd.Site
 
         protected void Application_AuthenticateRequest(object sander, EventArgs e)
         {
-            //狦﹟ゼ祅,ぃ矪瞶
-            if (!Request.IsAuthenticated) return;
+            ////狦﹟ゼ祅,ぃ矪瞶
+            //if (!Request.IsAuthenticated) return;
 
-            //眔FormsIdentity
-            var identity = (FormsIdentity)User.Identity;
+            ////眔FormsIdentity
+            //var identity = (FormsIdentity)User.Identity;
 
-            //礛眔粄靡布
-            FormsAuthenticationTicket ticket = identity.Ticket;
+            ////礛眔粄靡布
+            //FormsAuthenticationTicket ticket = identity.Ticket;
 
-            //眔布いㄏノ戈癟
-            string functions = ticket.UserData;
+            ////眔布いㄏノ戈癟
+            //string functions = ticket.UserData;
 
-            //ミ璹ㄏノン
-            IPrincipal principal = new CustomPrincipal(identity, functions);
+            ////ミ璹ㄏノン
+            //IPrincipal principal = new CustomPrincipal(identity, functions);
 
-            //┾传Θиㄏノン
-            Context.User = principal;
+            ////┾传Θиㄏノン
+            //Context.User = principal;
+
+            if (HttpContext.Current.User != null && HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                // 眔ō布
+                FormsAuthenticationTicket ticket = ((FormsIdentity)HttpContext.Current.User.Identity).Ticket;
+
+                // 眖 UserData い秆猂à︹计
+                string[] roles = ticket.UserData.Split(',');
+
+                // 盢讽玡ㄏノ锣传 CustomPrincipal
+                HttpContext.Current.User = new CustomPrincipal(HttpContext.Current.User.Identity, roles);
+            }
+
+
 
         }
 

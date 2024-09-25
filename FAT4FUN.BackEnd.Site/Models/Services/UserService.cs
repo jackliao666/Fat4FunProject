@@ -5,6 +5,7 @@ using FAT4FUN.BackEnd.Site.Models.Interfaces;
 using FAT4FUN.BackEnd.Site.Models.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 
@@ -44,13 +45,15 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             dto.ConfirmCode = confirmCode;
             dto.EncryptedPassword = hasPassword;
             dto.IsConfirmed = false;
-            
+
             int userId = _repo.Create(dto);
 
             // 保存角色到 Roles 表
             _repo.AssignRoleToUser(userId, dto.Roles);
 
             // todo 寄送驗證信
+
+
         }
 
         public void ActiveRegister(int userId, string confirmCode)
