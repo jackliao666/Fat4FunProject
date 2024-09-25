@@ -221,10 +221,17 @@
     <Content Include="Content\NavFooter.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="html\Checkout-Confirmation.html" />
+    <Content Include="html\Checkout-Success.html" />
+    <Content Include="html\EditProfile.html" />
     <Content Include="html\Login.html" />
     <Content Include="html\forget the password.html" />
     <Content Include="html\NavFooter.css" />
+    <Content Include="html\News.html" />
+    <Content Include="html\Order.html" />
+    <Content Include="html\QA.html" />
     <Content Include="html\shared-components.js" />
+    <Content Include="html\Track.html" />
     <Content Include="html\verify-code.html" />
     <Content Include="html\reset-password.html" />
     <Content Include="html\Sign up.html" />

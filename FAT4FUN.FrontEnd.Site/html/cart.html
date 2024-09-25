@@ -280,210 +280,219 @@
     </div>
     <!-- 導覽列元件 -->
     <script type="module">
-      import {
-        HeaderComponent,
-        FooterComponent,
-      } from "../Scripts/shared-components.js";
-      const app = Vue.createApp({
-        // 定義你的其他數據和方法
-        data() {
-          return {
-            cartItems: [], // 初始為空陣列
-            deliveryMethod: "宅配",
-            customer: {
-              name: "",
-              phone: "",
-              address: "",
+        import {
+            HeaderComponent,
+            FooterComponent,
+        } from "../Scripts/shared-components.js";
+        const app = Vue.createApp({
+            // 定義你的其他數據和方法
+            data() {
+                return {
+                    cartItems: [], // 初始為空陣列
+                    deliveryMethod: "宅配",
+                    customer: {
+                        name: "",
+                        phone: "",
+                        address: "",
+                    },
+                    paymentMethod: "貨到付款",
+                    invoiceMethod: "電子發票",
+                };
             },
-            paymentMethod: "貨到付款",
-            invoiceMethod: "電子發票",
-          };
-        },
-        computed: {
-          total() {
-            return this.cartItems.reduce((acc, item) => {
-              const price =
-                item.product.price +
-                (item.skuItem && item.skuItem.skuPrice
-                  ? item.skuItem.skuPrice
-                  : 0);
-              return acc + item.qty * price;
-            }, 0);
-          },
-        },
-        created() {
-          this.fetchCart(); // 加載購物車資料
-
-          const savedCustomer = localStorage.getItem("customerInfo");
-          if (savedCustomer) {
-            this.customer = JSON.parse(savedCustomer);
-          }
-        },
-        methods: {
-          async fetchCart() {
-            const userId = 3; // 這裡設置你的使用者 ID
-            const apiUrl = `https://localhost:44342/api/carts/${userId}`;
-
-            try {
-              const response = await fetch(apiUrl);
-
-              if (!response.ok) {
-                throw new Error(
-                  `Network response was not ok: ${response.statusText}`
-                );
-              }
-
-              const data = await response.json();
-
-              // 將獲取到的資料賦值給 cartItems
-              this.cartItems = data.cartItems; // 假設你的 API 返回的資料格式與你的範例一致
-
-              console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
-            } catch (error) {
-              console.error(
-                "There was a problem with the fetch operation:",
-                error
-              );
-            }
-          },
-          async increaseQuantity(item) {
-            item.qty++;
-
-            const apiUrl = `https://localhost:44342/api/carts/UpdateItemQty`;
-            try {
-              const response = await fetch(apiUrl, {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
+            computed: {
+                total() {
+                    return this.cartItems.reduce((acc, item) => {
+                        const price =
+                            item.product.price +
+                            (item.skuItem && item.skuItem.skuPrice
+                                ? item.skuItem.skuPrice
+                                : 0);
+                        return acc + item.qty * price;
+                    }, 0);
                 },
-                body: JSON.stringify({
-                  userId: item.userId,
-                  productSkuId: item.productSkuId,
-                  skuItemId: item.skuItemId,
-                  qty: item.qty,
-                }),
-              });
-              if (!response.ok) {
-                throw new Error(
-                  `Network response was not ok: ${response.statusText}`
-                );
-              }
+            },
+            created() {
+                this.fetchCart(); // 加載購物車資料
+            },
+            methods: {
+                async fetchCart() {
+                    const userId = 3; // 這裡設置你的使用者 ID
+                    const apiUrl = `/api/carts/${userId}`;
 
-              const result = await response.json();
-              console.log("Quantity updated successfully", result);
-            } catch (error) {
-              console.error(
-                "There was a problem with the fetch operation:",
-                error
-              );
-            }
+                    try {
+                        const response = await fetch(apiUrl);
 
-            localStorage.setItem("cart", JSON.stringify(this.cartItems));
-          },
+                        if (!response.ok) {
+                            throw new Error(
+                                `Network response was not ok: ${response.statusText}`
+                            );
+                        }
 
-          async decreaseQuantity(item) {
-            const apiUrl = `https://localhost:44342/api/carts/UpdateItemQty`;
-            if (item.qty > 1) {
-              item.qty--;
-              try {
-                const response = await fetch(apiUrl, {
-                  method: "PUT",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    userId: item.userId,
-                    productSkuId: item.productSkuId,
-                    skuItemId: item.skuItemId,
-                    qty: item.qty,
-                  }),
-                });
+                        const data = await response.json();
 
-                if (!response.ok) {
-                  throw new Error(
-                    `Network response was not ok: ${response.statusText}`
-                  );
-                }
-                const result = await response.json();
-                console.log("Quantity updated successfully", result);
-              } catch (error) {
-                console.error(
-                  "There was a problem with the fetch operation:",
-                  error
-                );
-              }
-            } else {
-              // 數量為 1 時刪除該項目
-              this.removeItem(item);
-            }
-            localStorage.setItem("cart", JSON.stringify(this.cartItems));
-          },
-          formatCurrency(value) {
-            if (typeof value !== "number" || isNaN(value)) {
-              return "0";
-            }
-            return value.toLocaleString();
-          },
-          submitOrder() {
-            if (this.cartItems.length === 0) {
-              alert("購物車內無商品繼續選購！");
-              return;
-            }
-            if (
-              this.customer.name &&
-              this.customer.phone &&
-              this.customer.address
-            ) {
-              localStorage.setItem(
-                "customerInfo",
-                JSON.stringify(this.customer)
-              );
-              localStorage.setItem("cart", JSON.stringify(this.cartItems));
+                        // 將獲取到的資料賦值給 cartItems
+                        this.cartItems = data.cartItems; // 假設你的 API 返回的資料格式與你的範例一致
 
-              window.location.href = "Checkout-Confirmation.html";
-            } else {
-              alert("請填寫完整的顧客資料！");
-            }
-          },
-          async removeItem(item) {
-            // 從 cartItems 中移除該項目
-            this.cartItems = this.cartItems.filter(
-              (cartItem) => cartItem.id !== item.id
-            );
-
-            const apiUrl = `https://localhost:44342/api/carts/RemoveItem`;
-            try {
-              const response = await fetch(apiUrl, {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
+                        console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
+                    } catch (error) {
+                        console.error(
+                            "There was a problem with the fetch operation:",
+                            error
+                        );
+                        localStorage.setItem("cart", JSON.stringify(this.cartItems));
+                    }
                 },
-                body: JSON.stringify({
-                  userId: item.userId,
-                  productSkuId: item.productSkuId,
-                  skuItemId: item.skuItemId,
-                }),
-              });
-              if (!response.ok) {
-                throw new Error(
-                  `Failed to remove item: ${response.statusText}`
-                );
-              }
-            } catch (error) {
-              console.error("Error removing item:", error);
-            }
-            localStorage.setItem("cart", JSON.stringify(this.cartItems));
-          },
-          handleSearch() {
-            // 在這裡定義搜尋的邏輯
-          },
-        },
-      });
+                async increaseQuantity(item) {
+                    item.qty++;
 
-      app.component("header-component", HeaderComponent);
-      app.component("footer-component", FooterComponent);
+                    const apiUrl = `/api/carts/UpdateItemQty`;
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                userId: item.userId,
+                                productSkuId: item.productSkuId,
+                                skuItemId: item.skuItemId,
+                                qty: item.qty,
+                            }),
+                        });
+                        if (!response.ok) {
+                            throw new Error(
+                                `Network response was not ok: ${response.statusText}`
+                            );
+                        }
 
-      app.mount("#app");
+                        const result = await response.json();
+                        console.log("Quantity updated successfully", result);
+                    } catch (error) {
+                        console.error(
+                            "There was a problem with the fetch operation:",
+                            error
+                        );
+                    }
+
+                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
+                },
+
+                async decreaseQuantity(item) {
+                    const apiUrl = `/api/carts/UpdateItemQty`;
+                    if (item.qty > 1) {
+                        item.qty--;
+                        try {
+                            const response = await fetch(apiUrl, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    userId: item.userId,
+                                    productSkuId: item.productSkuId,
+                                    skuItemId: item.skuItemId,
+                                    qty: item.qty,
+                                }),
+                            });
+
+                            if (!response.ok) {
+                                throw new Error(
+                                    `Network response was not ok: ${response.statusText}`
+                                );
+                            }
+                            const result = await response.json();
+                            console.log("Quantity updated successfully", result);
+                        } catch (error) {
+                            console.error(
+                                "There was a problem with the fetch operation:",
+                                error
+                            );
+                        }
+                    } else {
+                        // 數量為 1 時刪除該項目
+                        this.removeItem(item);
+                    }
+                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
+                },
+                formatCurrency(value) {
+                    if (typeof value !== "number" || isNaN(value)) {
+                        return "0";
+                    }
+                    return value.toLocaleString();
+                },
+
+                async removeItem(item) {
+                    // 從 cartItems 中移除該項目
+                    this.cartItems = this.cartItems.filter(
+                        (cartItem) => cartItem.id !== item.id
+                    );
+
+                    const apiUrl = `/api/carts/RemoveItem`;
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                userId: item.userId,
+                                productSkuId: item.productSkuId,
+                                skuItemId: item.skuItemId,
+                            }),
+                        });
+                        if (!response.ok) {
+                            throw new Error(
+                                `Failed to remove item: ${response.statusText}`
+                            );
+                        }
+                        const data = await response.json(); 
+
+                        // 將獲取到的資料賦值給 cartItems
+                        this.cartItems = data.cartItems;
+
+                        console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
+                    } catch (error) {
+                        console.error("Error removing item:", error);
+                    }
+                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
+                },
+                submitOrder() {
+                    if (this.cartItems.length === 0) {
+                        alert("購物車內無商品繼續選購！");
+                        return;
+                    }
+                    // 將整個購物車存儲到 localStorage
+                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
+                    if (
+                        this.customer.name &&
+                        this.customer.phone &&
+                        this.customer.address
+                    ) {
+                        const customerInfo = {
+                            name: this.customer.name,
+                            phone: this.customer.phone,
+                            address: this.customer.address,
+                            deliveryMethod: this.deliveryMethod,
+                            paymentMethod: this.paymentMethod,
+                            invoiceMethod: this.invoiceMethod
+                        };
+                        localStorage.setItem("customerInfo", JSON.stringify(customerInfo));
+
+                        window.location.href = "Checkout-Confirmation.html";
+                    } else {
+                        alert("請填寫完整的顧客資料！");
+                    }
+                },
+                handleSearch() {
+                    // 在這裡定義搜尋的邏輯
+                },
+            },
+        });
+
+        app.component("header-component", HeaderComponent);
+        app.component("footer-component", FooterComponent);
+
+        app.mount("#app");
     </script>
 </body>
 </html>

@@ -4,6 +4,7 @@ using FAT4FUN.FrontEnd.Site.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Dynamic;
 using System.Linq;
 using System.Net;
@@ -111,32 +112,8 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
                 return InternalServerError(ex); // 返回 500 錯誤
             }
         }
-
-        private void AddCart(string account, int productSkuId, int qty, int? skuItemId = null, int? cartId = null)
-        {
-            if (!cartId.HasValue)
-            {
-                cartId = CreateNewCart(account);  // 使用帳號創建新的購物車
-            }
-            AddCartItem(cartId.Value, productSkuId, qty, skuItemId);
-        }
-
-        private int CreateNewCart(string account)
-        {
-
-            var userId = GetUserIdByAccount(account); // 根據帳號獲取使用者 ID
-            var newCart = new Cart
-            {
-                UserId = userId
-                // 可視需要添加其他初始化的屬性
-            };
-
-            db.Carts.Add(newCart);
-            db.SaveChanges();
-
-            return newCart.Id; // 返回新的購物車 Id
-        }
-
+                
+        
         private int GetUserIdByAccount(string account)
         {
             var user = db.Users.FirstOrDefault(u => u.Account == account);
@@ -147,36 +124,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
             return user.Id;
         }
 
-        private void AddCartItem(int cartId, int productSkuId, int qty, int? skuItemId)
-        {
-            // 檢查購物車中是否已經有該商品及指定規格
-            var cartItem = db.Carts
-                .FirstOrDefault(c => c.UserId == db.Carts.Find(cartId).UserId &&
-                                     c.ProductSkuId == productSkuId &&
-                                     c.SkuItemId == skuItemId);
-
-            if (cartItem == null)
-            {
-                // 如果購物車中沒有該商品或該規格，則新增一個項目
-                cartItem = new Cart
-                {
-                    UserId = db.Carts.Find(cartId).UserId,
-                    ProductSkuId = productSkuId,
-                    SkuItemId = skuItemId,
-                    Qty = qty,
-                };
-                db.Carts.Add(cartItem);
-            }
-            else
-            {
-                // 如果商品和規格已經存在，則更新數量
-                cartItem.Qty += qty;
-            }
-
-            // 儲存變更
-            db.SaveChanges();
-        }
-            
+                   
         /// <summary>
         /// 取得目前購物車主檔，若沒有，就立刻新增一筆傳回
         /// </summary>
@@ -220,10 +168,161 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
             }
 
             // 計算總金額
-            var total = cartInfo.Sum(item => item.SubTotal) ?? 0;
+            var total = cartInfo.Sum(item => item.SubTotal);
 
             return (cartInfo, total); // 返回購物車項目和總金額
 
         }
+
+        //==============以下是建立訂單=========
+
+        [HttpPost]
+        [Route("api/carts/SubmitOrder")]
+        public IHttpActionResult SubmitOrder([FromBody] CheckoutOrderRequest request)
+        {
+            if (request == null || !ModelState.IsValid)
+            {
+                return BadRequest("請求數據無效");
+            }
+            var userid = request.UserId;
+            var vm = request.Vm;
+            //var account = User.Identity.Name;
+            var cart = GetCartInfo(userid);
+
+            //if (!ModelState.IsValid)
+            //{
+            //    // 重新載入購物車明細，因為表單驗證失敗時需要顯示購物車資訊
+            //    vm.Cart = cart.CartItems;  // 確保購物車明細仍然顯示在表單中
+            //    return Ok(vm);
+            //}
+ 
+            vm.Cart = cart.CartItems;
+            if (!cart.CartItems.Any())
+            {
+                ModelState.AddModelError(string.Empty, "購物車是空的，無法結帳");
+                vm.Cart = cart.CartItems;
+                return Ok(vm);
+            }
+
+
+            try
+            {
+                ProcessCheckout(userid, vm);
+                return Ok("Checkout-Success");
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest("結帳失敗，請稍後再試。");
+            }
+            catch (Exception ex)
+            {
+                // 記錄錯誤
+                return InternalServerError(ex);
+            }
+        }
+
+        private void ProcessCheckout(int userid, CheckoutVm vm)
+        {
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try { 
+                //建立訂單主黨明細檔
+                CreateOrder(userid, vm);
+
+                ////清空購物車
+                var cartItems = db.Carts
+                         .Where(c => c.UserId == userid)
+                         .ToList(); // 不用 AsNoTracking，因為需要刪除實體
+                if (!cartItems.Any()) return;
+
+                // 刪除每個購物車項目
+                db.Carts.RemoveRange(cartItems);
+
+
+                // 保存變更
+                db.SaveChanges();
+
+                transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    // 處理例外情況，可能需要記錄錯誤或返回錯誤信息
+                    throw new Exception("結帳失敗，請稍後再試。", ex);
+                }
+            }
+
+        }
+
+        
+        private void CreateOrder(int userid, CheckoutVm vm)
+        {
+            var userrId = db.Users.First(m => m.Id == userid).Id;
+
+            //取得Cart資料
+            var cartinfo = GetCartInfo(userid);
+           
+            //新增訂單主檔
+            var order = new Order
+            {
+                UserId = userid,
+                No= GenerateOrderNo(userid), // 使用生成的訂單編號,
+                PaymentMethod =1,
+                TotalAmount = cartinfo.Total,
+                ShippingMethod=1,
+                RecipientName=vm.RecipientName,
+                ShippingAddress=vm.ShippingAddress,
+                Phone=vm.Phone,
+                Status = 1,
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+            };
+
+            //新增訂單明細檔
+            foreach (var item in cartinfo.CartItems)
+            {
+                order.OrderItems.Add(new OrderItem
+                {
+                    ProductSkuId = item.ProductSkuId,
+                    ProductName = item.Product.Name,
+                    SkuItemId=item.SkuItemId ?? null,
+                    SkuItemName =item.SkuItem?.Value ?? "No Spec",
+                    Price = item.Product.Price + (item.SkuItem?.SkuPrice ?? 0),
+                    Qty = item.Qty,
+                    SubTotal = item.SubTotal,
+                });
+            }
+            db.Orders.Add(order);
+            db.SaveChanges();
+
+        }
+
+        private string GenerateOrderNo(int userId)
+        {
+            // 獲取當前日期並轉為所需的格式，例如 "20240924"
+            string currentDate = DateTime.Now.ToString("yyyyMMdd");
+
+            // 獲取當天的開始和結束時間
+            DateTime startDate = DateTime.Today; // 當天的開始時間
+            DateTime endDate = startDate.AddDays(1); // 當天的結束時間
+
+            // 查詢當天該用戶的訂單數量來生成流水號
+            int orderCountToday = db.Orders
+                                    .Where(o => o.UserId == userId && o.CreateDate >= startDate && o.CreateDate < endDate)
+                                    .Count() + 1; // 當天已有訂單數量 +1 作為流水號
+
+            // 格式化訂單編號，例如 "20240924-1001-001"
+            string orderNo = $"{currentDate}{userId:D3}{orderCountToday:D3}";
+
+            return orderNo;
+        }
+
+        public class CheckoutOrderRequest
+        {
+            public int UserId { get; set; }
+            public CheckoutVm Vm { get; set; }
+        }
+
     }
+
 }
