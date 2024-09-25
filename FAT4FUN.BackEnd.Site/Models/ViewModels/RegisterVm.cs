@@ -54,6 +54,10 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
         [Display(Name = "性別")]
         public bool Gender { get; set; }
 
+        [Display(Name = "角色")]
+        [Required(ErrorMessage = "必須選擇一個或多個角色")]
+        public int Roles { get; set; } // 可選擇多個角色
+
 
 
     }
@@ -96,7 +100,7 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
                 Phone= vm.Phone,
                 Address = vm.Address,
                 Gender= vm.Gender,
-                
+                Roles = vm.Roles,
                 
 
             };

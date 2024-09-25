@@ -65,8 +65,11 @@ namespace FAT4FUN.BackEnd.Site
             switch (roleNumber)
             {
                 case 0: return "Admin";
-                case 1: return "Employee";
+                case 1: return "Manager";
                 case 2: return "Designer";
+                case 3: return "Sales";
+                case 4: return "Human Resources";
+                case 5: return "Members";
                 default: return "Unknown";
             }
         }

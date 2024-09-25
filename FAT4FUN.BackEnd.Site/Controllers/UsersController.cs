@@ -5,6 +5,7 @@ using FAT4FUN.BackEnd.Site.Models.Services;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
@@ -26,12 +27,23 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         public ActionResult Register()
         {
+            var roles = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "0", Text = "Admin" },
+        new SelectListItem { Value = "1", Text = "Manager" },
+        new SelectListItem { Value = "2", Text = "Designer" },
+        new SelectListItem { Value = "3", Text = "Sales" },
+        new SelectListItem { Value = "4", Text = "Human Resources" },
+        new SelectListItem { Value = "5", Text = "Members" }
+    };
+
+            ViewBag.Roles = roles;
             return View();
         }
 
 
 
-        [MyAuthorize(Functions = "0")]
+        [MyAuthorize(Functions = "0,3")]
         [HttpPost]
         public ActionResult Register(RegisterVm vm)
         {
@@ -185,36 +197,37 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             //可自行決定叫用EF or Service object進行 create user 的工作
             UserService service = new UserService();
 
+            //try
+            //{
+            //    RegisterDto dto = vm.ToDto();
+            //    service.Register(dto);
+            //    service.AssignRole(dto.Id, dto.Role);
+
+            //    return Result.Success();
+            //}
+
+            //catch (Exception ex)
+            //{
+            //    return Result.Fail(ex.Message);
+            //}
             try
             {
-                RegisterDto dto = vm.ToDto();
-                service.Register(dto);
+                RegisterDto dto = vm.ToDto(); // 將 ViewModel 轉換為 DTO
+                service.Register(dto);         // 呼叫服務層進行註冊操作
+
+                // 為使用者分配選中的角色
+                foreach (var role in vm.Roles)
+                {
+                    service.AssignRole(dto.Id, role); // 為使用者分配每個選中的角色
+                }
 
                 return Result.Success();
             }
-            //catch (DbEntityValidationException ex)
-            //{
-            //    // 获取详细的验证错误信息
-            //    var validationErrors = ex.EntityValidationErrors
-            //        .SelectMany(e => e.ValidationErrors)
-            //        .Select(e => $"Property: {e.PropertyName}, Error: {e.ErrorMessage}")
-            //        .ToList();
-
-            //    // 记录错误信息或打印出来
-            //    foreach (var error in validationErrors)
-            //    {
-            //        System.Diagnostics.Debug.WriteLine(error); // 在调试窗口打印错误
-            //    }
-
-            //    // 返回详细的验证错误信息
-            //    return Result.Fail(string.Join(", ", validationErrors));
-            //}
             catch (Exception ex)
             {
                 return Result.Fail(ex.Message);
             }
 
-            
         }
     }
 }

@@ -44,7 +44,11 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             dto.ConfirmCode = confirmCode;
             dto.EncryptedPassword = hasPassword;
             dto.IsConfirmed = false;
-            _repo.Create(dto);
+            
+            int userId = _repo.Create(dto);
+
+            // 保存角色到 Roles 表
+            _repo.AssignRoleToUser(userId, dto.Roles);
 
             // todo 寄送驗證信
         }
@@ -99,6 +103,18 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             //回傳
             return isPasswordCorrect ? Result.Success() : Result.Fail("帳號或密碼錯誤");
 
+        }
+
+        internal void AssignRole(int userId, int role)
+        {
+            var userRole = new Role
+            {
+                UserId = userId,
+                Role1 = role
+            };
+
+            _db.Roles.Add(userRole);  // 將角色新增到資料庫
+            _db.SaveChanges();
         }
     }
 

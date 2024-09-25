@@ -50,7 +50,7 @@ Santiago
 			add Register.cshtml , RegisterConfirm.cshtml (不必寫 action)
 		modify _Layout.cshtml , add Register link
 
-[V] 實作 新會員 Emai	信裡的網址,為 https://.../Users/ActiveRegister?userId=7&confirmCode=9950601efcda42b59fb9227adc5750cd
+[V] 實作 新會員 Emai	信裡的網址,為 https://.../Users/ActiveRegister?userId=9&confirmCode=1d23f5c0fd0d4fe285c75c8c6f7cd9d6
 l 確認功能
 	modify MembersController , add ActiveRegister Action
 		update isConfirm=1, confirmCode=null

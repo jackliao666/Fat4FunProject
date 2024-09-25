@@ -49,27 +49,45 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             _db.SaveChanges();
         }
 
-
-
-        public void Create(RegisterDto dto)
+        public void AssignRoleToUser(int userId, int roleId)
         {
-            _db.Users.Add(new User
+            var userRole = new Role
+            {
+                UserId = userId,
+                Role1 = roleId
+            };
+
+            _db.Roles.Add(userRole);
+            _db.SaveChanges();
+        }
+
+        public int Create(RegisterDto dto)
+        {
+            // 轉換 DTO 為 User Entity
+            var user = new User
             {
                 Account = dto.Account,
-                Email = dto.Email,
                 Password = dto.EncryptedPassword,
+                Email = dto.Email,
                 Name = dto.Name,
                 Phone = dto.Phone,
-                ConfirmCode = dto.ConfirmCode,
-                IsConfirmed = dto.IsConfirmed,
                 Gender = dto.Gender,
                 Address = dto.Address,
-                CreateDate = DateTime.Now,  
-                ModifyDate = DateTime.Now   
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                IsConfirmed = dto.IsConfirmed,
+                ConfirmCode = dto.ConfirmCode,
+                Status = true,
+            };
 
-            });
-
+            // 將使用者新增到資料庫
+            _db.Users.Add(user);
             _db.SaveChanges();
+
+            // 回傳使用者的 Id
+            return user.Id;
+
+
         }
 
         public UserDto Get(string account)
