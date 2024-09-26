@@ -56,7 +56,6 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         public DateTime ModifyDate { get; set; }
 
-        public bool? IsConfirmed { get; set; }
 
         
 

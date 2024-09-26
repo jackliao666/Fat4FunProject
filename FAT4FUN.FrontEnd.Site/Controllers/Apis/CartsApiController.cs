@@ -257,16 +257,16 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
         
         private void CreateOrder(int userid, CheckoutVm vm)
         {
-            var userrId = db.Users.First(m => m.Id == userid).Id;
+            var userId = db.Users.First(m => m.Id == userid).Id;
 
             //取得Cart資料
-            var cartinfo = GetCartInfo(userid);
+            var cartinfo = GetCartInfo(userId);
            
             //新增訂單主檔
             var order = new Order
             {
-                UserId = userid,
-                No= GenerateOrderNo(userid), // 使用生成的訂單編號,
+                UserId = userId,
+                No= GenerateOrderNo(userId), // 使用生成的訂單編號,
                 PaymentMethod =1,
                 TotalAmount = cartinfo.Total,
                 ShippingMethod=1,
