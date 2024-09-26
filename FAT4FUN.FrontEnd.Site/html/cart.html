@@ -301,14 +301,12 @@
             },
             computed: {
                 total() {
-                    return this.cartItems.reduce((acc, item) => {
-                        const price =
-                            item.product.price +
-                            (item.skuItem && item.skuItem.skuPrice
-                                ? item.skuItem.skuPrice
-                                : 0);
-                        return acc + item.qty * price;
-                    }, 0);
+                    //if (!this.cartItems || !Array.isArray(this.cartItems)) {
+                    //    return 0;
+                    //}
+                    return this.cartItems.reduce((sum, item) => {
+                        return sum + (item.qty * (item.product.price + (item.skuItem ? item.skuItem.skuPrice : 0)));
+                    }, 0) || 0; // 確保 total 至少為 0
                 },
             },
             created() {
@@ -335,9 +333,7 @@
                             );
                         }
 
-                        const data = await response.json();
-
-                        // 將獲取到的資料賦值給 cartItems
+                        const data = await response.json(); // 將獲取到的資料賦值給 cartItems
                         this.cartItems = data.cartItems; // 假設你的 API 返回的資料格式與你的範例一致
 
                         console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
@@ -429,38 +425,43 @@
                 },
 
                 async removeItem(item) {
-                    // 從 cartItems 中移除該項目
-                    this.cartItems = this.cartItems.filter(
-                        (cartItem) => cartItem.id !== item.id
-                    );
-
-                    const apiUrl = `/api/carts/RemoveItem`;
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: "DELETE",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                userId: item.userId,
-                                productSkuId: item.productSkuId,
-                                skuItemId: item.skuItemId,
-                            }),
-                        });
-                        if (!response.ok) {
-                            throw new Error(
-                                `Failed to remove item: ${response.statusText}`
-                            );
-                        }
-                        const data = await response.json(); 
-
-                        // 將獲取到的資料賦值給 cartItems
-                        this.cartItems = data.cartItems;
-
-                        console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
-                    } catch (error) {
-                        console.error("Error removing item:", error);
+                  
+                    // 檢查 item 是否存在於 cartItems
+                    const index = this.cartItems.indexOf(item);
+                    if (index > -1) {
+                        this.cartItems.splice(index, 1); // 刪除商品
                     }
+
+                        const apiUrl = `/api/carts/RemoveItem`;
+                        try {
+                            const response = await fetch(apiUrl, {
+                                method: "DELETE",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    userId: item.userId,
+                                    productSkuId: item.productSkuId,
+                                    skuItemId: item.skuItemId,
+                                }),
+                            });
+                            if (!response.ok) {
+                                throw new Error(
+                                    `Failed to remove item: ${response.statusText}`
+                                );
+                            }
+
+                            this.fetchCart(userId);
+                            const data = await response.json();
+
+                            // 將獲取到的資料賦值給 cartItems
+                            this.cartItems = data.cartItems;
+
+                            this.cartItems = this.cartItems.filter(cartItem => cartItem.id !== item?.id);
+                        } catch (error) {
+                            console.error("Error removing item:", error);
+                        }
+                    
                     localStorage.setItem("cart", JSON.stringify(this.cartItems));
                 },
                 submitOrder() {
