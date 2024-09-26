@@ -14,16 +14,16 @@ namespace FAT4FUN.FrontEnd.Site
 
 			//設定 JSON 序列化使屬性名稱為駝峰式命名
 			config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-			// Web API 設定和服務
+            // Web API 設定和服務
 
-			// Web API 路由
-			config.MapHttpAttributeRoutes();
+            // Web API 路由
+            config.MapHttpAttributeRoutes();
 
-			config.Routes.MapHttpRoute(
-				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{id}",
-				defaults: new { id = RouteParameter.Optional }
-			);
-		}
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+        }
 	}
 }

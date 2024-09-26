@@ -22,11 +22,11 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         [StringLength(50)]
         public string No { get; set; }
 
-        public bool PaymentMethod { get; set; }
+        public int PaymentMethod { get; set; }
 
         public int TotalAmount { get; set; }
 
-        public bool ShippingMethod { get; set; }
+        public int ShippingMethod { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -40,7 +40,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         [StringLength(10)]
         public string Phone { get; set; }
 
-        public bool Status { get; set; }
+        public int Status { get; set; }
 
         public DateTime CreateDate { get; set; }
 

@@ -10,7 +10,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.ViewModels
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public int ProductSkuId { get; set; }
         public ProductSkuVm Product { get; set; }
 
@@ -21,12 +21,10 @@ namespace FAT4FUN.FrontEnd.Site.Models.ViewModels
         public int Qty { get; set; }
 
 
-        public int? SubTotal
+        public int SubTotal
         {
             get
             {
-                if (Product == null)
-                    return null;
 
                 int productPrice = Product?.Price ?? 0; // 確保不為 null
                 int skuPrice = SkuItem?.SkuPrice ?? 0; // 確保不為 null
