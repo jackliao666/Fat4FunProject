@@ -196,11 +196,11 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
             //    return Ok(vm);
             //}
  
-            vm.Cart = cart.CartItems;
+            //vm.Cart = cart.CartItems;
             if (!cart.CartItems.Any())
             {
                 ModelState.AddModelError(string.Empty, "購物車是空的，無法結帳");
-                vm.Cart = cart.CartItems;
+                //vm.Cart = cart.CartItems;
                 return Ok(vm);
             }
 

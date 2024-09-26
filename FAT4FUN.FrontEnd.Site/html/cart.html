@@ -312,11 +312,18 @@
                 },
             },
             created() {
-                this.fetchCart(); // 加載購物車資料
+                let userId = localStorage.getItem("userId");
+                if (!userId) {
+                    userId = 3; // 預設值
+                    localStorage.setItem("userId", userId);
+                    /*console.error("未找到會員ID，請先登入");*/
+                }
+                console.log("User ID:", userId); // 檢查 userId
+                this.fetchCart(userId);
+
             },
             methods: {
-                async fetchCart() {
-                    const userId = 3; // 這裡設置你的使用者 ID
+                async fetchCart(userId) {        
                     const apiUrl = `/api/carts/${userId}`;
 
                     try {
