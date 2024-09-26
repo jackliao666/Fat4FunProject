@@ -82,13 +82,25 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             if (ModelState.IsValid)
             {
                 var productDto = WebApiApplication._mapper.Map<ProductDto>(vm);
-                _productService.UpdateProduct(productDto);
+                _productService.Update(productDto);
                 // 更新資料邏輯
                 // Save changes to the database
                 return RedirectToAction("Index");
             }
             return View(vm);
         }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id)
+        //{
+        //    if (ModelState.IsValid)
+        //    { 
+        //        _productService.Delete(id);
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View();
+        //}
 
     }
 }

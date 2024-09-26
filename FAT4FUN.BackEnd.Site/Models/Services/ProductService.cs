@@ -39,6 +39,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
                 BrandName = dto.BrandName,
                 Name = dto.Name,
                 Description = dto.Description,
+                ProductSkuId = dto.ProductSkus != null && dto.ProductSkus.Any() ? dto.ProductSkus.First().Id : 0,
                 Price = dto.ProductSkus != null && dto.ProductSkus.Any() ? dto.ProductSkus.First().Price : 0, // 假設每個產品至少有一個規格
                 Sale = dto.ProductSkus != null && dto.ProductSkus.Any() ? dto.ProductSkus.First().Sale : 0,
                 Status = dto.Status,
@@ -108,6 +109,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
                 BrandName = productDto.BrandName,
                 Name = productDto.Name,
                 Description = productDto.Description,
+                ProductSkuId = productDto.ProductSkus != null && productDto.ProductSkus.Any() ? productDto.ProductSkus.First().Id:0,
                 ProductSkuName = productDto.ProductSkus != null && productDto.ProductSkus.Any() ? productDto.ProductSkus.First().Name : null, // 獲取第一個 SKU 的名稱
                 Price = productDto.ProductSkus != null && productDto.ProductSkus.Any() ? productDto.ProductSkus.First().Price : 0, // 假設每個產品至少有一個規格
                 Sale = productDto.ProductSkus != null && productDto.ProductSkus.Any() ? productDto.ProductSkus.First().Sale : 0,
@@ -119,36 +121,32 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
 
         }
 
-        public void UpdateProduct(ProductDto productDto)
+        public int Update(ProductDto productDto)
         {
-
-
-            var createdProductId = _repo.Create(productDto);
-            // 將 ViewModel 轉換為 DTO
-            var productDto = new ProductDto
+            var createdProductId = _repo.Update(productDto);
+  
+            var productskuDto = new ProductSkuDto
             {
-                Id = vm.Id,
-                CategoryId = vm.CategoryId,
-                CategoryName = vm.CategoryName,
-                BrandId = vm.BrandId,
-                BrandName = vm.BrandName,
-                Name = vm.Name,     
-                Description = vm.Description,
-                Status = vm.Status,      
-                ModifyDate = DateTime.Now, // 更新修改時間
-                ProductSkus = new List<ProductSkuDto>
-                {
-                    new ProductSkuDto // 使用 new 創建 ProductSkuDto 物件
-                    {
-                        ProductId = vm.Id, 
-                        Name = vm.ProductSkus.ProductSkuName, 
-                        Price = vm.ProductSkus.Price, 
-                        Sale = vm.ProductSkus.Sale 
-                    }
-                }
+                Id = productDto.ProductSkuId,
+                ProductId = createdProductId,
+                Name = productDto.Name,
+                Price = productDto.Price,
+                Sale = productDto.Sale,
             };
+            
+            _repo.UpdateSkus(productskuDto);
 
-            _repo.Update(productDto);
+            return createdProductId;
         }
+
+        //public void Delete(int id)
+        //{
+        //    var product = _repo.Get(id);
+        //    if (product != null)
+        //    {
+        //        _repo.Delete(product);
+        //        _repo.SaveChanges();
+        //    }
+        //}
     }
 }

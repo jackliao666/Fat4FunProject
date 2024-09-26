@@ -30,6 +30,7 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
         [Display(Name = "產品描述")]
         public string Description { get; set; }
 
+        public int ProductSkuId { get; set; }   
         [Display(Name="規格名稱")]
         public string ProductSkuName { get; set; }
 

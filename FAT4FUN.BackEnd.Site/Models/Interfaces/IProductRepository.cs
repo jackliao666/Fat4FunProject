@@ -17,7 +17,8 @@ namespace FAT4FUN.BackEnd.Site.Models.Interfaces
         List<ProductCategory> GetCategories();
 
         ProductDto GetProductId(int id);
-        void Update(ProductDto ProductDto);
-
+        int Update(ProductDto ProductDto);
+        void UpdateSkus(ProductSkuDto productSkuDto);
+        
     }
 }
