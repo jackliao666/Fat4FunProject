@@ -87,7 +87,7 @@ const HeaderComponent = {
         </form>
 
         <div class="d-flex">
-          <a href="Member.html" class="ms-5 btn btn-link">
+          <a href="Member1.html" class="ms-5 btn btn-link">
             <i class="bi bi-person-circle"></i>
           </a>
           <a href="Login.html" class="ms-5 btn btn-link">
