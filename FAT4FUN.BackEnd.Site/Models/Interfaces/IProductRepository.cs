@@ -19,6 +19,13 @@ namespace FAT4FUN.BackEnd.Site.Models.Interfaces
         ProductDto GetProductId(int id);
         int Update(ProductDto ProductDto);
         void UpdateSkus(ProductSkuDto productSkuDto);
-        
+
+        void DeleteProductWithSkus(ProductDto productDto);
+
+
+
+
+
+
     }
 }

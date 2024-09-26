@@ -23,8 +23,6 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             _repo = repo;
         }
 
-        
-
         // 獲取所有產品並轉換為 ViewModel
         public List<ProductVm> GetProducts()
         {
@@ -139,14 +137,19 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             return createdProductId;
         }
 
-        //public void Delete(int id)
-        //{
-        //    var product = _repo.Get(id);
-        //    if (product != null)
-        //    {
-        //        _repo.Delete(product);
-        //        _repo.SaveChanges();
-        //    }
-        //}
+        public void Delete(int id)
+        {
+            var productDto = _repo.GetProductId(id);
+            if (productDto != null)
+            {
+                // 刪除所有與該產品相關的 SKUs
+                var skus = _repo.GetProductId(id);
+                if (productDto != null)
+                {
+                    // 呼叫 Repository 層刪除產品及其 SKU
+                    _repo.DeleteProductWithSkus(productDto);
+                }
+            }
+        }
     }
 }

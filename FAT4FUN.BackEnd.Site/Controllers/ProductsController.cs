@@ -89,18 +89,14 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             }
             return View(vm);
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id)
-        //{
-        //    if (ModelState.IsValid)
-        //    { 
-        //        _productService.Delete(id);
 
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View();
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            _productService.Delete(id); // 呼叫刪除邏輯
+            return RedirectToAction("Index");
+        }
 
     }
 }

@@ -2091,6 +2091,7 @@
     <Content Include="Views\Products\Index.cshtml" />
     <Content Include="Views\Products\Create.cshtml" />
     <Content Include="Views\Products\Edit.cshtml" />
+    <Content Include="Views\Products\Delete.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

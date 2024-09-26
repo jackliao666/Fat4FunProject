@@ -118,6 +118,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                     ProductSkus = p.ProductSkus.Select(s => new ProductSkuDto
                     {
                         Id = s.Id,
+                        ProductId = s.ProductId,
                         Name = s.Name,
                         Price = s.Price,
                         Sale = s.Sale,
@@ -182,11 +183,32 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             // 保存更改
             _db.SaveChanges();
         }
-
-        public void Delete(Product product)
+        public void DeleteProductWithSkus(ProductDto productDto)
         {
-            _db.Products.Remove(product);
-        }
+            // 將 DTO 轉換回 Product 實體
+           
+            foreach (var skuDto in productDto.ProductSkus)
+            {
+                // 先從資料庫中查詢 SKU 實體
+                var skuEntity = _db.ProductSkus.Find(skuDto.Id);
+                if (skuEntity != null)
+                {
+                    _db.ProductSkus.Remove(skuEntity);
+                }
+            }
+       
+            var productEntity = _db.Products.Find(productDto.Id);
+                if (productEntity == null)
+                {
+                    throw new Exception("Product not found.");
+                }           
 
+            // 刪除 Product
+            _db.Products.Remove(productEntity);
+
+            // 儲存變更到資料庫
+            _db.SaveChanges();
+        }
     }
+
 }
