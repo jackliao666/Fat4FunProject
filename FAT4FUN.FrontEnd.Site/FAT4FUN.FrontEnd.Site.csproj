@@ -229,7 +229,6 @@
     <Content Include="html\News.html" />
     <Content Include="html\Order.html" />
     <Content Include="html\QA.html" />
-    <Content Include="html\shared-components.js" />
     <Content Include="html\Track.html" />
     <Content Include="html\verify-code.html" />
     <Content Include="html\reset-password.html" />
@@ -285,7 +284,6 @@
     <Content Include="html\index.html" />
     <Content Include="html\PC.html" />
     <Content Include="html\PcDetail.html" />
-    <Content Include="html\vue.global.js" />
     <Content Include="html\vueNavFooter.html" />
     <Content Include="Scripts\shared-components.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
