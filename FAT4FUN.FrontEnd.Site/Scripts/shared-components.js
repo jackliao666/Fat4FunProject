@@ -31,8 +31,8 @@ const HeaderComponent = {
             <li class="nav-item col-3">
               <a
                 class="nav-link"
-                :class="{'active-link': isActiveLink('#')}"
-                href="#"
+                :class="{'active-link': isActiveLink('News.html')}"
+                href="News.html"
                 >最新消息</a
               >
             </li>
