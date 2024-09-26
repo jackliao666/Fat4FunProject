@@ -102,59 +102,60 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 							SkuPrice = i.Price
 						}).ToList()
 					}).ToList()
-				});
+				}).ToList();
 
 			if (!string.IsNullOrEmpty(categoryName))
 			{
-				products = products.Where(p => p.CategoryName.Equals(categoryName, StringComparison.OrdinalIgnoreCase));
+				products = products.Where(p => p.CategoryName.Equals(categoryName, StringComparison.OrdinalIgnoreCase)).ToList();
 			}
 			if (!string.IsNullOrEmpty(brand))
 			{
-				products = products.Where(p => p.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase));
+				products = products.Where(p => p.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase)).ToList();
 			}
 			if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
 			{
-				products = products.Where(p => p.Specs.Any(s => s.SkuItems.Any(i => i.KeyList.Contains(key) && i.ValueList.Contains(value))));
+				products = products.Where(p => p.Specs.Any(s => s.SkuItems.Any(i => i.KeyList.Contains(key) && i.ValueList.Contains(value)))).ToList();
 			}
 			if (maxPrice.HasValue)
 			{
-				products = products.Where(p => p.Specs.Any(s => s.Price <= maxPrice.Value));
+				products = products.Where(p => p.Specs.Any(s => s.Price <= maxPrice.Value)).ToList();
 			}
 			if (minPrice.HasValue)
 			{
-				products = products.Where(p => p.Specs.Any(s => s.Price >= minPrice.Value));
+				products = products.Where(p => p.Specs.Any(s => s.Price >= minPrice.Value)).ToList();
 			}
 			// 排序邏輯
 			if (string.IsNullOrEmpty(sort) || sort == "name")
 			{
 				// 默認按照名稱排序
-				products = products.OrderBy(p => p.Name);
+				products = products.OrderBy(p => p.Name).ToList();
 			}
 			else if (sort == "price_asc")
 			{
 				// 按價格升序排序
-				products = products.OrderBy(p => p.Specs.Min(s => s.Price));
+				products = products.OrderBy(p => p.Specs.Min(s => s.Price)).ToList();
 			}
 			else if (sort == "price_desc")
 			{
 				// 按價格降序排序
-				products = products.OrderByDescending(p => p.Specs.Max(s => s.Price));
+				products = products.OrderByDescending(p => p.Specs.Max(s => s.Price)).ToList();
 			}
 			//手風琴設定
 			if (!string.IsNullOrEmpty(accordion))
 			{
 				if (accordion.Equals("INTEL", StringComparison.OrdinalIgnoreCase))
 				{
-					products = products.Where(p => p.Specs.Any(s => s.SkuItems.Any(i => i.Value.StartsWith("I"))));
+					products = products.Where(p => p.Specs.Any(s => s.SkuItems.Any(i => i.Value.StartsWith("I")))).ToList();
 				}
 				else if (accordion.Equals("AMD", StringComparison.OrdinalIgnoreCase))
 				{
-					products = products.Where(p => p.Specs.Any(s => s.SkuItems.Any(i => i.Value.StartsWith("R"))));
+					products = products.Where(p => p.Specs.Any(s => s.SkuItems.Any(i => i.Value.StartsWith("R")))).ToList();
 				}
 
 			}
+			
 
-			return Ok(products.ToList());
+            return Ok(products);
 		}
 
 		[Route("api/products/GetListProducts")]
@@ -241,7 +242,8 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
 				{ "雷蛇耳機", ("雷蛇", "耳機") },
                 { "酷睿處理器", ("INTEL", "處理器") },
 				{ "銳龍處理器", ("AMD", "處理器") },
-				{ "金士頓記憶體", ("金士頓", "記憶體") },
+                { "銳龍顯示卡", ("AMD", "顯示卡") },
+                { "金士頓記憶體", ("金士頓", "記憶體") },
 				{ "美光記憶體", ("美光", "記憶體") },
 				{ "美光硬碟", ("美光", "硬碟") }
 			};

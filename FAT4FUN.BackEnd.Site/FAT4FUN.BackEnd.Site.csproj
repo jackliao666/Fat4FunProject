@@ -194,6 +194,7 @@
     <Compile Include="Models\EFModels\SkuItem.cs" />
     <Compile Include="Models\EFModels\User.cs" />
     <Compile Include="Models\Infra\HashUtility.cs" />
+    <Compile Include="Models\Interfaces\IProductRepository.cs" />
     <Compile Include="Models\Interfaces\IUserRepository.cs" />
     <Compile Include="Models\MappingProfile.cs" />
     <Compile Include="Models\MyAuthorizeAttribute.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Models\Services\ProductService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
     <Compile Include="Models\ViewModels\LoginVm.cs" />
+    <Compile Include="Models\ViewModels\ProductSkuVm.cs" />
     <Compile Include="Models\ViewModels\ProductVm.cs" />
     <Compile Include="Models\ViewModels\RegisterVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2088,6 +2090,7 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Products\Index.cshtml" />
     <Content Include="Views\Products\Create.cshtml" />
+    <Content Include="Views\Products\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

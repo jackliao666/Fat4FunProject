@@ -7,10 +7,12 @@ using System.Data.Entity;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using FAT4FUN.BackEnd.Site.Models.Dtos;
 using System.Data;
+using FAT4FUN.BackEnd.Site.Models.Interfaces;
+using System.Web.Configuration;
 
 namespace FAT4FUN.BackEnd.Site.Models.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository:IProductRepository
     {
         private readonly AppDbContext _db;
         public ProductRepository()
@@ -20,6 +22,86 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
         public List<ProductDto> GetProducts()
         {
             var products = _db.Products
+                .Include(p => p.ProductCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductSkus)
+                .OrderBy(p=>p.Id)
+                .Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    CategoryName = p.ProductCategory.CategoryName,
+                    BrandName = p.Brand.Name,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Status = p.Status,
+                    CreateDate = p.CreateDate,
+                    ModifyDate = p.ModifyDate,
+                    ProductSkus = p.ProductSkus.Select(s => new ProductSkuDto
+                    {
+
+                        Name = s.Name,
+                        Price = s.Price,
+                        Sale = s.Sale,
+                        
+                    }).ToList(),
+                }).ToList();
+
+
+            return products;
+        }
+       
+        public int Create(ProductDto productDto)
+        {
+            if (productDto == null)
+            {
+                throw new ArgumentNullException(nameof(productDto), "ProductDto cannot be null");
+            }
+
+            // 使用 AutoMapper 將 ProductDto 映射為 Product 實體
+            var product = WebApiApplication._mapper.Map<Product>(productDto);
+
+            // 手動設定 Product 的額外欄位
+            product.ProductCategoryId = productDto.CategoryId;
+            product.BrandId = productDto.BrandId;
+            product.Name = productDto.Name;
+            product.Description = productDto.Description;
+            product.Status = productDto.Status;
+            product.CreateDate = DateTime.Now;
+            product.ModifyDate = DateTime.Now;
+
+            // 新增 Product 到資料庫
+            _db.Products.Add(product);
+            _db.SaveChanges(); // 保存變更，讓資料庫生成 Product 的自動遞增 Id
+
+            // 返回新創建的 Product Id
+            return product.Id; // 返回新創建的 Product Id
+        }
+
+        
+        public List<ProductCategory> GetCategories()
+        {
+            return _db.ProductCategories.ToList(); // 獲取所有分類
+        }
+
+        public List<Brand> GetBrands()
+        {
+            return _db.Brands.ToList(); // 獲取所有品牌
+        }
+
+        public void CreateSkus(ProductSkuDto productSkuDto)
+        {
+            var productSku = WebApiApplication._mapper.Map<ProductSku>(productSkuDto);
+
+            // 添加到資料庫上下文
+            _db.ProductSkus.Add(productSku);
+
+            // 保存所有變更
+            _db.SaveChanges();
+        }
+
+        public ProductDto GetProductId(int id)
+        {
+            var product = _db.Products
                 .Include(p => p.ProductCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.ProductSkus)
@@ -33,70 +115,69 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                     Status = p.Status,
                     CreateDate = p.CreateDate,
                     ModifyDate = p.ModifyDate,
-                    Specs = p.ProductSkus.Select(s => new ProductSkuDto
+                    ProductSkus = p.ProductSkus.Select(s => new ProductSkuDto
                     {
-                        Id = s.Id,
                         Name = s.Name,
                         Price = s.Price,
                         Sale = s.Sale,
-                        SkuItems = s.SkuItems.Select(i => new SkuItemDto
-                        {
-                            Id = i.Id,
-                            Key = i.key,
-                            Value = i.value,
-                            SkuPrice = i.Price
-                        }).ToList(),
+
                     }).ToList(),
-                }).ToList();
+                }).FirstOrDefault(p => p.Id == id);
 
+            return product;
 
-            return products;
         }
-        public void Create(ProductDto dto)
-        {
-            // 查詢對應的 Category 和 Brand
-            var category = _db.ProductCategories.FirstOrDefault(c => c.Id == dto.CategoryId);
-            var brand = _db.Brands.FirstOrDefault(b => b.Id == dto.BrandId);
 
-            if (category == null || brand == null)
+        public void Update(ProductDto ProductDto)
+        {
+            var product = _db.Products
+        .Include(p => p.ProductSkus)
+        .FirstOrDefault(p => p.Id == ProductDto.Id);
+            if (product == null)
             {
-                throw new Exception("無效的類別或品牌");
+                throw new Exception("Product not found.");
             }
 
-            // 將 ProductDto 映射為 Product，並加入 Category 和 Brand 名稱
-            var product = new Product
+            // 更新產品實體的屬性
+            product.Name = ProductDto.Name;
+            product.Description = ProductDto.Description;
+            product.Status = ProductDto.Status;
+            product.ModifyDate = ProductDto.ModifyDate;
+            product.ProductCategoryId = ProductDto.CategoryId;
+            product.BrandId = ProductDto.BrandId;
+
+            // 更新 SKU 的邏輯
+            if (ProductDto.ProductSkus != null && ProductDto.ProductSkus.Any())
             {
-                Name = dto.Name,
-                Description = dto.Description,
-                Status = dto.Status,
-                CreateDate = DateTime.Now, // 自動設置為現在時間
-                ModifyDate = DateTime.Now, // 自動設置為現在時間
-                ProductCategoryId = dto.CategoryId,
-                BrandId = dto.BrandId,
-                ProductSkus = dto.Specs.Select(s => new ProductSku
+                foreach (var skuDto in ProductDto.ProductSkus)
                 {
-                    Name = s.Name,
-                    Price = s.Price,
-                    Sale = s.Sale,
-                    SkuItems = s.SkuItems.Select(i => new SkuItem
+                    var existingSku = product.ProductSkus.FirstOrDefault(s => s.Id == skuDto.ProductId);
+
+                    if (existingSku != null)
                     {
-                        key = i.Key,
-                        value = i.Value,
-                        Price = i.SkuPrice
-                    }).ToList()
-                }).ToList(),
-                // 加入類別名稱和品牌名稱
-                ProductCategory = category,
-                Brand = brand
-            };
+                        // 更新現有 SKU 的屬性
+                        existingSku.Name = skuDto.Name;
+                        existingSku.Price = skuDto.Price;
+                        existingSku.Sale = skuDto.Sale;
+                    }
+                    else
+                    {
+                        // 添加新的 SKU 到產品中
+                        var newSku = new ProductSku
+                        {
+                            Name = skuDto.Name,
+                            Price = skuDto.Price,
+                            Sale = skuDto.Sale,
+                            ProductId = product.Id
+                        };
 
-            // 新增資料
-            _db.Products.Add(product);
+                        product.ProductSkus.Add(newSku);
+                    }
+                }
+            }
 
-            // 保存更改
+            // 保存更改至資料庫
             _db.SaveChanges();
         }
-
-
     }
 }

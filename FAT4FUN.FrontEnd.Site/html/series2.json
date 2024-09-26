@@ -28,7 +28,10 @@
   },
   {
     "name": "AMD 銳龍",
-    "subcategories": [ { "name": "銳龍處理器" } ]
+    "subcategories": [
+      { "name": "銳龍處理器" },
+      { "name": "銳龍顯示卡" }
+    ]
   },
   {
     "name": "金士頓 Kingston",

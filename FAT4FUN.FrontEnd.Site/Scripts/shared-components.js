@@ -2,14 +2,14 @@
 // you can download the `lit-html` vscode extension to enabled the syntax highlight
 // https://marketplace.visualstudio.com/items?itemName=bierner.lit-html
 function html(strings, ...values) {
-    return strings.reduce(
-        (result, str, i) => result + str + (values[i] || ""),
-        ""
-    );
+  return strings.reduce(
+    (result, str, i) => result + str + (values[i] || ""),
+    ""
+  );
 }
 
 const HeaderComponent = {
-    template: html`
+  template: html`
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
       <div class="container-fluid">
         <a href="index.html" class="col-1">
@@ -66,16 +66,17 @@ const HeaderComponent = {
         <form
           class="d-flex align-items-center"
           role="search"
-          @submit.prevent="searchProduct"
+          :action="this.pathname"
+          method="get"
         >
           <div class="input-group">
             <span class="input-group-text" id="basic-addon1">
               <i class="bi bi-search"></i>
             </span>
-
             <input
               class="form-control"
-              type="search"
+              name="search"
+              type="text"
               placeholder="請輸入商品名稱"
               aria-label="Search"
               v-model="searchQuery"
@@ -87,37 +88,55 @@ const HeaderComponent = {
         </form>
 
         <div class="d-flex">
-          <a href="Member.html" class="ms-5 btn btn-link">
+          <a
+            href="Member.html"
+            class="ms-5 btn btn-link"
+            :class="{'active-link': isActiveLink('Login.html')}"
+          >
             <i class="bi bi-person-circle"></i>
           </a>
-          <a href="Login.html" class="ms-5 btn btn-link">
+          <a
+            href="Login.html"
+            class="ms-5 btn btn-link"
+            :class="{'active-link': isActiveLink('Login.html')}"
+          >
             <i class="bi bi-box-arrow-in-right"></i>
           </a>
-          <a href="card03.html" class="ms-5 btn btn-link">
+          <a
+            href="cart.html"
+            class="ms-5 btn btn-link"
+            :class="{'active-link': isActiveLink('cart.html')}"
+          >
             <i class="bi bi-cart"></i>
           </a>
         </div>
       </div>
     </nav>
   `,
-    data() {
-        return {
-            searchQuery: "", // 绑定搜索输入
-        };
+  data() {
+    return {
+      searchQuery: "", // 绑定搜索输入
+      pathname: "",
+    };
+  },
+  mounted() {
+    this.pathname = window.location.pathname;
+  },
+  methods: {
+    // searchProduct() {
+    //   console.log(1, { emit: $emit, search: this.searchQuery });
+    //   this.$emit("search", this.searchQuery); // 通过事件传递搜索关键字
+    //   // 清空搜索框内容
+    //   this.searchQuery = "";
+    // },
+    isActiveLink(pathname) {
+      return window.location.pathname.includes(pathname);
     },
-    methods: {
-        searchProduct() {
-            this.$emit("search", this.searchQuery); // 通过事件传递搜索关键字
-        },
-        isActiveLink(pathname) {
-        
-            return window.location.pathname.includes(pathname);
-        },
-    },
+  },
 };
 
 const FooterComponent = {
-    template: `
+  template: `
     <footer>
       <div class="container">
         <div class="row d-flex justify-content-between align-items-start">

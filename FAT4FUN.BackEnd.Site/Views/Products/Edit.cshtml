@@ -1,28 +1,35 @@
 ﻿@model FAT4FUN.BackEnd.Site.Models.ViewModels.ProductVm
 
-
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
 }
 
-<h2>Create</h2>
+<h2>Edit</h2>
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
+    
 <div class="form-horizontal">
     <h4>ProductVm</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+
+
     <div class="form-group">
-        @Html.LabelFor(model => model.CategoryName)
-        @Html.DropDownList("CategoryId", ViewBag.Categories as List<SelectListItem>, "請選擇分類", new { @class = "form-control" })
+        @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
     </div>
+
     <div class="form-group">
-        @Html.LabelFor(model => model.BrandName)
-        @Html.DropDownList("BrandId", ViewBag.Brands as List<SelectListItem>, "請選擇品牌", new { @class = "form-control" })
+        @Html.LabelFor(model => model.BrandName, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.BrandName, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
     </div>
 
     <div class="form-group">
@@ -76,18 +83,14 @@
     </div>
 
     <div class="form-group">
-        <div class="control-label col-md-2">
-            @Html.DisplayNameFor(model => model.CreateDate) <!-- 顯示欄位名稱 -->
-        </div>
+        @Html.LabelFor(model => model.CreateDate, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.DisplayFor(model => model.CreateDate, new { htmlAttributes = new { @class = "form-control" } })
         </div>
     </div>
 
     <div class="form-group">
-        <div class="control-label col-md-2">
-            @Html.DisplayNameFor(model => model.ModifyDate) <!-- 顯示欄位名稱 -->
-        </div>
+        @Html.LabelFor(model => model.ModifyDate, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.DisplayFor(model => model.ModifyDate, new { htmlAttributes = new { @class = "form-control" } })
         </div>
@@ -95,7 +98,7 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="Save" class="btn btn-default" />
         </div>
     </div>
 </div>

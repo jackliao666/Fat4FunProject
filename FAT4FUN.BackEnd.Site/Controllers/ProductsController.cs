@@ -3,6 +3,7 @@ using FAT4FUN.BackEnd.Site.Models.Services;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,19 +22,24 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         public ActionResult Index()
         {
-            List<ProductVm> products = _productService.GetAll();
+            List<ProductVm> products = _productService.GetProducts();
             return View(products);
         }
         [HttpGet]
         public ActionResult Create()
         {
-            //var categories = _productService.GetCategories(); // 假設有方法獲取所有類別
-            //var brands = _productService.GetBrands(); // 假設有方法獲取所有品牌
+            var categories = _productService.GetCategories(); // 獲取所有分類
+            var brands = _productService.GetBrands(); // 獲取所有品牌
 
-            //ViewBag.Categories = new SelectList(categories, "Id", "Name");
-            //ViewBag.Brands = new SelectList(brands, "Id", "Name");
+            ViewBag.Categories = categories;
+            ViewBag.Brands = brands;
 
-            return View(new ProductVm());
+            var productVm = new ProductVm
+            {
+                ProductSkus = new ProductSkuVm()// 初始化列表
+            };
+
+            return View(productVm);
         }
 
         // 新增商品，提交表單時觸發
@@ -42,10 +48,47 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         {
             if (ModelState.IsValid)
             {
-                _productService.Create(vm);
+                // 將 ProductVm 轉換為 ProductDto
+                var productDto = WebApiApplication._mapper.Map<ProductDto>(vm);
+
+                var createdProductId = _productService.Create(productDto);
+
+                return RedirectToAction("Index");
+            }
+
+            return View(vm);
+        }
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            ProductVm product = _productService.GetProduct(id);
+                
+            // 如果產品不存在，返回 404 錯誤
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+            var categories = _productService.GetCategories(); // 獲取所有分類
+            var brands = _productService.GetBrands(); // 獲取所有品牌
+
+            ViewBag.Categories = categories;
+            ViewBag.Brands = brands;
+
+            return View(product);
+        }
+        [HttpPost]
+        public ActionResult Edit(ProductVm vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var productDto = WebApiApplication._mapper.Map<ProductDto>(vm);
+                _productService.UpdateProduct(productDto);
+                // 更新資料邏輯
+                // Save changes to the database
                 return RedirectToAction("Index");
             }
             return View(vm);
         }
+
     }
 }

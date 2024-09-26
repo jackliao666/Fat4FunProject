@@ -7,10 +7,10 @@ namespace FAT4FUN.BackEnd.Site.Models.Dtos
 {
     public class ProductSkuDto
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
         public int Sale { get; set; }
-        public List<SkuItemDto>SkuItems { get; set; }
+        public SkuItemDto SkuItems { get; set; }
     }
-}
+}   
