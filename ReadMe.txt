@@ -19,7 +19,7 @@ JK
     add series.json
 [v]Device�ӫ~����
 [v]Hots�ӫ~����
-
+[working on]��x �ӫ~�޲z
 	
 
 

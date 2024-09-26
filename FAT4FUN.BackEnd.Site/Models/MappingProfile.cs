@@ -11,11 +11,22 @@ namespace FAT4FUN.BackEnd.Site.Models
 {
     public class MappingProfile:Profile
     {
-      public MappingProfile() 
+        public MappingProfile() 
         {
-           CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
 
             CreateMap<LoginVm, LoginDto>();
+            //vm轉換至dto 雙向
+            CreateMap<ProductVm, ProductDto>().ReverseMap();
+            //dto轉換至sku
+            CreateMap<ProductSkuDto, ProductSku>();
+            CreateMap<ProductDto, Product>();
+
+
+
+         
+            
+
 
         }
     }
