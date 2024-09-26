@@ -136,14 +136,12 @@
                             <td>
                                 {{ item.product.name }}
                                 <!-- 如果有 SKU 規格名稱顯示 -->
-                                <div style="white-space: nowrap; font-size: 0.9em;">
+                                <div style="white-space: nowrap; font-size: 0.9em">
                                     規格：
                                     <span v-if="item.skuItem && item.skuItem.value">
                                         {{ item.skuItem.value }}
                                     </span>
-                                    <span v-else>
-                                        基本款
-                                    </span>
+                                    <span v-else> 基本款 </span>
                                     <!-- 如果有加價則顯示 -->
                                     <span v-if="item.skuItem && item.skuItem.skuPrice > 0">
                                         +{{ formatCurrency(item.skuItem.skuPrice) }} 元
@@ -168,10 +166,16 @@
                             <!-- 格式化單價和總價 -->
                             <!-- 價格計算考慮 SKU 規格 -->
                             <td class="text-end pt-3">
-                                {{ formatCurrency(item.product.price + (item.skuItem ? item.skuItem.skuPrice : 0)) }} 元
+                                {{
+ formatCurrency(item.product.price + (item.skuItem ?
+                  item.skuItem.skuPrice : 0))
+                                }} 元
                             </td>
                             <td class="text-end pt-3">
-                                {{ formatCurrency(item.qty * (item.product.price + (item.skuItem ? item.skuItem.skuPrice : 0))) }} 元
+                                {{
+ formatCurrency(item.qty * (item.product.price +
+                  (item.skuItem ? item.skuItem.skuPrice : 0)))
+                                }} 元
                             </td>
                             <td class="text-center pt-3">
                                 <!-- 刪除按鈕 -->
@@ -228,11 +232,11 @@
                            placeholder="輸入電話" />
                 </div>
                 <div class="mb-3">
-                    <label for="Adress" class="form-label">送貨地址</label>
+                    <label for="Address" class="form-label">送貨地址</label>
                     <input type="text"
                            class="form-control"
-                           id="Adress"
-                           v-model="customer.adress"
+                           id="Address"
+                           v-model="customer.address"
                            placeholder="送貨地址" />
                 </div>
             </div>
@@ -276,7 +280,10 @@
     </div>
     <!-- 導覽列元件 -->
     <script type="module">
-        import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
+        import {
+            HeaderComponent,
+            FooterComponent,
+        } from "../Scripts/shared-components.js";
         const app = Vue.createApp({
             // 定義你的其他數據和方法
             data() {
@@ -286,7 +293,7 @@
                     customer: {
                         name: "",
                         phone: "",
-                        adress: "",
+                        address: "",
                     },
                     paymentMethod: "貨到付款",
                     invoiceMethod: "電子發票",
@@ -295,29 +302,37 @@
             computed: {
                 total() {
                     return this.cartItems.reduce((acc, item) => {
-                        const price = item.product.price + (item.skuItem && item.skuItem.skuPrice ? item.skuItem.skuPrice : 0);
+                        const price =
+                            item.product.price +
+                            (item.skuItem && item.skuItem.skuPrice
+                                ? item.skuItem.skuPrice
+                                : 0);
                         return acc + item.qty * price;
                     }, 0);
                 },
             },
             created() {
-                this.fetchCart(); // 加載購物車資料
-
-                const savedCustomer = localStorage.getItem("customerInfo");
-                if (savedCustomer) {
-                    this.customer = JSON.parse(savedCustomer);
+                let userId = localStorage.getItem("userId");
+                if (!userId) {
+                    userId = 3; // 預設值
+                    localStorage.setItem("userId", userId);
+                    /*console.error("未找到會員ID，請先登入");*/
                 }
+                console.log("User ID:", userId); // 檢查 userId
+                this.fetchCart(userId);
+
             },
             methods: {
-                async fetchCart() {
-                    const userId = 3; // 這裡設置你的使用者 ID
-                    const apiUrl = `https://localhost:44342/api/carts/${userId}`;
+                async fetchCart(userId) {        
+                    const apiUrl = `/api/carts/${userId}`;
 
                     try {
                         const response = await fetch(apiUrl);
 
                         if (!response.ok) {
-                            throw new Error(`Network response was not ok: ${response.statusText}`);
+                            throw new Error(
+                                `Network response was not ok: ${response.statusText}`
+                            );
                         }
 
                         const data = await response.json();
@@ -327,56 +342,153 @@
 
                         console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
                     } catch (error) {
-                        console.error("There was a problem with the fetch operation:", error);
+                        console.error(
+                            "There was a problem with the fetch operation:",
+                            error
+                        );
+                        localStorage.setItem("cart", JSON.stringify(this.cartItems));
                     }
                 },
-                increaseQuantity(item) {
+                async increaseQuantity(item) {
                     item.qty++;
+
+                    const apiUrl = `/api/carts/UpdateItemQty`;
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                userId: item.userId,
+                                productSkuId: item.productSkuId,
+                                skuItemId: item.skuItemId,
+                                qty: item.qty,
+                            }),
+                        });
+                        if (!response.ok) {
+                            throw new Error(
+                                `Network response was not ok: ${response.statusText}`
+                            );
+                        }
+
+                        const result = await response.json();
+                        console.log("Quantity updated successfully", result);
+                    } catch (error) {
+                        console.error(
+                            "There was a problem with the fetch operation:",
+                            error
+                        );
+                    }
+
                     localStorage.setItem("cart", JSON.stringify(this.cartItems));
                 },
-                decreaseQuantity(item) {
+
+                async decreaseQuantity(item) {
+                    const apiUrl = `/api/carts/UpdateItemQty`;
                     if (item.qty > 1) {
                         item.qty--;
-                    } else {
-                        const index = this.cartItems.indexOf(item);
-                        if (index > -1) {
-                            this.cartItems.splice(index, 1);
+                        try {
+                            const response = await fetch(apiUrl, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    userId: item.userId,
+                                    productSkuId: item.productSkuId,
+                                    skuItemId: item.skuItemId,
+                                    qty: item.qty,
+                                }),
+                            });
+
+                            if (!response.ok) {
+                                throw new Error(
+                                    `Network response was not ok: ${response.statusText}`
+                                );
+                            }
+                            const result = await response.json();
+                            console.log("Quantity updated successfully", result);
+                        } catch (error) {
+                            console.error(
+                                "There was a problem with the fetch operation:",
+                                error
+                            );
                         }
+                    } else {
+                        // 數量為 1 時刪除該項目
+                        this.removeItem(item);
                     }
                     localStorage.setItem("cart", JSON.stringify(this.cartItems));
                 },
                 formatCurrency(value) {
-                    if (typeof value !== 'number' || isNaN(value)) {
-                        return '0';
+                    if (typeof value !== "number" || isNaN(value)) {
+                        return "0";
                     }
                     return value.toLocaleString();
+                },
+
+                async removeItem(item) {
+                    // 從 cartItems 中移除該項目
+                    this.cartItems = this.cartItems.filter(
+                        (cartItem) => cartItem.id !== item.id
+                    );
+
+                    const apiUrl = `/api/carts/RemoveItem`;
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                userId: item.userId,
+                                productSkuId: item.productSkuId,
+                                skuItemId: item.skuItemId,
+                            }),
+                        });
+                        if (!response.ok) {
+                            throw new Error(
+                                `Failed to remove item: ${response.statusText}`
+                            );
+                        }
+                        const data = await response.json(); 
+
+                        // 將獲取到的資料賦值給 cartItems
+                        this.cartItems = data.cartItems;
+
+                        console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
+                    } catch (error) {
+                        console.error("Error removing item:", error);
+                    }
+                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
                 },
                 submitOrder() {
                     if (this.cartItems.length === 0) {
                         alert("購物車內無商品繼續選購！");
                         return;
                     }
+                    // 將整個購物車存儲到 localStorage
+                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
                     if (
                         this.customer.name &&
                         this.customer.phone &&
-                        this.customer.adress
+                        this.customer.address
                     ) {
-                        localStorage.setItem(
-                            "customerInfo",
-                            JSON.stringify(this.customer)
-                        );
-                        localStorage.setItem("cart", JSON.stringify(this.cartItems));
+                        const customerInfo = {
+                            name: this.customer.name,
+                            phone: this.customer.phone,
+                            address: this.customer.address,
+                            deliveryMethod: this.deliveryMethod,
+                            paymentMethod: this.paymentMethod,
+                            invoiceMethod: this.invoiceMethod
+                        };
+                        localStorage.setItem("customerInfo", JSON.stringify(customerInfo));
 
                         window.location.href = "Checkout-Confirmation.html";
                     } else {
                         alert("請填寫完整的顧客資料！");
                     }
-                },
-                removeItem(item) {
-                    this.cartItems = this.cartItems.filter(
-                        (cartItem) => cartItem.id !== item.id
-                    );
-                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
                 },
                 handleSearch() {
                     // 在這裡定義搜尋的邏輯

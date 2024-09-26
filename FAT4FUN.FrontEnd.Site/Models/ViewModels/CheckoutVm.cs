@@ -23,7 +23,16 @@ namespace FAT4FUN.FrontEnd.Site.Models.ViewModels
         [StringLength(200)]
         public string ShippingAddress { get; set; }
 
-        public CartVm Cart { get; set; }
+        [Display(Name = "運送方法")]
+        public int DeliveryMethod { get; set; }
+
+        [Display(Name = "付款方式")]
+        public int PaymentMethod { get; set; }
+
+        [Display(Name = "發票選項")]
+        public int InvoiceOption { get; set; }
+
+        //public List<CartVm> Cart { get; set; }
 
     }
 }
