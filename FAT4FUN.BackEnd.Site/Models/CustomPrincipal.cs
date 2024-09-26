@@ -36,9 +36,20 @@ namespace FAT4FUN.BackEnd.Site.Models
         {
             // 檢查是否角色在這個使用者的可用角色列表中
             //return _roles.Contains(role.ToLower());
-            System.Diagnostics.Debug.WriteLine($"Checking role: {role}");
-            System.Diagnostics.Debug.WriteLine($"Current roles: {string.Join(",", _functions)}");
+            /*System.Diagnostics.Debug.WriteLine($"Checking role: {role} against user roles: {string.Join(",", _functions)}")*/;
+
             return _functions.Contains(role.ToLower());
         }
+
+
+        /// <summary>
+        /// Debug用
+        /// </summary>
+        /// <returns></returns>
+        //public string[] GetRoles()
+        //{
+        //    System.Diagnostics.Debug.WriteLine($"User Roles: {string.Join(",", _functions)}");
+        //    return _functions;
+        //}
     }
 }

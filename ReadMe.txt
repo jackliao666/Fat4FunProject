@@ -90,6 +90,22 @@ int userRole = (int)roleResult.Data;
 
 
 
-[Working on] 權限賦予
-設定edituser 並能給權限值
+[V] 權限賦予
+Register 新增roles 欄位 創建員工帳戶時能選擇角色
+
+
+[V]實作 修改個人基本資料
+	modify MembersController, add EditProfile action, 要加[Authorize]
+	add EditProfileVm , add EditProfileDto classes
+		不允許修改 account, password
+		增加Mapping config 
+	add EditProfile view page
+
+[V]實作 變更密碼
+modify MembersController, add EditProfile action, 要加[Authorize]
+	add ChangePassword , add ChangePasswordDto classes
+		增加Mapping config 
+	add ChangePassword view page
+	modify MemberService , add ChangePassword method
+
 	

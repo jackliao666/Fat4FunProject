@@ -57,16 +57,32 @@ namespace FAT4FUN.BackEnd.Site
             ////抽換成我們自己的使用者物件
             //Context.User = principal;
 
-            if (HttpContext.Current.User != null && HttpContext.Current.User.Identity.IsAuthenticated)
+            //if (HttpContext.Current.User != null && HttpContext.Current.User.Identity.IsAuthenticated)
+            //{
+            //    // 取得身份票
+            //    FormsAuthenticationTicket ticket = ((FormsIdentity)HttpContext.Current.User.Identity).Ticket;
+
+            //    // 從 UserData 中解析角色數字
+            //    string[] roles = ticket.UserData.Split(',');
+
+            //    // 將當前使用者轉換為 CustomPrincipal
+            //    HttpContext.Current.User = new CustomPrincipal(HttpContext.Current.User.Identity, roles);
+            //}
+
+            HttpCookie authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
             {
-                // 取得身份票
-                FormsAuthenticationTicket ticket = ((FormsIdentity)HttpContext.Current.User.Identity).Ticket;
+                FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
 
-                // 從 UserData 中解析角色數字
-                string[] roles = ticket.UserData.Split(',');
 
-                // 將當前使用者轉換為 CustomPrincipal
-                HttpContext.Current.User = new CustomPrincipal(HttpContext.Current.User.Identity, roles);
+
+                // 解析 UserData，這裡應該是角色數字
+                string[] roles = authTicket.UserData.Split(',');
+
+                // 創建 CustomPrincipal 並傳遞角色數字
+                CustomPrincipal newUser = new CustomPrincipal(new GenericIdentity(authTicket.Name), roles);
+
+                HttpContext.Current.User = newUser;
             }
 
 

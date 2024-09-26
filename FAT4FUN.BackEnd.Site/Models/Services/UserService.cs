@@ -119,6 +119,41 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             _db.Roles.Add(userRole);  // 將角色新增到資料庫
             _db.SaveChanges();
         }
+
+        internal void UpdateProfile(EditProfileDto dto)
+        {
+            UserDto userIndb = _repo.Get(dto.Id);
+            userIndb.Name = dto.Name;
+            userIndb.Phone = dto.Phone;
+            userIndb.Email = dto.Email;
+            userIndb.Address = dto.Address;
+            _repo.Update(userIndb);
+
+        }
+
+        internal void ChangePassword(string account, ChangePasswordDto dto)
+        {
+            UserDto userInDb = _repo.Get(account);
+            string oldPassword = HashUtility.ToSHA256(dto.Password);
+            string newPassword = HashUtility.ToSHA256(dto.NewPassword);
+
+            if (oldPassword != userInDb.Password)
+            {
+                throw new Exception("密碼錯誤");
+            }
+            if (oldPassword == newPassword)
+            {
+                throw new Exception("新舊密碼不可相同");
+            }
+            if(dto.NewPassword != dto.ConfirmPassword)
+            {
+                throw new Exception("新密碼與確認密碼必須相同");
+            }
+
+            userInDb.Password = newPassword;
+            
+            _repo.Update(userInDb);
+        }
     }
 
    

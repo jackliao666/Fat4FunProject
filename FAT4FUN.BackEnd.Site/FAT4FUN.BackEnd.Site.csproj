@@ -173,6 +173,8 @@
     </Compile>
     <Compile Include="Models\CustomPrincipal.cs" />
     <Compile Include="Models\DAHelper.cs" />
+    <Compile Include="Models\Dtos\ChangePasswordDto.cs" />
+    <Compile Include="Models\Dtos\EditProfileDto.cs" />
     <Compile Include="Models\Dtos\LoginDto.cs" />
     <Compile Include="Models\Dtos\RegisterDto.cs" />
     <Compile Include="Models\Dtos\UserDto.cs" />
@@ -196,6 +198,8 @@
     <Compile Include="Models\Repositories\UserRepository.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\Services\UserService.cs" />
+    <Compile Include="Models\ViewModels\ChangePasswordVm.cs" />
+    <Compile Include="Models\ViewModels\EditProfileVm.cs" />
     <Compile Include="Models\ViewModels\LoginVm.cs" />
     <Compile Include="Models\ViewModels\RegisterVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -231,6 +235,9 @@
     <Content Include="img\undraw_profile_2.svg" />
     <Content Include="img\undraw_profile_3.svg" />
     <Content Include="img\undraw_rocket.svg" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\js\demo\chart-area-demo.js" />
     <Content Include="Scripts\js\demo\chart-bar-demo.js" />
     <Content Include="Scripts\js\demo\chart-pie-demo.js" />
@@ -1919,6 +1926,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Users\EditProfile.cshtml" />
+    <Content Include="Views\Users\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

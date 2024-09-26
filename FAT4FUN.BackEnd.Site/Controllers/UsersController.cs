@@ -1,6 +1,7 @@
 ﻿using FAT4FUN.BackEnd.Site.Models;
 using FAT4FUN.BackEnd.Site.Models.Dtos;
 using FAT4FUN.BackEnd.Site.Models.EFModels;
+using FAT4FUN.BackEnd.Site.Models.Repositories;
 using FAT4FUN.BackEnd.Site.Models.Services;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using System;
@@ -25,8 +26,10 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
 
 
+        [MyAuthorize(Functions = "0,4")]
         public ActionResult Register()
         {
+            // 設置 Roles 選項
             var roles = new List<SelectListItem>
     {
         new SelectListItem { Value = "0", Text = "Admin" },
@@ -43,10 +46,23 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
 
 
-        [MyAuthorize(Functions = "0,3")]
+        [MyAuthorize(Functions ="0,4")]
         [HttpPost]
         public ActionResult Register(RegisterVm vm)
         {
+            // 測試用的解密程式碼
+            if (Request.Cookies[FormsAuthentication.FormsCookieName] != null)
+            {
+                HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+                FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
+
+                // 輸出解密後的角色資料
+                System.Diagnostics.Debug.WriteLine($"User Role from Decrypted Cookie: {ticket.UserData}");
+            }
+
+
+
+            // 重新設置 Roles 選項
             var roles = new List<SelectListItem>
     {
         new SelectListItem { Value = "0", Text = "Admin" },
@@ -105,13 +121,23 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                     // 例如，將角色數據寫入 cookie 或其他處理邏輯
                     (string url, HttpCookie cookie) = ProcessLogin(vm.Account);
                     Response.Cookies.Add(cookie);
+
+                    // 設置身份驗證的 Cookie，這行是關鍵
+                    FormsAuthentication.SetAuthCookie(vm.Account, false);
+
+                    // 登入成功後的重定向
+                    return RedirectToAction("EditProfile", "Users");
+
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                    return View(vm);
                 }
 
-                ModelState.AddModelError(
-                    string.Empty,
-                    result.ErrorMessage);
+                
             }
-            return View("Index");
+            return View(vm);
         }
 
         public ActionResult Logout() 
@@ -120,6 +146,85 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             FormsAuthentication.SignOut();
 
             return RedirectToAction("Login","Users");
+        }
+
+        
+        [Authorize]
+        public ActionResult EditProfile()
+        {
+            var account = User.Identity.Name;
+            UserDto dto = new UserRepository().Get(account);
+
+            EditProfileVm vm = WebApiApplication._mapper.Map<EditProfileVm>(dto);
+            return View(vm);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult EditProfile(EditProfileVm vm)
+        {
+            string account = User.Identity.Name;
+            Result result = HandleUpdateProfile(account, vm);
+
+            if (result.IsSuccess) 
+            {
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError(string.Empty, result.ErrorMessage);
+            return View(vm);
+        }
+
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordVm vm)
+        {
+            string account = User.Identity.Name;
+            Result result = HandleChangePassword(account, vm);
+
+            if (result.IsSuccess)
+            {
+                return RedirectToAction("Index"); // 密碼修改成功，轉到首頁
+            }
+            ModelState.AddModelError(string.Empty, result.ErrorMessage);
+            return View(vm); // 密碼修改失敗，返回修改密碼頁面
+
+        }
+
+        private Result HandleChangePassword(string account, ChangePasswordVm vm)
+        {
+            var service = new UserService();
+            try 
+            {
+                ChangePasswordDto dto = WebApiApplication._mapper.Map<ChangePasswordDto>(vm);
+                service.ChangePassword(account, dto);
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
+
+        private Result HandleUpdateProfile(string account, EditProfileVm vm)
+        {
+            var service = new UserService();
+            try
+            {
+                EditProfileDto dto = WebApiApplication._mapper.Map<EditProfileDto>(vm);
+                service.UpdateProfile(dto);
+
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
         }
 
         public ActionResult ActiveRegister(int? userId, string confirmCode)
@@ -135,6 +240,8 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
             return View();
         }
+
+        
 
 
         private (string url, HttpCookie cookie) ProcessLogin(string account)
@@ -159,6 +266,10 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             
             //將它加密
             var value = FormsAuthentication.Encrypt(ticket);
+
+            // 解密以進行測試和輸出
+            //var decryptedTicket = FormsAuthentication.Decrypt(value);
+            //System.Diagnostics.Debug.WriteLine($"Decrypted Role from Cookie: {decryptedTicket.UserData}"); // 應顯示角色數字
 
             //存入cookie
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, value);

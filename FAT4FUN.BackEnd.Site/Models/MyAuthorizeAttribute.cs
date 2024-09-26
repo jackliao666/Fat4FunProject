@@ -37,18 +37,28 @@ namespace FAT4FUN.BackEnd.Site.Models
                 string[] allowedFunctions = Functions.Split(',')
                                                       .Select(x => x.Trim().ToLower())
                                                       .ToArray();
+
+               
                 
+                //System.Diagnostics.Debug.WriteLine($"MyAuthorize - Allowed Functions: {string.Join(",", allowedFunctions)}");
+                //System.Diagnostics.Debug.WriteLine($"MyAuthorize - User Role: {string.Join(",", currentUser.GetRoles())}");
+
+
 
                 // 判斷目前使用者是否有上述功能權限
                 if (!allowedFunctions.Any(f => currentUser.IsInRole(f)))
                 {
-                    // 若沒有權限，則導向到 NoPermission 頁面
-                    filterContext.Result = new RedirectToRouteResult(
-                        new System.Web.Routing.RouteValueDictionary(
-                            new { controller = "Users", action = "NoPermission" }
-                        )
-                    );
-                    
+                    //// 若沒有權限，則導向到 NoPermission 頁面
+                    //filterContext.Result = new RedirectToRouteResult(
+                    //    new System.Web.Routing.RouteValueDictionary(
+                    //        new { controller = "Users", action = "Login" }
+                    //    )
+                    //);
+
+                    // 若沒有權限，則重定向到登入頁面
+                    filterContext.Result = new RedirectResult("/Users/Login");
+                    return;
+
                 }
             }
             else

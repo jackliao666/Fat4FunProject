@@ -8,9 +8,9 @@ using System.Web;
 
 namespace FAT4FUN.BackEnd.Site.Models.Repositories
 {
-    public class UserRepository:IUserRepository
+    public class UserRepository : IUserRepository
     {
-       private AppDbContext _db;
+        private AppDbContext _db;
 
         public UserRepository()
         {
@@ -95,7 +95,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             var user = _db.Users.FirstOrDefault(x => x.Account == account);
             if (user == null) return null;
 
-            return WebApiApplication._mapper.Map<UserDto>(user); 
+            return WebApiApplication._mapper.Map<UserDto>(user);
         }
 
         public UserDto Get(int userId)
@@ -121,6 +121,32 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
         {
             var user = _db.Users.AsNoTracking().FirstOrDefault(x => x.Account == account);
             return user != null;
+        }
+
+        public void Update(UserDto dto)
+        {
+            //User user = WebApiApplication._mapper.Map<User>(dto);
+            //var db = new AppDbContext();
+            //db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+            //db.SaveChanges();
+
+            using (var db = new AppDbContext())
+            {
+                var user = db.Users.Find(dto.Id);
+                if (user != null)
+                {
+                    // 手動更新需要更新的屬性
+                    user.Name = dto.Name;
+                    user.Phone = dto.Phone;
+                    user.Email = dto.Email;
+                    user.Address = dto.Address;
+                    user.Password = dto.Password;
+
+                    // 確保其他不應被修改的屬性保持原樣
+
+                    db.SaveChanges();
+                }
+            }
         }
     }
 }
