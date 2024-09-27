@@ -103,14 +103,19 @@
 
         /* 調整按鈕樣式 */
         .btn-primary {
-            background-color: #28a745;
-            border-color: #28a745;
+            background-color: blue;
         }
 
-            .btn-primary:hover {
-                background-color: #218838;
+        .btn-primary:hover {
+                background-color: red;
                 border-color: #1e7e34;
             }
+        .btn-disabled {
+            background-color: #d3d3d3 !important; /* 淺灰色背景 */
+            border-color: #d3d3d3 !important; /* 邊框顏色 */
+            color: #a9a9a9 !important; /* 文字顏色 */
+            cursor: not-allowed; /* 改變滑鼠游標樣式 */
+        }
     </style>
 </head>
 
@@ -140,7 +145,141 @@
                     <div>
                         <h3 class="mt-4">未完成訂單</h3>
                         <div class="accordion accordion-menu" id="accordionExample">
-                            <table v-for="order in filteredOrders" class="table table-striped">
+                            <table v-for="order in filteredOrders"
+                                   class="table table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>訂單編號</th>
+                                        <th>日期</th>
+                                        <th>訂單狀態</th>
+                                        <th>總價</th>
+                                        <th>發票</th>
+                                        <th>付款方式</th>
+                                        <th>商品狀態</th>
+                                        <th>備註</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="order.id" class="text-center">
+                                        <td>
+                                            <a class="btn btn-link"
+                                               data-bs-toggle="collapse"
+                                               :href="'#order' + order.id"
+                                               role="button"
+                                               aria-expanded="false"
+                                               :aria-controls="'order' + order.id">
+                                                {{ order.no }}
+                                            </a>
+                                        </td>
+                                        <td>{{ formatDate(order.createDate)}}</td>
+                                        <td>{{ getOrderStatus(order.status) }}</td>
+                                        <td>$ {{formatCurrency(order.totalAmount)}}</td>
+                                        <td>電子發票</td>
+                                        <td>{{ getPaymentMethod(order.paymentMethod) }}</td>
+                                        <td>
+                                            <button v-if="order.status === 1" class="btn btn-outline-primary" @click="openCancelModal(order.id)" style="border:none"><strong>取消訂單</strong></button>
+                                            <span v-else-if="order.status === 4"><strong>退貨處理中</strong></span>
+                                            <span v-else><strong>出貨中</strong></span>
+                                        </td>
+                                        <td>{{ getDeliveryDate(order.status, formatDate(order.modifyDate)) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8">
+                                            <div class="progress mt-2 mb-2">
+                                                <div class="progress-bar bg-success"
+                                                     style="width: 25%">
+                                                    收到訂單
+                                                </div>
+
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 1, 'bg-secondary': order.status < 1}"
+                                                     style="width: 25%">
+                                                    處理中
+                                                </div>
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 2, 'bg-secondary': order.status < 2}"
+                                                     style="width: 25%">
+                                                    已出貨
+                                                </div>
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 3, 'bg-secondary': order.status < 3}"
+                                                     style="width: 25%">
+                                                    已送達
+                                                </div>
+                                            </div>
+                                            <strong>產品明細：</strong>
+                                            <div class="accordion-body collapse"
+                                                 :id="'order' + order.id">
+                                                <table class="table table-bordered mt-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">編號</th>
+                                                            <th class="text-center">品名</th>
+                                                            <th class="text-center">數量</th>
+                                                            <th class="text-center">價格</th>
+                                                            <th class="text-center">小計</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(item,index) in order.orderItems"
+                                                            :key="item.id">
+                                                            <td class="text-center">{{ index+1 }}</td>
+                                                            <td>
+                                                                {{ item.productName }}<br />規格：{{
+                                  item.skuItemName ? item.skuItemName : '基本款'
+                                                                }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                {{formatCurrency(item.qty)}}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $ {{formatCurrency(item.price)}}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $ {{formatCurrency(item.subTotal)}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 取消訂單申請 Modal -->
+                        <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <!-- 使用 modal-dialog-centered -->
+                                <div class="modal-content">
+                                    <div class="modal-header d-flex align-items-center">
+                                        <!-- 使用 d-flex -->
+                                        <h5 class="modal-title flex-grow-1 text-center" id="cancelModalLabel">取消訂單</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column align-items-center">
+
+                                            <p>您確定要取消訂單嗎？</p>
+                                            <textarea v-model="cancelReason" class="form-control" placeholder="請輸入取消原因（可選）" rows="3"></textarea>
+                                        <input type="hidden" v-model="selectedOrderId" />
+
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <button type="submit" class="btn btn-danger me-2" @click="submitCancelOrder(selectedOrderId)">取消訂單</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    <!-- 未完成訂單end -->
+                    <!-- 已完成訂單start -->
+                    <div>
+                        <hr class="mt-5" style="background-color: red; height: 2px" />
+                        <h3 class="mt-5">已完成訂單</h3>
+                        <div class="accordion accordion-menu" id="accordionExample">
+                            <table v-for="order in completedOrders"
+                                   class="table table-striped">
                                 <thead>
                                     <tr class="text-center">
                                         <th>訂單編號</th>
@@ -153,46 +292,64 @@
                                         <th>備註</th>
                                     </tr>
                                 </thead>
-                                <tbody >
+                                <tbody>
                                     <tr :key="order.id" class="text-center">
                                         <td>
-                                            <a class="btn btn-link" data-bs-toggle="collapse" :href="'#order' + order.id" role="button" aria-expanded="false" :aria-controls="'order' + order.id">
+                                            <a class="btn btn-link"
+                                               data-bs-toggle="collapse"
+                                               :href="'#order' + order.id"
+                                               role="button"
+                                               aria-expanded="false"
+                                               :aria-controls="'order' + order.id">
                                                 {{ order.no }}
                                             </a>
                                         </td>
                                         <td>{{ formatDate(order.createDate)}}</td>
                                         <td>{{ getOrderStatus(order.status) }}</td>
-                                        <td>
-                                            $ {{formatCurrency(order.totalAmount)}}
-                                        </td>
+                                        <td>$ {{formatCurrency(order.totalAmount)}}</td>
                                         <td>電子發票</td>
                                         <td>{{ getPaymentMethod(order.paymentMethod) }}</td>
-                                        <td>7天內可退貨</td>
-                                        <td>無</td>
+                                        <td>
+                                            <span v-if="order.status === 6"><strong>訂單已取消</strong></span>
+                                            <button class="btn btn-primary"
+                                                    :class="{'btn-disabled': isReturnDisabled(order.modifyDate)}"
+                                                    :disabled="isReturnDisabled(order.modifyDate)"
+                                                    @click="openReturnModal(order.id)"
+                                                    v-else>
+                                                退貨
+                                            </button>
+                                        </td>
+                                        <td>{{ getDeliveryDate(order.status, order.modifyDate) }}</td>
+                                        
                                     </tr>
-                                    <tr >
+                                    <tr>
                                         <td colspan="8">
                                             <div class="progress mt-2 mb-2">
+
                                                 <div class="progress-bar bg-success"
                                                      style="width: 25%">
                                                     收到訂單
                                                 </div>
 
-                                                <div class="progress-bar" :class="{'bg-success': order.status >= 1, 'bg-secondary': order.status < 1}"
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 1, 'bg-secondary': order.status < 1}"
                                                      style="width: 25%">
                                                     處理中
                                                 </div>
-                                                <div class="progress-bar" :class="{'bg-success': order.status >= 2, 'bg-secondary': order.status < 2}"
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 2, 'bg-secondary': order.status < 2}"
                                                      style="width: 25%">
                                                     已出貨
                                                 </div>
-                                                <div class="progress-bar" :class="{'bg-success': order.status >= 3, 'bg-secondary': order.status < 3}"
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 3, 'bg-secondary': order.status < 3}"
                                                      style="width: 25%">
                                                     已送達
                                                 </div>
                                             </div>
                                             <strong>產品明細：</strong>
-                                            <div class="accordion-body collapse" :id="'order' + order.id">
+                                            <div class="accordion-body collapse"
+                                                 :id="'order' + order.id">
                                                 <table class="table table-bordered mt-3">
                                                     <thead>
                                                         <tr>
@@ -204,12 +361,23 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr v-for="(item,index) in order.orderItems" :key="item.id">
+                                                        <tr v-for="(item,index) in order.orderItems"
+                                                            :key="item.id">
                                                             <td class="text-center">{{ index+1 }}</td>
-                                                            <td>{{ item.productName }}<br />規格：{{ item.skuItemName ? item.skuItemName : '基本款' }}</td>
-                                                            <td class="text-end">{{formatCurrency(item.qty)}}</td>
-                                                            <td class="text-end">$ {{formatCurrency(item.price)}}</td>
-                                                            <td class="text-end">$ {{formatCurrency(item.subTotal)}}</td>
+                                                            <td>
+                                                                {{ item.productName }}<br />規格：{{
+                                  item.skuItemName ? item.skuItemName : '基本款'
+                                                                }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                {{formatCurrency(item.qty)}}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $ {{formatCurrency(item.price)}}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $ {{formatCurrency(item.subTotal)}}
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -218,120 +386,96 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            </div>
-                    </div>
-                    <!-- 未完成訂單end -->
-                        <!-- 已完成訂單start -->
-                        <div>
-                            <hr class="mt-5" style="background-color: red; height: 2px" />
-                            <h3 class="mt-5">已完成訂單</h3>
-                            <div class="accordion accordion-menu" id="accordionExample">
-                                <table v-for="order in completedOrders" class="table table-striped">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>訂單編號</th>
-                                            <th>日期</th>
-                                            <th>訂單狀態</th>
-                                            <th>總價</th>
-                                            <th>發票</th>
-                                            <th>付款方式</th>
-                                            <th>退貨</th>
-                                            <th>備註</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr :key="order.id" class="text-center">
-                                            <td>
-                                                <a class="btn btn-link" data-bs-toggle="collapse" :href="'#order' + order.id" role="button" aria-expanded="false" :aria-controls="'order' + order.id">
-                                                    {{ order.no }}
-                                                </a>
-                                            </td>
-                                            <td>{{ formatDate(order.createDate)}}</td>
-                                            <td>{{ getOrderStatus(order.status) }}</td>
-                                            <td>
-                                                $ {{formatCurrency(order.totalAmount)}}
-                                            </td>
-                                            <td>電子發票</td>
-                                            <td>{{ getPaymentMethod(order.paymentMethod) }}</td>
-                                            <td>7天內可退貨</td>
-                                            <td>無</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="8">
-                                                <div class="progress mt-2 mb-2">
-                                                    <div class="progress-bar bg-success"
-                                                         style="width: 25%">
-                                                        收到訂單
-                                                    </div>
+                            <!-- 退貨申請 Modal -->
+                            <div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <!-- 使用 modal-dialog-centered -->
+                                    <div class="modal-content">
+                                        <div class="modal-header d-flex align-items-center">
+                                            <!-- 使用 d-flex -->
+                                            <h5 class="modal-title flex-grow-1 text-center" id="returnModalLabel">退貨申請</h5> 
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body d-flex flex-column align-items-center">
+                                            <!-- 使用 d-flex 和 align-items-center -->
+                                            <form @submit.prevent="showConfirmation" class="w-100">
+                                                <div class="mb-3">
+                                                    <label for="reason" class="form-label">退貨原因</label>
+                                                    <textarea v-model="returnReason" class="form-control" id="reason" rows="3" required></textarea>
+                                                </div>
+                                                <input type="hidden" v-model="selectedOrderId" />
 
-                                                    <div class="progress-bar" :class="{'bg-success': order.status >= 1, 'bg-secondary': order.status < 1}"
-                                                         style="width: 25%">
-                                                        處理中
-                                                    </div>
-                                                    <div class="progress-bar" :class="{'bg-success': order.status >= 2, 'bg-secondary': order.status < 2}"
-                                                         style="width: 25%">
-                                                        已出貨
-                                                    </div>
-                                                    <div class="progress-bar" :class="{'bg-success': order.status >= 3, 'bg-secondary': order.status < 3}"
-                                                         style="width: 25%">
-                                                        已送達
-                                                    </div>
+                                                <div class="d-flex justify-content-end mt-3">
+                                                    <button type="submit" class="btn btn-primary me-2">送出申請</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                                                 </div>
-                                                <strong>產品明細：</strong>
-                                                <div class="accordion-body collapse" :id="'order' + order.id">
-                                                    <table class="table table-bordered mt-3">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center">編號</th>
-                                                                <th class="text-center">品名</th>
-                                                                <th class="text-center">數量</th>
-                                                                <th class="text-center">價格</th>
-                                                                <th class="text-center">小計</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr v-for="(item,index) in order.orderItems" :key="item.id">
-                                                                <td class="text-center">{{ index+1 }}</td>
-                                                                <td>{{ item.productName }}<br />規格：{{ item.skuItemName ? item.skuItemName : '基本款' }}</td>
-                                                                <td class="text-end">{{formatCurrency(item.qty)}}</td>
-                                                                <td class="text-end">$ {{formatCurrency(item.price)}}</td>
-                                                                <td class="text-end">$ {{formatCurrency(item.subTotal)}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 確認視窗 Modal -->
+                            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <!-- 使用 modal-dialog-centered -->
+                                    <div class="modal-content">
+                                        <div class="modal-header modal-header d-flex align-items-center">
+                                            <h5 class="modal-title flex-grow-1 text-center" id="confirmationModalLabel">確認退貨</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body d-flex flex-column align-items-center">
+                                            <!-- 使用 d-flex 和 align-items-center -->
+                                            <p>您確定要提交退貨申請嗎？</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="submitReturnForm(selectedOrderId)">確定</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!-- 已完成訂單end -->
-</section>
+                    <!-- 已完成訂單end -->
+                    </div>
+                 </section>
             </div>
         </main>
         <footer-component></footer-component>
     </div>
 
     <script type="module">
-        import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
+        import {
+            HeaderComponent,
+            FooterComponent,
+        } from "../Scripts/shared-components.js";
         const app = Vue.createApp({
             data() {
                 return {
-                    orders: [], 
+                    orders: [],
+                    returnReason: '', // 退貨原因
+                    cancelReason: '', // 取消原因
+                    selectedOrderId: null, // 選中的訂單 ID
+                    userId: localStorage.getItem("userId"), // 新增 userId
                 };
             },
             mounted() {
                 // 確保在組件掛載時從 API 正確地獲取資料
-                this.fetchOrders();
+                this.fetchOrders(this.userId);
             },
             computed: {
                 filteredOrders() {
-                    return this.orders.filter(order => order.status === 1 || order.status === 2 || order.status === 4);
+                    return this.orders
+                        .filter((order) => order.status === 1 || order.status === 2 || order.status === 4)
+                        .sort((a, b) => new Date(b.createDate) - new Date(a.createDate)); // 根據日期降序排序
                 },
                 completedOrders() {
-                    return this.orders.filter(order => order.status === 3 || order.status === 5);
-                }
+                    return this.orders
+                        .filter((order) => order.status === 3 || order.status === 5 || order.status === 6)
+                        .sort((a, b) => new Date(b.createDate) - new Date(a.createDate)); // 根據日期降序排序
+                },
+                
+
             },
             created() {
                 let userId = localStorage.getItem("userId");
@@ -341,20 +485,19 @@
                     /*console.error("未找到會員ID，請先登入");*/
                 }
                 console.log("User ID:", userId); // 檢查 userId
-                this.fetchOrders(userId);
-              },
+            },
             methods: {
                 async fetchOrders(userId) {
                     try {
                         const response = await fetch(`/api/Members/Orders/${userId}`);
                         if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                            throw new Error("Network response was not ok");
                         }
                         const data = await response.json();
                         this.orders = data; // 假設 API 返回的資料結構
                         console.log("orders:", this.orders); // 檢查 orders 的內容
                     } catch (error) {
-                        console.error('Error fetching orders:', error);
+                        console.error("Error fetching orders:", error);
                     }
                 },
                 formatCurrency(value) {
@@ -365,28 +508,181 @@
                 },
                 formatDate(dateString) {
                     const date = new Date(dateString);
-                    return date.toISOString().split('T')[0]; // 只保留日期部分
+                    return date.toISOString().split("T")[0]; // 只保留日期部分
                 },
                 getOrderStatus(status) {
                     const statusMap = {
-                        1: '處理中',
-                        2: '已出貨',
-                        3: '已完成',
-                        4: '已申請退貨',
-                        5: '已退貨'
+                        1: "處理中",
+                        2: "已出貨",
+                        3: "已完成",
+                        4: "已申請退貨",
+                        5: "已退貨",
+                        6: "已取消",
                     };
-                    return statusMap[status] || '未知狀態';
+                    return statusMap[status] || "未知狀態";
                 },
                 getPaymentMethod(method) {
                     const paymentMap = {
-                        1: '貨到付款',
-                        2: '信用卡'
+                        1: "貨到付款",
+                        2: "信用卡",
                     };
-                    return paymentMap[method] || '未知付款方式';
+                    return paymentMap[method] || "未知付款方式";
+                },
+                isReturnDisabled(modifyDate) {
+                    // 將 modifyDate 轉換為日期物件
+                    const modifyDateObj = new Date(modifyDate);
+                    const today = new Date();
+
+                    // 計算兩個日期之間的差異（以天為單位）
+                    const timeDiff = today - modifyDateObj;
+                    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); // 將毫秒轉換為天
+
+                    return daysDiff > 7; // 超過7天返回true，按鈕禁用
+                },
+                getDeliveryDate(status, originalDate) {
+                    const formattedDate = this.formatDate(originalDate); // 格式化日期
+                    switch (status) {
+                        case 1:
+                            return `成立訂單日: ${formattedDate}`;
+                        case 3:
+                            return `送達日期: ${formattedDate}`;
+                        case 6:
+                            return `取消訂單日: ${formattedDate}`;
+                        case 4:
+                            return `申請退貨日: ${formattedDate}`; 
+                        case 5:
+                            return `退貨完成日: ${formattedDate}`;
+                        case 2:
+                            return `出貨日: ${formattedDate}`;
+                        default:
+                            return '';
+                    }
+                },
+                openReturnModal(orderId) {
+                    this.selectedOrderId = orderId;
+                    this.returnReason = ''; // 清空退貨原因
+                    const modal = new bootstrap.Modal(document.getElementById('returnModal'));
+                    modal.show(); // 顯示退貨表單的Modal
+                },
+                cancelReturn() {
+                    this.returnReason = '';
+                    this.selectedOrderId = null;
+                    this.hideModal('returnModal');
+                },
+                async submitReturnForm(orderId) {
+                    // 實際提交退貨申請的邏輯
+                    const userId = localStorage.getItem("userId");
+                    console.log("Submitting return for Order ID:", orderId, "with User ID:", userId);
+
+                    try { 
+                    const response = await fetch(`/api/Members/Orders/SubmitReturnRequest/${orderId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userId: userId,
+                            returnReason: this.returnReason,
+                        }),
+                        });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Network response was not ok: ${response.status} - ${errorText}`);
+                    }
+
+                        const data = await response.json();
+                        alert(data.message); 
+
+                        // 獲取舊的 ModifyDate，並使用正確的格式
+                        const originalModifyDate = new Date(data.originalModifyDate);
+                        const deliveryDateMessage = this.getDeliveryDate(4, originalModifyDate); // 呼叫方法時使用狀態 4
+
+                        console.log(deliveryDateMessage); // 輸出送達日期的消息
+
+
+                    } catch (error) {
+                        console.error('Error in submitReturnForm:', error); // 輸出詳細錯誤信息
+                        alert("退貨申請失敗，請稍後再試。");
+                    }
+                    console.log("退貨申請已提交:", this.returnReason, this.selectedOrderId);
+
+                    this.fetchOrders(this.userId); // 刷新訂單列表
+
+                    // 這裡可以加上其他的邏輯，例如清空表單等
+                    this.returnReason = '';
+                    this.selectedOrderId = '';
+
+                    this.hideModal('returnModal');  // 關閉退貨申請 Modal
+
+                    // 關閉確認視窗
+                    const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+                    confirmationModal.hide();
+                },
+                showConfirmation() {
+                    // 顯示確認視窗
+                    const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                    confirmationModal.show();
+                },
+                hideModal(modalId) {
+                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                },
+                //以下是取消訂單區域
+                openCancelModal(orderId) {
+                    this.selectedOrderId = orderId;
+                    this.cancelReason = ''; // 清空退貨原因
+                    const modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+                    modal.show(); // 顯示退貨表單的Modal
+                },
+                cancelCancel() {
+                    this.returnReason = '';
+                    this.selectedOrderId = null;
+                    this.hideModal('cancelModal');
+                },
+                async submitCancelOrder(orderId) {
+                    const userId = localStorage.getItem("userId");
+                    console.log("Submitting return for Order ID:", orderId, "with User ID:", userId);
+
+                    try {
+                        const response = await fetch(`/api/Members/Orders/CancelOrder/${orderId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                userId: userId,
+                                cancelReason: this.cancelReason,
+                            }),
+                        });
+
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(`Network response was not ok: ${response.status} - ${errorText}`);
+                        }
+
+                        const data = await response.json();
+                        alert(data.message);
+
+                    } catch (error) {
+                        console.error('Error in submitReturnForm:', error); // 輸出詳細錯誤信息
+                        alert("取消訂單申請失敗，請稍後再試。");
+                    }
+                    console.log("取消訂單申請已提交:", this.returnReason, this.selectedOrderId);
+
+                    this.fetchOrders(this.userId); // 刷新訂單列表
+
+                    // 這裡可以加上其他的邏輯，例如清空表單等
+                    this.cancelReason = '';
+                    this.selectedOrderId = '';
+
+                    this.hideModal('cancelModal');  // 關閉退貨申請 Modal
+                    
                 },
             },
-            
-                  });
+        });
 
         app.component("header-component", HeaderComponent);
         app.component("footer-component", FooterComponent);

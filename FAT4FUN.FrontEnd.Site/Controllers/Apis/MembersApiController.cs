@@ -33,6 +33,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
                     TotalAmount = o.TotalAmount,
                     Status = o.Status,
                     CreateDate = o.CreateDate,
+                    ModifyDate = o.ModifyDate,
                     OrderItems = o.OrderItems.Select(item => new OrderItemVM
                     {
                         Id = item.Id,
@@ -53,45 +54,72 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
             }
         }
 
-        //// 可以根據訂單編號查詢特定訂單
-        //// GET: api/members/orders/{id}
-        //[HttpGet]
-        //[Route("api/members/orders/{userid}/{id}")]
-        //public IHttpActionResult GetOrderById(int id)
-        //{
-        //    try
-        //    {
-        //        var order = db.Orders.Where(o => o.Id == id).Select(o => new OrderVm
-        //        {
-        //            Id = o.Id,
-        //            No = o.No,
-        //            PaymentMethod = o.PaymentMethod,
-        //            TotalAmount = o.TotalAmount,
-        //            Status = o.Status,
-        //            CreateDate = o.CreateDate,
-        //            OrderItems = o.OrderItems.Select(item => new OrderItemVM
-        //            {
-        //                Id = item.Id,
-        //                OrderId = item.OrderId,
-        //                ProductName = item.ProductName,
-        //                Price = item.Price,
-        //                Qty = item.Qty,
-        //                SubTotal = item.SubTotal
-        //            }).ToList()
-        //        }).FirstOrDefault();
+        [HttpPut]
+        [Route("api/Members/Orders/SubmitReturnRequest/{orderId}")]
+        public IHttpActionResult SubmitReturnRequest(int orderId)
+        {
+            try
+            {
+                // 確認請求的訂單ID是否有效
+                var order = db.Orders.Find(orderId);
+                if (order == null)
+                {
+                    return NotFound(); // 如果訂單不存在，返回 404 Not Found
+                }
 
-        //        if (order == null)
-        //        {
-        //            return NotFound(); // 返回 404 Not Found
-        //        }
+                // 更新訂單狀態為「已申請退貨」(4)
+                order.Status = 4;
+                
+                string originalModifyDate = order.ModifyDate.ToString("yyyy-MM-dd");
+                
+                // 更新 modifyDate 為當前日期
+                order.ModifyDate = DateTime.Now;
 
-        //        return Ok(order); // 返回 200 OK 和特定訂單資料
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return InternalServerError(ex); // 返回 500 Internal Server Error
-        //    }
-        //}
+                db.SaveChanges();
+
+                return Ok(new
+                {
+                    message = "退貨申請已成功提交。",
+                    originalModifyDate = originalModifyDate
+                });
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex); // 返回 500 Internal Server Error
+            }
+        }
+
+        [HttpPut]
+        [Route("api/Members/Orders/CancelOrder/{orderId}")]
+        public IHttpActionResult CancelOrder(int orderId)
+        {
+            try
+            {
+                // 確認請求的訂單ID是否有效
+                var order = db.Orders.Find(orderId);
+                if (order == null)
+                {
+                    return NotFound(); // 如果訂單不存在，返回 404 Not Found
+                }
+
+                order.Status = 6;
+
+                string originalModifyDate = order.ModifyDate.ToString("yyyy-MM-dd");
+
+                // 更新 modifyDate 為當前日期
+                order.ModifyDate = DateTime.Now;
+
+                db.SaveChanges();
+
+                return Ok(new { message = "取消訂單申請已成功提交。" }); // 返回成功訊息
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex); // 返回 500 Internal Server Error
+            }
+        }
+
+
 
     }
 }

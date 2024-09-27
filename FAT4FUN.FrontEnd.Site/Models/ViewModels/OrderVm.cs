@@ -19,6 +19,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.ViewModels
         //public string Phone { get; set; }
         public int Status { get; set; }
         public DateTime CreateDate { get; set; }
+        public DateTime ModifyDate { get; set; }
 
         // 訂單明細
         public List<OrderItemVM> OrderItems { get; set; }
