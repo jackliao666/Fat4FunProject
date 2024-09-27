@@ -18,6 +18,7 @@ namespace FAT4FUN.BackEnd.Site.Models
             CreateMap<LoginVm, LoginDto>();
             //vm轉換至dto 雙向
             CreateMap<ProductVm, ProductDto>().ReverseMap();
+            CreateMap<ProductDto, ProductVm>();
             //dto轉換至sku
             CreateMap<ProductSkuDto, ProductSku>().ReverseMap();
             CreateMap<ProductDto, Product>().ReverseMap();

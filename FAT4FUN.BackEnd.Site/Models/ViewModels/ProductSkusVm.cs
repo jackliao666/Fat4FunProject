@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FAT4FUN.BackEnd.Site.Models.Dtos
+namespace FAT4FUN.BackEnd.Site.Models.ViewModels
 {
-    public class ProductSkuDto
+    public class ProductSkusVm
     {
+        
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public string Name { get; set; }
+        public string ProductSkuName { get; set; }
         public int Price { get; set; }
         public int Sale { get; set; }
-        //public SkuItemDto SkuItems { get; set; }
     }
-}   
+}

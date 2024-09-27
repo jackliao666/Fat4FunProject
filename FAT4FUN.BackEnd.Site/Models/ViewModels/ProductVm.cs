@@ -48,8 +48,9 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
 
         [Display(Name = "修改日期")]
         public DateTime? ModifyDate { get; set; } = DateTime.Now;
-        //public List<ProductSkuVm> ProductSkus { get; set; }
-        public ProductSkuVm ProductSkus { get; set; }
+        public ProductSkuVm ProductSku { get; set; }
+        public List<ProductSkusVm> ProductSkus { get; set; }
+
 
     }
 }

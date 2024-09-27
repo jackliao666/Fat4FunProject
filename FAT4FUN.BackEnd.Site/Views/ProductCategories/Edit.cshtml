@@ -1,0 +1,59 @@
+﻿@model FAT4FUN.BackEnd.Site.Models.EFModels.ProductCategory
+
+@*@{
+        ViewBag.Title = "Edit";
+    }*@
+
+<h2 class="my-4">編輯商品類別</h2>
+
+<style>
+    .small-input {
+        width: 300px; /* 設置文本框和下拉選單寬度 */
+    }
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>商品類別</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <!-- 商品類別名稱（縮小文本框） -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">商品類別</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control small-input" } })
+                @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 狀態管理（使用下拉選單） -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">狀態管理</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Status, new SelectList(new[]
+                {
+                    new { Value = "true", Text = "啟用" },
+                    new { Value = "false", Text = "不啟用" }
+                }, "Value", "Text"), new { @class = "form-control small-input" })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 保存按鈕 -->
+        <div class="form-group row">
+            <div class="col-md-10 offset-md-2">
+                <input type="submit" value="保存" class="btn btn-primary" />
+                @Html.ActionLink("返回列表", "Index", null, new { @class = "btn btn-secondary ml-2" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

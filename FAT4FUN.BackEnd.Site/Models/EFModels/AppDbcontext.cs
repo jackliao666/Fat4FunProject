@@ -111,5 +111,7 @@ namespace FAT4FUN.BackEnd.Site.Models.EFModels
                 .WithRequired(e => e.User)
                 .WillCascadeOnDelete(false);
         }
+
+        public System.Data.Entity.DbSet<FAT4FUN.BackEnd.Site.Models.ViewModels.CategoryVm> CategoryVms { get; set; }
     }
 }

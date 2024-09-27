@@ -9,6 +9,8 @@ using FAT4FUN.BackEnd.Site.Models.Dtos;
 using System.Data;
 using FAT4FUN.BackEnd.Site.Models.Interfaces;
 using System.Web.Configuration;
+using PagedList;
+using System.Drawing.Printing;
 
 namespace FAT4FUN.BackEnd.Site.Models.Repositories
 {
@@ -36,9 +38,10 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                     Status = p.Status,
                     CreateDate = p.CreateDate,
                     ModifyDate = p.ModifyDate,
-                    ProductSkus = p.ProductSkus.Select(s => new ProductSkuDto
+                    ProductSkus = p.ProductSkus.Select(s => new ProductSkusDto
                     {
                         Id = s.Id,
+                        ProductId = s.ProductId,
                         Name = s.Name,
                         Price = s.Price,
                         Sale = s.Sale,
@@ -49,7 +52,8 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
 
             return products;
         }
-       
+        
+
         public int Create(ProductDto productDto)
         {
             if (productDto == null)
@@ -115,7 +119,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                     Status = p.Status,
                     CreateDate = p.CreateDate,
                     ModifyDate = p.ModifyDate,
-                    ProductSkus = p.ProductSkus.Select(s => new ProductSkuDto
+                    ProductSkus = p.ProductSkus.Select(s => new ProductSkusDto
                     {
                         Id = s.Id,
                         ProductId = s.ProductId,
@@ -209,6 +213,37 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             // 儲存變更到資料庫
             _db.SaveChanges();
         }
+
+        public IPagedList<ProductDto> GetProductsByFilter(string categoryName, string brandName, string productName,  int page = 1, int pageSize = 10)
+        {
+            
+            var products = GetProducts().ToList();
+
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                products = products.Where(p => p.CategoryName.Contains(categoryName)).ToList();
+            }
+            if (!string.IsNullOrEmpty(brandName))
+            {
+                products = products.Where(p => p.BrandName.Contains(brandName)).ToList();
+            }
+            if (!string.IsNullOrEmpty(productName))
+            {
+                products = products.Where(p => p.Name.Contains(productName)).ToList();
+            }
+            //if (minPrice.HasValue)
+            //{
+            //    products = products.Where(p => p.Price >= minPrice.Value).ToList();
+            //}
+            //if (maxPrice.HasValue)
+            //{
+            //    products = products.Where(p => p.Price <= maxPrice.Value).ToList();
+            //}
+
+            
+            return products.OrderBy(p => p.Id).ToPagedList(page, pageSize);
+        }
+
     }
 
 }

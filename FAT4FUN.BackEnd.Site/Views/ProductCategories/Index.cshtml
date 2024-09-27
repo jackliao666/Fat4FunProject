@@ -1,0 +1,99 @@
+﻿@model IEnumerable<FAT4FUN.BackEnd.Site.Models.EFModels.ProductCategory>
+
+@*@{
+        ViewBag.Title = "Index";
+    }*@
+
+<h2>商品類別管理</h2>
+
+<p>
+    @Html.ActionLink("新增類別", "Create", null, new { @class = "btn btn-primary mb-3" })
+</p>
+
+<div class="form-inline mb-3">
+    <label for="statusFilter" class="mr-2">顯示商品狀態：</label>
+    <select id="statusFilter" class="form-control form-control-sm">
+        <option value="true" selected>啟用</option>
+        <option value="false">不啟用</option>
+    </select>
+</div>
+<!-- 搜尋功能 -->
+<form method="get" action="@Url.Action("Index")" class="form-inline mb-3">
+    <label for="searchKeyword" class="mr-2">搜尋類別名稱：</label>
+    <input type="text" id="searchKeyword" name="searchKeyword" class="form-control form-control-sm mr-2" placeholder="請輸入類別名稱" />
+    <button type="submit" class="btn btn-primary">搜尋</button>
+</form>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>商品類別</th> <!-- 手動設定欄位名稱 -->
+            @*<th>
+                    @Html.DisplayNameFor(model => model.DisplayOrder)
+                </th>*@
+
+            <th>狀態管理</th> <!-- 手動設定欄位名稱 -->
+
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr class="category-row @(item.Status ? "enabled" : "disabled")">
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.DisplayOrder)
+                    </td>*@
+                <td>
+                    @if (item.Status)
+                    {
+                        <span class="badge badge-success">啟用</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-secondary">不啟用</span>
+                    }
+                    @*@Html.DisplayFor(modelItem => item.Status)*@
+                </td>
+                <td>
+                    @Html.ActionLink("編輯", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+                    @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
+                    @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script>
+        // 當選擇商品狀態時，篩選顯示對應的商品
+        document.getElementById('statusFilter').addEventListener('change', function () {
+            var selectedStatus = this.value;
+            var rows = document.querySelectorAll('.category-row');
+
+            rows.forEach(function (row) {
+                if (selectedStatus === 'true') {
+                    if (row.classList.contains('enabled')) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                } else if (selectedStatus === 'false') {
+                    if (row.classList.contains('disabled')) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        // 頁面加載時默認只顯示啟用商品
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('statusFilter').dispatchEvent(new Event('change'));
+        });</script>
+}

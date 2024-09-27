@@ -1,5 +1,6 @@
 ﻿using FAT4FUN.BackEnd.Site.Models.Dtos;
 using FAT4FUN.BackEnd.Site.Models.EFModels;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,6 @@ namespace FAT4FUN.BackEnd.Site.Models.Interfaces
 
         void DeleteProductWithSkus(ProductDto productDto);
 
-
-
-
-
-
+        IPagedList<ProductDto> GetProductsByFilter(string categoryName, string brandName, string productName, int page = 1, int pageSize = 10);
     }
 }

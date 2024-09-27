@@ -28,8 +28,9 @@ namespace FAT4FUN.BackEnd.Site.Models.Dtos
         public bool Status { get; set; }      
         public DateTime CreateDate { get; set; }    
         public DateTime ModifyDate { get; set; }
-        public List<ProductSkuDto> ProductSkus { get; set;}
-        
+        public ProductSkuDto ProductSku { get; set; }
+        public List<ProductSkusDto> ProductSkus { get; set; }
+
 
     }
 }   

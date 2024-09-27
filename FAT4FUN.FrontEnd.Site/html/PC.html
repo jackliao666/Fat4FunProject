@@ -187,10 +187,10 @@
               :data-bs-target="'#collapse' + index"
               aria-expanded="false"
               :aria-controls="'collapse' + index"
-              @click="setAccordion(item.name)"
-              :class="{'active-accordion': selectedAccordion === item.name}"
+              @click="setAccordion(item?.name)"
+              :class="{'active-accordion': selectedAccordion === item?.name}"
             >
-              {{ item.name }}
+              {{ item?.name }}
             </button>
           </h2>
           <div
@@ -200,8 +200,10 @@
           >
             <div class="accordion-body">
               <ul>
-                <li v-for="sub in item.subcategories" :key="sub.name">
-                  <a href="#" @click="setAccordion(sub.name)">{{ sub.name }}</a>
+                <li v-for="sub in item.subcategories" :key="sub?.name">
+                  <a href="#" @click="setAccordion(sub?.name)"
+                    >{{ sub?.name }}</a
+                  >
                 </li>
               </ul>
             </div>
@@ -299,15 +301,15 @@
             <img
               :src="product.image"
               class="card-img-top"
-              :alt="product.name"
+              :alt="product?.name"
             />
             <div class="card-body">
-              <h5 class="card-title">{{ product.name }}</h5>
+              <h5 class="card-title">{{ product?.name }}</h5>
               <p class="card-text">{{ product.description }}</p>
               <p class="card-brand">品牌: {{ product.brand }}</p>
               <p class="card-price">價格: ${{ product.specs[0]?.price }}</p>
               <!-- 顯示默認規格 -->
-              <p class="card-specs">規格: {{ product.specs[0].name }}</p>
+              <p class="card-specs">規格: {{ product.specs[0]?.name }}</p>
               <div class="d-flex justify-content-between">
                 <!-- 愛心按鈕 -->
                 <button
@@ -425,7 +427,9 @@
           },
           //計算總頁數
           totalPages() {
-            return Math.ceil(this.products.length / this.itemsPerPage);
+            return (
+              Math.ceil(this.filteredProducts.length / this.itemsPerPage) || 1
+            );
           },
         },
         methods: {
@@ -564,13 +568,13 @@
             if (query) {
               this.filteredProducts = this.products.filter((product) => {
                 // 檢查產品名稱是否包含搜尋關鍵字
-                const matchesName = product.name
+                const matchesName = product?.name
                   .toLowerCase()
                   .includes(query.toLowerCase());
 
                 // 檢查產品的任意規格是否包含搜尋關鍵字
                 const matchesSpecs = product.specs.some((spec) =>
-                  spec.name.toLowerCase().includes(query.toLowerCase())
+                  spec?.name.toLowerCase().includes(query.toLowerCase())
                 );
 
                 // 只要名稱或規格匹配就返回 true
@@ -705,7 +709,7 @@
                 const item = {
                   UserId: 3,
                   ProductId: ProductId,
-                  Name: product.name,
+                  Name: product?.name,
                 };
                 fetch("/api/products/SaveFollow", {
                   method: "POST",

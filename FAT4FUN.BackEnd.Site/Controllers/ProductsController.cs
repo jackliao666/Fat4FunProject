@@ -1,4 +1,5 @@
-﻿using FAT4FUN.BackEnd.Site.Models.Dtos;
+﻿using AutoMapper;
+using FAT4FUN.BackEnd.Site.Models.Dtos;
 using FAT4FUN.BackEnd.Site.Models.Services;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using System;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
 
 namespace FAT4FUN.BackEnd.Site.Controllers
 {
@@ -19,11 +21,12 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             _productService = new ProductService();
         }
         // GET: Products
-
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Index(string categoryName, string brandName, string productName, int page = 1, int pageSize = 10)
         {
-            List<ProductVm> products = _productService.GetProducts();
-            return View(products);
+           var productVms = _productService.ConverToVm(categoryName, brandName, productName, page, pageSize);
+            
+            return View(productVms);
         }
         [HttpGet]
         public ActionResult Create()
@@ -36,7 +39,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
             var productVm = new ProductVm
             {
-                ProductSkus = new ProductSkuVm()// 初始化列表
+                ProductSku = new ProductSkuVm()// 初始化列表
             };
 
             return View(productVm);
@@ -62,7 +65,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         public ActionResult Edit(int id)
         {
             ProductVm product = _productService.GetProduct(id);
-                
+
             // 如果產品不存在，返回 404 錯誤
             if (product == null)
             {
@@ -97,6 +100,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             _productService.Delete(id); // 呼叫刪除邏輯
             return RedirectToAction("Index");
         }
+
 
     }
 }

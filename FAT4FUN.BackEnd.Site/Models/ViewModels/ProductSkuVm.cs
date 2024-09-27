@@ -10,6 +10,7 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
     public class ProductSkuVm
     {   
         public int Id { get; set; }
+        public int ProductId { get; set; }
         public string ProductSkuName { get; set; }
         public int Price { get; set; }
         public int Sale { get; set; }
