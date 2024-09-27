@@ -25,20 +25,26 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
 
+        private List<SelectListItem> GetRoles()
+        {
+            var roles = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "0", Text = "Admin" },
+                    new SelectListItem { Value = "1", Text = "Manager" },
+                    new SelectListItem { Value = "2", Text = "Designer" },
+                    new SelectListItem { Value = "3", Text = "Sales" },
+                    new SelectListItem { Value = "4", Text = "Human Resources" },
+                    new SelectListItem { Value = "5", Text = "Members" }
+                };
 
-        [MyAuthorize(Functions = "0,4")]
+            return roles;
+        }
+
+        [MyAuthorize(Functions ="0,4")]
         public ActionResult Register()
         {
             // 設置 Roles 選項
-            var roles = new List<SelectListItem>
-    {
-        new SelectListItem { Value = "0", Text = "Admin" },
-        new SelectListItem { Value = "1", Text = "Manager" },
-        new SelectListItem { Value = "2", Text = "Designer" },
-        new SelectListItem { Value = "3", Text = "Sales" },
-        new SelectListItem { Value = "4", Text = "Human Resources" },
-        new SelectListItem { Value = "5", Text = "Members" }
-    };
+            var roles = GetRoles();
 
             ViewBag.Roles = new SelectList(roles, "Value", "Text");
             return View();
@@ -63,15 +69,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
 
             // 重新設置 Roles 選項
-            var roles = new List<SelectListItem>
-    {
-        new SelectListItem { Value = "0", Text = "Admin" },
-        new SelectListItem { Value = "1", Text = "Manager" },
-        new SelectListItem { Value = "2", Text = "Designer" },
-        new SelectListItem { Value = "3", Text = "Sales" },
-        new SelectListItem { Value = "4", Text = "Human Resources" },
-        new SelectListItem { Value = "5", Text = "Members" }
-    };
+            var roles = GetRoles();
 
             ViewBag.Roles = new SelectList(roles, "Value", "Text");
 
@@ -98,10 +96,14 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         public ActionResult Login(LoginVm vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var service = new UserService();
-                Result result = HandleLogin(vm);
+
+                return View(vm);
+            }
+            
+            var service = new UserService();
+             Result result = HandleLogin(vm);
 
                 if (result.IsSuccess)
                 {
@@ -117,13 +119,17 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                     // 獲取角色數據
                     int userRole = (int)roleResult.Data;
 
+                    
                     // 根據角色處理邏輯
                     // 例如，將角色數據寫入 cookie 或其他處理邏輯
                     (string url, HttpCookie cookie) = ProcessLogin(vm.Account);
                     Response.Cookies.Add(cookie);
-
-                    // 設置身份驗證的 Cookie，這行是關鍵
-                    FormsAuthentication.SetAuthCookie(vm.Account, false);
+                    
+                    
+                        
+                    
+                    //// 設置身份驗證的 Cookie，這行是關鍵
+                    //FormsAuthentication.SetAuthCookie(vm.Account, true);
 
                     // 登入成功後的重定向
                     return RedirectToAction("EditProfile", "Users");
@@ -136,8 +142,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                 }
 
                 
-            }
-            return View(vm);
+            
         }
 
         public ActionResult Logout() 
@@ -267,12 +272,17 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             //將它加密
             var value = FormsAuthentication.Encrypt(ticket);
 
-            // 解密以進行測試和輸出
-            //var decryptedTicket = FormsAuthentication.Decrypt(value);
-            //System.Diagnostics.Debug.WriteLine($"Decrypted Role from Cookie: {decryptedTicket.UserData}"); // 應顯示角色數字
+
+
+            // 解密並輸出調試信息
+            var decryptedTicket = FormsAuthentication.Decrypt(value);
+            System.Diagnostics.Debug.WriteLine($"Decrypted Role from Ticket: {decryptedTicket.UserData}");  // 確認UserData包含正確的角色數字
+
 
             //存入cookie
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, value);
+
+            
 
             //取得 return url
             var url = FormsAuthentication.GetRedirectUrl(account, true);   //第二個引述沒有用處

@@ -38,6 +38,8 @@ namespace FAT4FUN.BackEnd.Site.Models
             //return _roles.Contains(role.ToLower());
             /*System.Diagnostics.Debug.WriteLine($"Checking role: {role} against user roles: {string.Join(",", _functions)}")*/;
 
+            System.Diagnostics.Debug.WriteLine($"Checking if user has role: {role}. User roles are: {string.Join(", ", _functions)}");
+
             return _functions.Contains(role.ToLower());
         }
 

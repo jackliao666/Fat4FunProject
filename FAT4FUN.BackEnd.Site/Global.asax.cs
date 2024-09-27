@@ -70,19 +70,23 @@ namespace FAT4FUN.BackEnd.Site
             //}
 
             HttpCookie authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+
             if (authCookie != null)
             {
+                // 解密認證票
                 FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
 
+                if (authTicket != null && !string.IsNullOrEmpty(authTicket.UserData))
+                {
+                    // 解析 UserData（這裡是角色數字）
+                    string[] roles = authTicket.UserData.Split(',');
 
+                    // 使用解密的資料創建 CustomPrincipal
+                    CustomPrincipal newUser = new CustomPrincipal(new GenericIdentity(authTicket.Name), roles);
 
-                // 解析 UserData，這裡應該是角色數字
-                string[] roles = authTicket.UserData.Split(',');
-
-                // 創建 CustomPrincipal 並傳遞角色數字
-                CustomPrincipal newUser = new CustomPrincipal(new GenericIdentity(authTicket.Name), roles);
-
-                HttpContext.Current.User = newUser;
+                    // 設置 HttpContext 的 User 物件
+                    HttpContext.Current.User = newUser;
+                }
             }
 
 
