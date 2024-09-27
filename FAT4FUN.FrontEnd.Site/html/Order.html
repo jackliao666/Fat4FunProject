@@ -15,6 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../Content/NavFooter.css" />
     <script src="../Scripts/vue.global.js"></script>
+
     <style>
         body,
         main {
@@ -138,150 +139,175 @@
                     <!-- 未完成訂單start -->
                     <div>
                         <h3 class="mt-4">未完成訂單</h3>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>訂單編號</th>
-                                    <th>日期</th>
-                                    <th>訂單狀態</th>
-                                    <th>總價</th>
-                                    <th>發票</th>
-                                    <th>付款方式</th>
-                                    <th>退貨</th>
-                                    <th>備註</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="order in orders" :key="order.id" class="text-center">
-                                    <td>
-                                        <a class="btn btn-link" data-bs-toggle="collapse" :href="'#order' + order.id" role="button" aria-expanded="false" :aria-controls="'order' + order.id">
-                                            {{ order.no }}
-                                        </a>
-                                    </td>
-                                    <td>{{ order.createDate }}</td>
-                                    <td>{{ order.status }}</td>
-                                    <td>
-                                        $ {{formatCurrency(order.totalAmount)}}
-                                    </td>
-                                    <td>電子發票</td>
-                                    <td>{{ order.paymentMethod }}</td>
-                                    <td>7天內可退貨</td>
-                                    <td>無</td>
-                                </tr>
-                                <tr v-for="item in orders.orderItems" :key="item.id" class="collapse" :id="'order' + order.id">
-                                    <td colspan="8">
-                                        <div class="accordion-body">
-                                            <strong>產品明細：</strong>
-                                            <table class="table table-bordered mt-3">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">編號</th>
-                                                        <th class="text-center">品名</th>
-                                                        <th class="text-center">數量</th>
-                                                        <th class="text-center">價格</th>
-                                                        <th class="text-center">小計</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="text-center">{{ item.id }}</td>
-                                                        <td>{{ item.productName }}<br />規格：{{ item.SkuItemName }}</td>
-                                                        <td class="text-end">{{ item.qty }}</td>
-                                                        <td class="text-end">$ {{ formatCurrency(item.price) }})</td>
-                                                        <td class="text-end">$ {{ formatCurrency(item.subTotal) }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- 未完成訂單end -->
-                    <!-- 已完成訂單start -->
-                    <div>
-                        <hr class="mt-5" style="background-color: red; height: 2px" />
-                        <h3 class="mt-5">已完成訂單</h3>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>訂單編號</th>
-                                    <th>日期</th>
-                                    <th>訂單狀態</th>
-                                    <th>總價</th>
-                                    <th>發票</th>
-                                    <th>付款方式</th>
-                                    <th>備註</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="text-center">
-                                    <td>
-                                        <a class="btn btn-link"
-                                           data-bs-toggle="collapse"
-                                           href="#orderB002"
-                                           role="button"
-                                           aria-expanded="false"
-                                           aria-controls="orderB002">
-                                            B-002
-                                        </a>
-                                    </td>
-                                    <td>2024/08/26</td>
-                                    <td>已完成</td>
-                                    <td>$4,200</td>
-                                    <td>電子發票</td>
-                                    <td>貨到付款</td>
-                                    <td></td>
-                                </tr>
-                                <tr class="collapse" id="orderB002">
-                                    <td colspan="8">
-                                        <div class="accordion-body">
-                                            <div class="progress mt-3 mb-2">
+                        <div class="accordion accordion-menu" id="accordionExample">
+                            <table v-for="order in filteredOrders" class="table table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>訂單編號</th>
+                                        <th>日期</th>
+                                        <th>訂單狀態</th>
+                                        <th>總價</th>
+                                        <th>發票</th>
+                                        <th>付款方式</th>
+                                        <th>退貨</th>
+                                        <th>備註</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <tr :key="order.id" class="text-center">
+                                        <td>
+                                            <a class="btn btn-link" data-bs-toggle="collapse" :href="'#order' + order.id" role="button" aria-expanded="false" :aria-controls="'order' + order.id">
+                                                {{ order.no }}
+                                            </a>
+                                        </td>
+                                        <td>{{ formatDate(order.createDate)}}</td>
+                                        <td>{{ getOrderStatus(order.status) }}</td>
+                                        <td>
+                                            $ {{formatCurrency(order.totalAmount)}}
+                                        </td>
+                                        <td>電子發票</td>
+                                        <td>{{ getPaymentMethod(order.paymentMethod) }}</td>
+                                        <td>7天內可退貨</td>
+                                        <td>無</td>
+                                    </tr>
+                                    <tr >
+                                        <td colspan="8">
+                                            <div class="progress mt-2 mb-2">
                                                 <div class="progress-bar bg-success"
                                                      style="width: 25%">
                                                     收到訂單
                                                 </div>
-                                                <div class="progress-bar bg-success"
+
+                                                <div class="progress-bar" :class="{'bg-success': order.status >= 1, 'bg-secondary': order.status < 1}"
                                                      style="width: 25%">
                                                     處理中
                                                 </div>
-                                                <div class="progress-bar bg-secondary"
+                                                <div class="progress-bar" :class="{'bg-success': order.status >= 2, 'bg-secondary': order.status < 2}"
                                                      style="width: 25%">
                                                     已出貨
                                                 </div>
-                                                <div class="progress-bar bg-secondary"
+                                                <div class="progress-bar" :class="{'bg-success': order.status >= 3, 'bg-secondary': order.status < 3}"
                                                      style="width: 25%">
                                                     已送達
                                                 </div>
                                             </div>
                                             <strong>產品明細：</strong>
-                                            <table class="table table-bordered mt-3">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">品名</th>
-                                                        <th class="text-center">數量</th>
-                                                        <th class="text-center">價格</th>
-                                                        <th class="text-center">小計</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>產品 B</td>
-                                                        <td class="text-end">2</td>
-                                                        <td class="text-end">$2,100</td>
-                                                        <td class="text-end">$4,200</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                            <div class="accordion-body collapse" :id="'order' + order.id">
+                                                <table class="table table-bordered mt-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">編號</th>
+                                                            <th class="text-center">品名</th>
+                                                            <th class="text-center">數量</th>
+                                                            <th class="text-center">價格</th>
+                                                            <th class="text-center">小計</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(item,index) in order.orderItems" :key="item.id">
+                                                            <td class="text-center">{{ index+1 }}</td>
+                                                            <td>{{ item.productName }}<br />規格：{{ item.skuItemName ? item.skuItemName : '基本款' }}</td>
+                                                            <td class="text-end">{{formatCurrency(item.qty)}}</td>
+                                                            <td class="text-end">$ {{formatCurrency(item.price)}}</td>
+                                                            <td class="text-end">$ {{formatCurrency(item.subTotal)}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
                     </div>
-                    <!-- 已完成訂單end -->
-                </section>
+                    <!-- 未完成訂單end -->
+                        <!-- 已完成訂單start -->
+                        <div>
+                            <hr class="mt-5" style="background-color: red; height: 2px" />
+                            <h3 class="mt-5">已完成訂單</h3>
+                            <div class="accordion accordion-menu" id="accordionExample">
+                                <table v-for="order in completedOrders" class="table table-striped">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>訂單編號</th>
+                                            <th>日期</th>
+                                            <th>訂單狀態</th>
+                                            <th>總價</th>
+                                            <th>發票</th>
+                                            <th>付款方式</th>
+                                            <th>退貨</th>
+                                            <th>備註</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr :key="order.id" class="text-center">
+                                            <td>
+                                                <a class="btn btn-link" data-bs-toggle="collapse" :href="'#order' + order.id" role="button" aria-expanded="false" :aria-controls="'order' + order.id">
+                                                    {{ order.no }}
+                                                </a>
+                                            </td>
+                                            <td>{{ formatDate(order.createDate)}}</td>
+                                            <td>{{ getOrderStatus(order.status) }}</td>
+                                            <td>
+                                                $ {{formatCurrency(order.totalAmount)}}
+                                            </td>
+                                            <td>電子發票</td>
+                                            <td>{{ getPaymentMethod(order.paymentMethod) }}</td>
+                                            <td>7天內可退貨</td>
+                                            <td>無</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="8">
+                                                <div class="progress mt-2 mb-2">
+                                                    <div class="progress-bar bg-success"
+                                                         style="width: 25%">
+                                                        收到訂單
+                                                    </div>
+
+                                                    <div class="progress-bar" :class="{'bg-success': order.status >= 1, 'bg-secondary': order.status < 1}"
+                                                         style="width: 25%">
+                                                        處理中
+                                                    </div>
+                                                    <div class="progress-bar" :class="{'bg-success': order.status >= 2, 'bg-secondary': order.status < 2}"
+                                                         style="width: 25%">
+                                                        已出貨
+                                                    </div>
+                                                    <div class="progress-bar" :class="{'bg-success': order.status >= 3, 'bg-secondary': order.status < 3}"
+                                                         style="width: 25%">
+                                                        已送達
+                                                    </div>
+                                                </div>
+                                                <strong>產品明細：</strong>
+                                                <div class="accordion-body collapse" :id="'order' + order.id">
+                                                    <table class="table table-bordered mt-3">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">編號</th>
+                                                                <th class="text-center">品名</th>
+                                                                <th class="text-center">數量</th>
+                                                                <th class="text-center">價格</th>
+                                                                <th class="text-center">小計</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="(item,index) in order.orderItems" :key="item.id">
+                                                                <td class="text-center">{{ index+1 }}</td>
+                                                                <td>{{ item.productName }}<br />規格：{{ item.skuItemName ? item.skuItemName : '基本款' }}</td>
+                                                                <td class="text-end">{{formatCurrency(item.qty)}}</td>
+                                                                <td class="text-end">$ {{formatCurrency(item.price)}}</td>
+                                                                <td class="text-end">$ {{formatCurrency(item.subTotal)}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- 已完成訂單end -->
+</section>
             </div>
         </main>
         <footer-component></footer-component>
@@ -294,6 +320,18 @@
                 return {
                     orders: [], 
                 };
+            },
+            mounted() {
+                // 確保在組件掛載時從 API 正確地獲取資料
+                this.fetchOrders();
+            },
+            computed: {
+                filteredOrders() {
+                    return this.orders.filter(order => order.status === 1 || order.status === 2 || order.status === 4);
+                },
+                completedOrders() {
+                    return this.orders.filter(order => order.status === 3 || order.status === 5);
+                }
             },
             created() {
                 let userId = localStorage.getItem("userId");
@@ -324,6 +362,27 @@
                         return "0";
                     }
                     return value.toLocaleString();
+                },
+                formatDate(dateString) {
+                    const date = new Date(dateString);
+                    return date.toISOString().split('T')[0]; // 只保留日期部分
+                },
+                getOrderStatus(status) {
+                    const statusMap = {
+                        1: '處理中',
+                        2: '已出貨',
+                        3: '已完成',
+                        4: '已申請退貨',
+                        5: '已退貨'
+                    };
+                    return statusMap[status] || '未知狀態';
+                },
+                getPaymentMethod(method) {
+                    const paymentMap = {
+                        1: '貨到付款',
+                        2: '信用卡'
+                    };
+                    return paymentMap[method] || '未知付款方式';
                 },
             },
             

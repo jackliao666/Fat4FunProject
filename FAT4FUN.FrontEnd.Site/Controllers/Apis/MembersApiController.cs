@@ -38,6 +38,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
                         Id = item.Id,
                         OrderId = item.OrderId,
                         ProductName = item.ProductName,
+                        SkuItemName = item.SkuItemName ?? "基本款",
                         Price = item.Price,
                         Qty = item.Qty,
                         SubTotal = item.SubTotal
