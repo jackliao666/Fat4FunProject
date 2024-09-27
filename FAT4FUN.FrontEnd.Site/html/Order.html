@@ -1,377 +1,692 @@
 <!DOCTYPE html>
-<html lang="zh-tw">
-  <head>
+<html lang="zh-tw" style="background-color: #f0f2f5">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fat4Fun-確認商品及填寫資料</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- bootstrap5 icon start -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-    />
-    <!-- bootstrap5 icon end -->
-    <!-- 引入bootstrap end -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <link rel="stylesheet" href="../NavFooter.css" />
-    <style>
-      .stepper {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-      }
-
-      .step {
-        text-align: center;
-        width: 100%;
-        position: relative;
-      }
-
-      .step:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        right: -50%;
-        width: 100%;
-        height: 2px;
-        background-color: #e0e0e0;
-        z-index: 1;
-      }
-
-      .step.active .circle {
-        background-color: #c6a272;
-        color: white;
-      }
-
-      .circle {
-        display: inline-block;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        border-radius: 50%;
-        background-color: #e0e0e0;
-        z-index: 2;
-      }
-
-      
-      .label {
-        margin-top: 10px;
-        font-size: 14px;
-        color: #7d7d7d;
-      }
-
-      .step.active .label {
-        color: #000;
-      }
-      .table{
-      width: 100%; /* 表格寬度設置為佔滿容器 */
-      table-layout: auto; /* 根據內容自適應列寬 */
-      }
-      .table th,
-      .table td {
-        padding: 12px 15px; /* 調整單元格的內邊距，增加可讀性 */
-        
-      }
-      .table .text-end {
-        text-align: right;
-      }
-      h4 {
-        color: #222;
-      }
-      .btn-primary {
-        background-color: #007bff; /* 按鈕主色 */
-        border-color: #007bff; /* 按鈕邊框顏色 */
-      }
-      .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #004085;
-      }
-
-    </style>
-  </head>
-
-  <body style="background-color: #f0f2f5">
-    <!-- nav start-->
-    <nav class="navbar navbar-expand-lg navbar-custom">
-      <div class="container-fluid">
-        <a href="/index.html" class="col-1">
-          <img src="../image/logo1.webp" alt="首頁" class="img-fluid rounded" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav col-6">
-            <li class="nav-item col-3">
-              <a class="nav-link" href="#">最新消息</a>
-            </li>
-            <li class="nav-item col-3">
-              <a class="nav-link" href="#">熱門商品</a>
-            </li>
-            <li class="nav-item col-3">
-              <a class="nav-link" href="PC.html">PC專區</a>
-            </li>
-            <li class="nav-item col-3">
-              <a class="nav-link disabled" aria-disabled="true">週邊專區</a>
-            </li>
-          </ul>
-        </div>
-        <form class="d-flex align-items-center" role="search">
-          <div class="input-group">
-            <span class="input-group-text" id="basic-addon1"
-              ><i class="bi bi-search"></i
-            ></span>
-            <input
-              class="form-control"
-              type="search"
-              placeholder="請輸入商品名稱"
-              aria-label="Search"
-            />
-          </div>
-          <button class="btn btn-danger ms-2" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </form>
-        <!-- <div class="d-flex">
-          
-          <button type="button" class="ms-5 btn btn-link" >會員中心</button>
-          <button type="button" class="ms-5 btn btn-link">註冊/登入</button>
-          <button type="button" class="ms-5 btn btn-link">購物車</button>
-        </div> -->
-        <div class="d-flex">
-          <a href="Member.html" class="ms-5 btn btn-link">
-            <i class="bi bi-person-circle"></i>
-          </a>
-          <a href="Register.html" class="ms-5 btn btn-link">
-            <i class="bi bi-box-arrow-in-right"></i>
-          </a>
-          <a
-            href="/購物車第一頁/card03.html"
-            class="ms-5 btn btn-link active"
-            style="color: red"
-          >
-            <i class="bi bi-cart"></i>
-          </a>
-        </div>
-      </div>
-    </nav>
-    <!-- nav end -->
-
-    <main>
-      <!-- 这里放置页面主要内容 -->
-      <div class="container py-5">
-        <!-- 頁籤區域 -->
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-              <a class="nav-link active" href="Order.html">訂單查詢</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="track.html">追蹤訂單</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="QA.html">Q&A</a>
-            </li>
-          </ul>
-    
-        <!-- 訂單查詢區域 -->
-        <section class="mt-4">
-          <h2 class="text-dark">訂單查詢</h2>
-          <table class="table table-striped ">
-            <thead>
-              <tr>
-                <th>訂單編號</th>
-                <th>日期</th>
-                <th>訂單狀態</th>
-                <th>總價</th>
-                <th>付款</th>
-                <th>配送狀態</th>
-                <th>發票</th>
-                <th>退貨</th>
-                <th>備註</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>A-001</td>
-                <td>2024/09/01</td>
-                <td>已完成</td>
-                <td>$3,200</td>
-                <td>信用卡</td>
-                <td>已送達</td>
-                <td>電子發票</td>
-                <td>7天內可退貨</td>
-                <td>無</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-    
-        <!-- 查看明細區域 -->
-        <section class="mt-4">
-            <h2 class="text-dark">訂單明細</h2>
-          
-            <!-- 使用 Bootstrap 的進度條顯示訂單追蹤狀況，根據進度改變顏色 -->
-            <div class="progress mb-3">
-              <div
-                class="progress-bar bg-success"
-                role="progressbar"
-                style="width: 25%"
-                aria-valuenow="25"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                收到訂單
-              </div>
-              <div
-                class="progress-bar bg-success"
-                role="progressbar"
-                style="width: 25%"
-                aria-valuenow="50"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                出貨中
-              </div>
-              <div
-                class="progress-bar bg-success"
-                role="progressbar"
-                style="width: 25%"
-                aria-valuenow="75"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                已出貨
-              </div>
-              <div
-                class="progress-bar bg-secondary"
-                role="progressbar"
-                style="width: 25%"
-                aria-valuenow="100"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                已送達
-              </div>
-            </div>
-          
-            <!-- 訂單明細表格 -->
-            <!-- <h3 class="text-white">訂單明細</h3> -->
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>品名</th>
-                  <th>數量</th>
-                  <th>價格</th>
-                  <th>可退貨期限</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>產品 A</td>
-                  <td>2</td>
-                  <td>$1,600</td>
-                  <td>7天內可退貨</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-    
-          <h2 class="text-dark">歷史訂單</h2>
-          <table class="table table-striped ">
-            <thead>
-              <tr>
-                <th>訂單編號</th>
-                <th>日期</th>
-                <th>訂單狀態</th>
-                <th>總價</th>
-                <th>付款</th>
-                <th>配送狀態</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>B-002</td>
-                <td>2024/08/26</td>
-                <td>已送達</td>
-                <td>$4,200</td>
-                <td>信用卡</td>
-                <td>已送達</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </div>
-
-    <!-- 引入 Bootstrap 5 的 JavaScript -->
+    <title>Fat4Fun-訂單查詢</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    </main>
-    <!-- footer start-->
-    <footer>
-      <div class="container">
-        <div class="row d-flex justify-content-between align-items-start">
-          <!-- 公司資訊 -->
-          <div class="col-md-4 text-center">
-            <h5>關於我們</h5>
-            <p>
-              Fat4Fun 是一家致力於提供高性能電競設備的公司
-              <br />專注於滿足玩家的需求。
-            </p>
-          </div>
+    <link rel="stylesheet" href="../Content/NavFooter.css" />
+    <script src="../Scripts/vue.global.js"></script>
 
-          <!-- 聯絡我們 -->
-          <div class="col-md-4 text-center mx-auto">
-            <h5>聯絡我們</h5>
-            <p class="text-center">
-              Email: support@fat4fun.com <br />
-              電話: +886 1234-5678
-            </p>
-          </div>
+    <style>
+        body,
+        main {
+            font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
+            color: #333; /* 文字色調較深 */
+        }
 
-          <!-- 社交媒體 -->
-          <div class="col-md-4 text-center">
-            <h5>關注我們</h5>
-            <div class="social-icons">
-              <a
-                href="https://www.facebook.com/profile.php?id=100009114848126"
-                class="text-white"
-              >
-                <i class="bi bi-facebook"></i>
-              </a>
-              <a
-                href="https://www.instagram.com/liaohongming/"
-                class="text-white"
-              >
-                <i class="bi bi-instagram"></i>
-              </a>
+        h1,
+        h3 {
+            color: #4a4a4a; /* 標題用較深灰色 */
+        }
+
+        .nav-tabs .nav-link {
+            color: #6c757d; /* 頁籤文字色 */
+            background-color: #e9ecef;
+        }
+
+            .nav-tabs .nav-link.active {
+                color: #fff;
+                background-color: #007bff; /* 藍色主題 */
+            }
+
+        .table {
+            border-collapse: collapse; /* 避免雙重邊框 */
+        }
+
+            .table td {
+                min-height: 50px; /* 調整這裡的高度值 */
+            }
+
+            .table th,
+            .table td {
+                color: #333;
+                padding: 12px 15px;
+                border: 2px solid #ddd; /* 添加邊框 */
+                vertical-align: middle; /* 垂直置中 */
+            }
+
+            .table thead th {
+                background-color: #f8f9fa; /* 淺灰色背景 */
+                color: #333;
+                font-weight: bold;
+            }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f2f2f2; /* 偶數行的背景顏色 */
+        }
+
+        /* 按鈕顏色設定 */
+        .btn-link {
+            color: #007bff; /* 設定連結按鈕顏色 */
+            text-decoration: none;
+        }
+
+            .btn-link:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+
+        .progress-bar {
+            color: white; /* 進度條內的文字白色 */
+        }
+
+        /* 美化的分隔線 */
+        hr {
+            background-color: #007bff;
+            height: 3px;
+            border: none;
+        }
+
+        .accordion-body {
+            background-color: #f9fafb;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* 主背景顏色 */
+        main {
+            background-color: #ffffff; /* 主要區域的背景設置為白色 */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 加陰影效果 */
+            font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* 調整按鈕樣式 */
+        .btn-primary {
+            background-color: blue;
+        }
+
+        .btn-primary:hover {
+                background-color: red;
+                border-color: #1e7e34;
+            }
+        .btn-disabled {
+            background-color: #d3d3d3 !important; /* 淺灰色背景 */
+            border-color: #d3d3d3 !important; /* 邊框顏色 */
+            color: #a9a9a9 !important; /* 文字顏色 */
+            cursor: not-allowed; /* 改變滑鼠游標樣式 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header-component></header-component>
+        <main>
+            <div class="container py-5" style="margin-top: 140px">
+                <h1 class="text-dark mb-5">訂單查詢</h1>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Order.html">訂單查詢</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="track.html">追蹤訂單</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="QA.html">Q&A</a>
+                    </li>
+                </ul>
+
+                <section class="mt-4">
+                    <!-- 未完成訂單start -->
+                    <div>
+                        <h3 class="mt-4">未完成訂單</h3>
+                        <div class="accordion accordion-menu" id="accordionExample">
+                            <table v-for="order in filteredOrders"
+                                   class="table table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>訂單編號</th>
+                                        <th>日期</th>
+                                        <th>訂單狀態</th>
+                                        <th>總價</th>
+                                        <th>發票</th>
+                                        <th>付款方式</th>
+                                        <th>商品狀態</th>
+                                        <th>備註</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="order.id" class="text-center">
+                                        <td>
+                                            <a class="btn btn-link"
+                                               data-bs-toggle="collapse"
+                                               :href="'#order' + order.id"
+                                               role="button"
+                                               aria-expanded="false"
+                                               :aria-controls="'order' + order.id">
+                                                {{ order.no }}
+                                            </a>
+                                        </td>
+                                        <td>{{ formatDate(order.createDate)}}</td>
+                                        <td>{{ getOrderStatus(order.status) }}</td>
+                                        <td>$ {{formatCurrency(order.totalAmount)}}</td>
+                                        <td>電子發票</td>
+                                        <td>{{ getPaymentMethod(order.paymentMethod) }}</td>
+                                        <td>
+                                            <button v-if="order.status === 1" class="btn btn-outline-primary" @click="openCancelModal(order.id)" style="border:none"><strong>取消訂單</strong></button>
+                                            <span v-else-if="order.status === 4"><strong>退貨處理中</strong></span>
+                                            <span v-else><strong>出貨中</strong></span>
+                                        </td>
+                                        <td>{{ getDeliveryDate(order.status, formatDate(order.modifyDate)) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8">
+                                            <div class="progress mt-2 mb-2">
+                                                <div class="progress-bar bg-success"
+                                                     style="width: 25%">
+                                                    收到訂單
+                                                </div>
+
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 1, 'bg-secondary': order.status < 1}"
+                                                     style="width: 25%">
+                                                    處理中
+                                                </div>
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 2, 'bg-secondary': order.status < 2}"
+                                                     style="width: 25%">
+                                                    已出貨
+                                                </div>
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 3, 'bg-secondary': order.status < 3}"
+                                                     style="width: 25%">
+                                                    已送達
+                                                </div>
+                                            </div>
+                                            <strong>產品明細：</strong>
+                                            <div class="accordion-body collapse"
+                                                 :id="'order' + order.id">
+                                                <table class="table table-bordered mt-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">編號</th>
+                                                            <th class="text-center">品名</th>
+                                                            <th class="text-center">數量</th>
+                                                            <th class="text-center">價格</th>
+                                                            <th class="text-center">小計</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(item,index) in order.orderItems"
+                                                            :key="item.id">
+                                                            <td class="text-center">{{ index+1 }}</td>
+                                                            <td>
+                                                                {{ item.productName }}<br />規格：{{
+                                  item.skuItemName ? item.skuItemName : '基本款'
+                                                                }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                {{formatCurrency(item.qty)}}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $ {{formatCurrency(item.price)}}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $ {{formatCurrency(item.subTotal)}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 取消訂單申請 Modal -->
+                        <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <!-- 使用 modal-dialog-centered -->
+                                <div class="modal-content">
+                                    <div class="modal-header d-flex align-items-center">
+                                        <!-- 使用 d-flex -->
+                                        <h5 class="modal-title flex-grow-1 text-center" id="cancelModalLabel">取消訂單</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column align-items-center">
+
+                                            <p>您確定要取消訂單嗎？</p>
+                                            <textarea v-model="cancelReason" class="form-control" placeholder="請輸入取消原因（可選）" rows="3"></textarea>
+                                        <input type="hidden" v-model="selectedOrderId" />
+
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <button type="submit" class="btn btn-danger me-2" @click="submitCancelOrder(selectedOrderId)">取消訂單</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    <!-- 未完成訂單end -->
+                    <!-- 已完成訂單start -->
+                    <div>
+                        <hr class="mt-5" style="background-color: red; height: 2px" />
+                        <h3 class="mt-5">已完成訂單</h3>
+                        <div class="accordion accordion-menu" id="accordionExample">
+                            <table v-for="order in completedOrders"
+                                   class="table table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>訂單編號</th>
+                                        <th>日期</th>
+                                        <th>訂單狀態</th>
+                                        <th>總價</th>
+                                        <th>發票</th>
+                                        <th>付款方式</th>
+                                        <th>退貨</th>
+                                        <th>備註</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="order.id" class="text-center">
+                                        <td>
+                                            <a class="btn btn-link"
+                                               data-bs-toggle="collapse"
+                                               :href="'#order' + order.id"
+                                               role="button"
+                                               aria-expanded="false"
+                                               :aria-controls="'order' + order.id">
+                                                {{ order.no }}
+                                            </a>
+                                        </td>
+                                        <td>{{ formatDate(order.createDate)}}</td>
+                                        <td>{{ getOrderStatus(order.status) }}</td>
+                                        <td>$ {{formatCurrency(order.totalAmount)}}</td>
+                                        <td>電子發票</td>
+                                        <td>{{ getPaymentMethod(order.paymentMethod) }}</td>
+                                        <td>
+                                            <span v-if="order.status === 6"><strong>訂單已取消</strong></span>
+                                            <button class="btn btn-primary"
+                                                    :class="{'btn-disabled': isReturnDisabled(order.modifyDate)}"
+                                                    :disabled="isReturnDisabled(order.modifyDate)"
+                                                    @click="openReturnModal(order.id)"
+                                                    v-else>
+                                                退貨
+                                            </button>
+                                        </td>
+                                        <td>{{ getDeliveryDate(order.status, order.modifyDate) }}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8">
+                                            <div class="progress mt-2 mb-2">
+
+                                                <div class="progress-bar bg-success"
+                                                     style="width: 25%">
+                                                    收到訂單
+                                                </div>
+
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 1, 'bg-secondary': order.status < 1}"
+                                                     style="width: 25%">
+                                                    處理中
+                                                </div>
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 2, 'bg-secondary': order.status < 2}"
+                                                     style="width: 25%">
+                                                    已出貨
+                                                </div>
+                                                <div class="progress-bar"
+                                                     :class="{'bg-success': order.status >= 3, 'bg-secondary': order.status < 3}"
+                                                     style="width: 25%">
+                                                    已送達
+                                                </div>
+                                            </div>
+                                            <strong>產品明細：</strong>
+                                            <div class="accordion-body collapse"
+                                                 :id="'order' + order.id">
+                                                <table class="table table-bordered mt-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">編號</th>
+                                                            <th class="text-center">品名</th>
+                                                            <th class="text-center">數量</th>
+                                                            <th class="text-center">價格</th>
+                                                            <th class="text-center">小計</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(item,index) in order.orderItems"
+                                                            :key="item.id">
+                                                            <td class="text-center">{{ index+1 }}</td>
+                                                            <td>
+                                                                {{ item.productName }}<br />規格：{{
+                                  item.skuItemName ? item.skuItemName : '基本款'
+                                                                }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                {{formatCurrency(item.qty)}}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $ {{formatCurrency(item.price)}}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                $ {{formatCurrency(item.subTotal)}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- 退貨申請 Modal -->
+                            <div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <!-- 使用 modal-dialog-centered -->
+                                    <div class="modal-content">
+                                        <div class="modal-header d-flex align-items-center">
+                                            <!-- 使用 d-flex -->
+                                            <h5 class="modal-title flex-grow-1 text-center" id="returnModalLabel">退貨申請</h5> 
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body d-flex flex-column align-items-center">
+                                            <!-- 使用 d-flex 和 align-items-center -->
+                                            <form @submit.prevent="showConfirmation" class="w-100">
+                                                <div class="mb-3">
+                                                    <label for="reason" class="form-label">退貨原因</label>
+                                                    <textarea v-model="returnReason" class="form-control" id="reason" rows="3" required></textarea>
+                                                </div>
+                                                <input type="hidden" v-model="selectedOrderId" />
+
+                                                <div class="d-flex justify-content-end mt-3">
+                                                    <button type="submit" class="btn btn-primary me-2">送出申請</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 確認視窗 Modal -->
+                            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <!-- 使用 modal-dialog-centered -->
+                                    <div class="modal-content">
+                                        <div class="modal-header modal-header d-flex align-items-center">
+                                            <h5 class="modal-title flex-grow-1 text-center" id="confirmationModalLabel">確認退貨</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body d-flex flex-column align-items-center">
+                                            <!-- 使用 d-flex 和 align-items-center -->
+                                            <p>您確定要提交退貨申請嗎？</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="submitReturnForm(selectedOrderId)">確定</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- 已完成訂單end -->
+                    </div>
+                 </section>
             </div>
-          </div>
-        </div>
+        </main>
+        <footer-component></footer-component>
+    </div>
 
-        <!-- 底部聲明 -->
-        <div class="row mt-4 bottom-info">
-          <div class="col text-center">
-            <p class="mb-0">
-              Fat4Fun &copy; 2024. All rights reserved.
-              <a href="#">隱私政策</a> | <a href="#">服務條款</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <!-- footer end -->
-  </body>
+    <script type="module">
+        import {
+            HeaderComponent,
+            FooterComponent,
+        } from "../Scripts/shared-components.js";
+        const app = Vue.createApp({
+            data() {
+                return {
+                    orders: [],
+                    returnReason: '', // 退貨原因
+                    cancelReason: '', // 取消原因
+                    selectedOrderId: null, // 選中的訂單 ID
+                    userId: localStorage.getItem("userId"), // 新增 userId
+                };
+            },
+            mounted() {
+                // 確保在組件掛載時從 API 正確地獲取資料
+                this.fetchOrders(this.userId);
+            },
+            computed: {
+                filteredOrders() {
+                    return this.orders
+                        .filter((order) => order.status === 1 || order.status === 2 || order.status === 4)
+                        .sort((a, b) => new Date(b.createDate) - new Date(a.createDate)); // 根據日期降序排序
+                },
+                completedOrders() {
+                    return this.orders
+                        .filter((order) => order.status === 3 || order.status === 5 || order.status === 6)
+                        .sort((a, b) => new Date(b.createDate) - new Date(a.createDate)); // 根據日期降序排序
+                },
+                
+
+            },
+            created() {
+                let userId = localStorage.getItem("userId");
+                if (!userId) {
+                    userId = 3; // 預設值
+                    localStorage.setItem("userId", userId);
+                    /*console.error("未找到會員ID，請先登入");*/
+                }
+                console.log("User ID:", userId); // 檢查 userId
+            },
+            methods: {
+                async fetchOrders(userId) {
+                    try {
+                        const response = await fetch(`/api/Members/Orders/${userId}`);
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        const data = await response.json();
+                        this.orders = data; // 假設 API 返回的資料結構
+                        console.log("orders:", this.orders); // 檢查 orders 的內容
+                    } catch (error) {
+                        console.error("Error fetching orders:", error);
+                    }
+                },
+                formatCurrency(value) {
+                    if (typeof value !== "number" || isNaN(value)) {
+                        return "0";
+                    }
+                    return value.toLocaleString();
+                },
+                formatDate(dateString) {
+                    const date = new Date(dateString);
+                    return date.toISOString().split("T")[0]; // 只保留日期部分
+                },
+                getOrderStatus(status) {
+                    const statusMap = {
+                        1: "處理中",
+                        2: "已出貨",
+                        3: "已完成",
+                        4: "已申請退貨",
+                        5: "已退貨",
+                        6: "已取消",
+                    };
+                    return statusMap[status] || "未知狀態";
+                },
+                getPaymentMethod(method) {
+                    const paymentMap = {
+                        1: "貨到付款",
+                        2: "信用卡",
+                    };
+                    return paymentMap[method] || "未知付款方式";
+                },
+                isReturnDisabled(modifyDate) {
+                    // 將 modifyDate 轉換為日期物件
+                    const modifyDateObj = new Date(modifyDate);
+                    const today = new Date();
+
+                    // 計算兩個日期之間的差異（以天為單位）
+                    const timeDiff = today - modifyDateObj;
+                    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); // 將毫秒轉換為天
+
+                    return daysDiff > 7; // 超過7天返回true，按鈕禁用
+                },
+                getDeliveryDate(status, originalDate) {
+                    const formattedDate = this.formatDate(originalDate); // 格式化日期
+                    switch (status) {
+                        case 1:
+                            return `成立訂單日: ${formattedDate}`;
+                        case 3:
+                            return `送達日期: ${formattedDate}`;
+                        case 6:
+                            return `取消訂單日: ${formattedDate}`;
+                        case 4:
+                            return `申請退貨日: ${formattedDate}`; 
+                        case 5:
+                            return `退貨完成日: ${formattedDate}`;
+                        case 2:
+                            return `出貨日: ${formattedDate}`;
+                        default:
+                            return '';
+                    }
+                },
+                openReturnModal(orderId) {
+                    this.selectedOrderId = orderId;
+                    this.returnReason = ''; // 清空退貨原因
+                    const modal = new bootstrap.Modal(document.getElementById('returnModal'));
+                    modal.show(); // 顯示退貨表單的Modal
+                },
+                cancelReturn() {
+                    this.returnReason = '';
+                    this.selectedOrderId = null;
+                    this.hideModal('returnModal');
+                },
+                async submitReturnForm(orderId) {
+                    // 實際提交退貨申請的邏輯
+                    const userId = localStorage.getItem("userId");
+                    console.log("Submitting return for Order ID:", orderId, "with User ID:", userId);
+
+                    try { 
+                    const response = await fetch(`/api/Members/Orders/SubmitReturnRequest/${orderId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userId: userId,
+                            returnReason: this.returnReason,
+                        }),
+                        });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Network response was not ok: ${response.status} - ${errorText}`);
+                    }
+
+                        const data = await response.json();
+                        alert(data.message); 
+
+                        // 獲取舊的 ModifyDate，並使用正確的格式
+                        const originalModifyDate = new Date(data.originalModifyDate);
+                        const deliveryDateMessage = this.getDeliveryDate(4, originalModifyDate); // 呼叫方法時使用狀態 4
+
+                        console.log(deliveryDateMessage); // 輸出送達日期的消息
+
+
+                    } catch (error) {
+                        console.error('Error in submitReturnForm:', error); // 輸出詳細錯誤信息
+                        alert("退貨申請失敗，請稍後再試。");
+                    }
+                    console.log("退貨申請已提交:", this.returnReason, this.selectedOrderId);
+
+                    this.fetchOrders(this.userId); // 刷新訂單列表
+
+                    // 這裡可以加上其他的邏輯，例如清空表單等
+                    this.returnReason = '';
+                    this.selectedOrderId = '';
+
+                    this.hideModal('returnModal');  // 關閉退貨申請 Modal
+
+                    // 關閉確認視窗
+                    const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+                    confirmationModal.hide();
+                },
+                showConfirmation() {
+                    // 顯示確認視窗
+                    const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                    confirmationModal.show();
+                },
+                hideModal(modalId) {
+                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                },
+                //以下是取消訂單區域
+                openCancelModal(orderId) {
+                    this.selectedOrderId = orderId;
+                    this.cancelReason = ''; // 清空退貨原因
+                    const modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+                    modal.show(); // 顯示退貨表單的Modal
+                },
+                cancelCancel() {
+                    this.returnReason = '';
+                    this.selectedOrderId = null;
+                    this.hideModal('cancelModal');
+                },
+                async submitCancelOrder(orderId) {
+                    const userId = localStorage.getItem("userId");
+                    console.log("Submitting return for Order ID:", orderId, "with User ID:", userId);
+
+                    try {
+                        const response = await fetch(`/api/Members/Orders/CancelOrder/${orderId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                userId: userId,
+                                cancelReason: this.cancelReason,
+                            }),
+                        });
+
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(`Network response was not ok: ${response.status} - ${errorText}`);
+                        }
+
+                        const data = await response.json();
+                        alert(data.message);
+
+                    } catch (error) {
+                        console.error('Error in submitReturnForm:', error); // 輸出詳細錯誤信息
+                        alert("取消訂單申請失敗，請稍後再試。");
+                    }
+                    console.log("取消訂單申請已提交:", this.returnReason, this.selectedOrderId);
+
+                    this.fetchOrders(this.userId); // 刷新訂單列表
+
+                    // 這裡可以加上其他的邏輯，例如清空表單等
+                    this.cancelReason = '';
+                    this.selectedOrderId = '';
+
+                    this.hideModal('cancelModal');  // 關閉退貨申請 Modal
+                    
+                },
+            },
+        });
+
+        app.component("header-component", HeaderComponent);
+        app.component("footer-component", FooterComponent);
+        app.mount("#app");
+    </script>
+</body>
 </html>
