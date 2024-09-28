@@ -147,7 +147,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
                         {
                             Id = c.ProductSku.Id,
                             Name = c.ProductSku.Name,
-                            Price = c.ProductSku.Price,
+                            Price = c.ProductSku.Sale,
                         },
                         SkuItem = c.SkuItemId != null ? new SkuItemVm
                         {

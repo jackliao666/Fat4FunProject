@@ -12,6 +12,7 @@
           rel="stylesheet" />
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../Content/NavFooter.css" />
     <script src="../Scripts/vue.global.js"></script>
@@ -21,6 +22,14 @@
         main {
             font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
             color: #333; /* 文字色調較深 */
+        }
+        /* 主背景顏色 */
+        main {
+            background-color: #ffffff; /* 主要區域的背景設置為白色 */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 加陰影效果 */
+            font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
         }
 
         h1,
@@ -92,36 +101,73 @@
             border: 1px solid #e0e0e0;
         }
 
-        /* 主背景顏色 */
-        main {
-            background-color: #ffffff; /* 主要區域的背景設置為白色 */
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 加陰影效果 */
-            font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
-        }
+
 
         /* 調整按鈕樣式 */
         .btn-primary {
             background-color: blue;
         }
 
-        .btn-primary:hover {
+            .btn-primary:hover {
                 background-color: red;
                 border-color: #1e7e34;
             }
+
         .btn-disabled {
             background-color: #d3d3d3 !important; /* 淺灰色背景 */
             border-color: #d3d3d3 !important; /* 邊框顏色 */
             color: #a9a9a9 !important; /* 文字顏色 */
             cursor: not-allowed; /* 改變滑鼠游標樣式 */
         }
+        /* 搜尋框容器，讓它靠右 */
+        .search-container {
+            text-align: right; /* 讓內部的元素靠右 */
+            margin-bottom: 15px; /* 給底部一點間距 */
+        }
+
+        /* 搜尋框的包裹元素 */
+        .search-wrapper {
+            position: relative; /* 使圖示相對於輸入框定位 */
+            display: inline-block; /* 使其與搜尋框並排顯示 */
+        }
+
+        /* 搜尋框本身 */
+        .search-input {
+            width: 200px; /* 設定搜尋框寬度 */
+            padding: 5px 10px; /* 調整內部間距讓它不那麼大 */
+            border-radius: 4px; /* 給搜尋框圓角 */
+            border: 1px solid #ccc; /* 邊框顏色 */
+
+            text-align: right; /* 讓輸入文字靠右對齊 */
+        }
+
+            /* 使用 ::placeholder 來設定替代文字的對齊方式 */
+            .search-input::placeholder {
+                text-align: center; /* 替代文字置中 */
+            }
+
+        /* 放大鏡圖示的樣式 */
+        .search-icon {
+            position: absolute; /* 絕對定位 */
+            left: 10px; /* 距離輸入框左邊的距離 */
+            top: 50%; /* 垂直置中 */
+            transform: translateY(-50%); /* 修正位置 */
+            color: #ccc; /* 圖示顏色 */
+        }
+
+        /* 調整搜尋框的左邊距 */
+        .search-input {
+            padding-left: 30px; /* 確保輸入文字不會與圖示重疊 */
+        }
     </style>
 </head>
 
 <body>
     <div id="app">
+        <!-- nav start-->
         <header-component></header-component>
+        <!-- nav end -->
+
         <main>
             <div class="container py-5" style="margin-top: 140px">
                 <h1 class="text-dark mb-5">訂單查詢</h1>
@@ -130,7 +176,7 @@
                         <a class="nav-link active" href="Order.html">訂單查詢</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="track.html">追蹤訂單</a>
+                        <a class="nav-link" href="track.html">追蹤商品</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
@@ -141,6 +187,18 @@
                 </ul>
 
                 <section class="mt-4">
+                    <!--搜尋框-->
+                    <!--div class="search-container">
+                    <div class="search-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text"
+                               v-model="searchQuery"
+                               placeholder="搜尋產品或規格"
+                               @input="handleSearch(searchQuery)"
+                               class="search-input" />
+                    </div>
+                </div>-->
+
                     <!-- 未完成訂單start -->
                     <div>
                         <h3 class="mt-4">未完成訂單</h3>
@@ -259,8 +317,8 @@
                                     </div>
                                     <div class="modal-body d-flex flex-column align-items-center">
 
-                                            <p>您確定要取消訂單嗎？</p>
-                                            <textarea v-model="cancelReason" class="form-control" placeholder="請輸入取消原因（可選）" rows="3"></textarea>
+                                        <p>您確定要取消訂單嗎？</p>
+                                        <textarea v-model="cancelReason" class="form-control" placeholder="請輸入取消原因（可選）" rows="3"></textarea>
                                         <input type="hidden" v-model="selectedOrderId" />
 
                                         <div class="d-flex justify-content-end mt-3">
@@ -271,7 +329,7 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
+                    </div>
                     <!-- 未完成訂單end -->
                     <!-- 已完成訂單start -->
                     <div>
@@ -320,7 +378,7 @@
                                             </button>
                                         </td>
                                         <td>{{ getDeliveryDate(order.status, order.modifyDate) }}</td>
-                                        
+
                                     </tr>
                                     <tr>
                                         <td colspan="8">
@@ -393,7 +451,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header d-flex align-items-center">
                                             <!-- 使用 d-flex -->
-                                            <h5 class="modal-title flex-grow-1 text-center" id="returnModalLabel">退貨申請</h5> 
+                                            <h5 class="modal-title flex-grow-1 text-center" id="returnModalLabel">退貨申請</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body d-flex flex-column align-items-center">
@@ -436,9 +494,9 @@
                                 </div>
                             </div>
                         </div>
-                    <!-- 已完成訂單end -->
+                        <!-- 已完成訂單end -->
                     </div>
-                 </section>
+                </section>
             </div>
         </main>
         <footer-component></footer-component>
@@ -457,6 +515,8 @@
                     cancelReason: '', // 取消原因
                     selectedOrderId: null, // 選中的訂單 ID
                     userId: localStorage.getItem("userId"), // 新增 userId
+                    searchQuery: '', // 用來儲存搜尋關鍵字
+                    filteredProducts: [], // 已過濾商品數據
                 };
             },
             mounted() {
@@ -558,6 +618,37 @@
                             return '';
                     }
                 },
+                hideModal(modalId) {
+                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                },
+
+                //以下是搜尋區
+
+                //handleSearch(query) {
+                //    if (query) {
+                //        this.filteredProducts = this.products.filter((product) => {
+                //            // 檢查產品名稱是否包含搜尋關鍵字
+                //            const matchesName = product.name
+                //                .toLowerCase()
+                //                .includes(query.toLowerCase());
+
+                //            // 檢查產品的任意規格是否包含搜尋關鍵字
+                //            const matchesSpecs = product.specs.some((spec) =>
+                //                spec.name.toLowerCase().includes(query.toLowerCase())
+                //            );
+
+                //            // 只要名稱或規格匹配就返回 true
+                //            return matchesName || matchesSpecs;
+                //        });
+                //    } else {
+                //        this.filteredProducts = this.products;
+                //    }
+                //},
+
+                //以下是退貨確認區
                 openReturnModal(orderId) {
                     this.selectedOrderId = orderId;
                     this.returnReason = ''; // 清空退貨原因
@@ -624,12 +715,7 @@
                     const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
                     confirmationModal.show();
                 },
-                hideModal(modalId) {
-                    const modalInstance = bootstrap.Modal.getInstance(document.getElementById(modalId));
-                    if (modalInstance) {
-                        modalInstance.hide();
-                    }
-                },
+               
                 //以下是取消訂單區域
                 openCancelModal(orderId) {
                     this.selectedOrderId = orderId;
@@ -638,7 +724,7 @@
                     modal.show(); // 顯示退貨表單的Modal
                 },
                 cancelCancel() {
-                    this.returnReason = '';
+                    this.cancelReason  = '';
                     this.selectedOrderId = null;
                     this.hideModal('cancelModal');
                 },
@@ -667,7 +753,7 @@
                         alert(data.message);
 
                     } catch (error) {
-                        console.error('Error in submitReturnForm:', error); // 輸出詳細錯誤信息
+                        console.error('Error in submitCancelOrder:', error); // 輸出詳細錯誤信息
                         alert("取消訂單申請失敗，請稍後再試。");
                     }
                     console.log("取消訂單申請已提交:", this.returnReason, this.selectedOrderId);

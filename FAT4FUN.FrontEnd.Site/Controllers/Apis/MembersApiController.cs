@@ -1,8 +1,10 @@
-﻿using FAT4FUN.FrontEnd.Site.Models.EFModels;
+﻿using FAT4FUN.FrontEnd.Site.Models.Dto;
+using FAT4FUN.FrontEnd.Site.Models.EFModels;
 using FAT4FUN.FrontEnd.Site.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -116,6 +118,111 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
             catch (Exception ex)
             {
                 return InternalServerError(ex); // 返回 500 Internal Server Error
+            }
+        }
+
+        [HttpGet]
+        [Route("api/Members/Track/{userid}")]
+        public IHttpActionResult GetTrack(int userId)
+        {
+            try
+            {
+                // 查詢所有追蹤商品
+                var MemberFollowLists = db.MemberFollowLists
+                    .Where(c => c.UserId == userId)
+                    .AsNoTracking()
+                    .Select(f => new MemberFollowListVm
+                    {
+                        Id=f.Id,
+                        UserId=f.UserId,
+                        ProductId=f.ProductId,
+                        ProductSkuId= f.Product.ProductSkus
+                        .Select(sku => sku.Id)
+                        .FirstOrDefault(),
+                        Name = f.Product.Name,
+                        Price = f.Product.ProductSkus
+                        .Select(sku => sku.Sale)
+                        .FirstOrDefault(), 
+                        CreateDate =f.CreateDate          
+                    }).ToList();
+
+                return Ok(MemberFollowLists); // 返回 200 OK 和訂單資料
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex); // 返回 500 Internal Server Error
+            }
+        }
+
+        //存購物車
+        [Route("api/Track/SaveToCart")]
+        [HttpPost]
+        public IHttpActionResult SaveCart(CartVm vm)
+        {
+                var existingCartItem = db.Carts
+                    .FirstOrDefault(c => c.UserId == vm.UserId && c.ProductSkuId == vm.ProductSkuId && c.SkuItemId == vm.SkuItemId);
+
+                if (existingCartItem != null)
+                {
+                    existingCartItem.Qty += vm.Qty;
+                }
+                else
+                {
+                    var newCartItem = new Cart
+                    {
+                        UserId = vm.UserId,
+                        ProductSkuId = vm.ProductSkuId,
+                        SkuItemId = vm.SkuItemId,
+                        Qty = vm.Qty
+                    };
+                    db.Carts.Add(newCartItem);
+                }
+
+                db.SaveChanges();
+
+                return Ok("商品已成功加入購物車");
+        }
+
+        //查詢購物車
+        [Route("api/Track/QueryCart")]
+        [HttpGet]
+        public IHttpActionResult QueryCart(int UserId, int ProductSkuId, int? SkuItemId)
+        {
+            using (var db = new AppDbContext())
+            {
+                // 檢查購物車是否已經存在該商品
+
+
+                var exists = db.Carts
+                    .Any(c => c.UserId == UserId && c.ProductSkuId == ProductSkuId && c.SkuItemId == SkuItemId);
+                return Ok(exists);
+            }
+
+        }
+
+        [HttpDelete]
+        [Route("api/Members/Track/RemoveItem/{memberFollowListsId}")]
+        public IHttpActionResult RemoveItem(int memberFollowListsId)
+        {
+            try
+            {
+                // 找到對應的購物車項目
+                var MemberFollowListsitem = db.MemberFollowLists.FirstOrDefault(ci => ci.Id == memberFollowListsId );
+
+                if (MemberFollowListsitem == null)
+                {
+                    return NotFound(); // 如果找不到對應的購物車項目，返回404
+                }
+
+                // 從數據庫中刪除該項目
+                db.MemberFollowLists.Remove(MemberFollowListsitem);
+                db.SaveChanges(); // 確保保存變更
+
+                return Ok("商品已成功從追蹤清單中移除");
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex); // 返回 500 錯誤
             }
         }
 
