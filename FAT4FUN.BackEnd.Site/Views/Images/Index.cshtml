@@ -2,22 +2,43 @@
 
 <h2>圖片管理</h2>
 
-<!-- 產品選擇 -->
-<form id="productForm" method="get" action="@Url.Action("Index", "Images")">
-    <label for="productSelect">選擇產品：</label>
-    <select id="productSelect" name="productInfo" onchange="this.form.submit();">
+
+
+<div>
+    <!-- 產品下拉選單 -->
+    <select id="productSelect">
         @foreach (var product in Model.Products)
         {
-            @* 將 productId 和 imageId 一起放入 option 的 value 屬性 *@
-            <option value="@product.Value-@product.ImageId" @(Model.SelectedProductId.ToString() == product.Value ? "selected" : "")>
+            <option value="@product.Value">@product.Text</option>
+        }
+    </select>
+</div>
+
+
+<!-- 圖片顯示區域 -->
+<div id="imageContainer">
+    @foreach (var image in Model.Images)
+    {
+        <img src="@Url.Content(image.Path)" alt="Image for product @Model.SelectedProductId" class="product-image" />
+    }
+</div>
+
+
+<!-- 產品選擇 -->
+@*<form id="productForm" method="get" action="@Url.Action("Index", "Images")">
+    <label for="productSelect">选择产品：</label>
+    <select id="productSelect" name="productId" onchange="this.form.submit();">
+        @foreach (var product in Model.Products)
+        {
+            <option value="@product.Value" @(Model.SelectedProductId == int.Parse(product.Value) ? "selected" : "")>
                 @product.Text
             </option>
         }
     </select>
-</form>
+</form>*@
 
 <!-- 圖片列表展示 -->
-<h3>產品圖片</h3>
+@*<h3>產品圖片</h3>
 <div id="imageList">
     @if (Model.Images != null && Model.Images.Any())
     {
@@ -27,7 +48,7 @@
                 <li>
                     <img src="@image.Path" alt="Product Image" style="width:100px;height:100px;" />
                     <p>排序：@image.Sort</p>
-                    @*<p>上傳時間：@image.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")</p>*@
+                    
                 </li>
             }
         </ul>
@@ -36,51 +57,110 @@
     {
         <p>沒有圖片可顯示。</p>
     }
-</div>
+</div>*@
 
 <!-- 圖片上傳 -->
 <h3>上傳新圖片</h3>
 <form id="uploadForm" enctype="multipart/form-data">
-    <input type="hidden" name="productId" value="@Model.SelectedProductId" />
-    <label for="sortInput">排序：</label>
-    <input type="number" id="sortInput" name="sort" value="0" required />
-
-    <label for="fileInput">選擇圖片文件：</label>
-    <input type="file" id="fileInput" name="file" required />
-
+    <input type="hidden" id="productId" name="productId" value="@Model.SelectedProductId" />
+    <input type="number" id="sort" name="sort" placeholder="排序" />
+    <input type="file" id="file" name="file" />
     <button type="submit">上傳圖片</button>
 </form>
 
 <!-- 使用 jQuery 處理上傳 -->
 @section scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#uploadForm').submit(function (e) {
-                e.preventDefault();
+    <script type="text/javascript">
+    $(document).ready(function () {
+    // 從 localStorage 中讀取選中的 productId
+    var selectedProductId = localStorage.getItem('selectedProductId');
 
-                var formData = new FormData(this);
+    if (selectedProductId) {
+        $('#productSelect').val(selectedProductId); // 設置選中項
+        $('#productId').val(selectedProductId); // 更新隱藏字段
 
-                $.ajax({
-                    url: '@Url.Action("UploadImage", "Images")',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        if (response.success) {
-                            alert('圖片上傳成功！');
-                            // 上傳成功後刷新頁面以顯示新的圖片
-                            window.location.reload();
-                        } else {
-                            alert('上傳失敗: ' + response.message);
-                        }
-                    },
-                    error: function () {
-                        alert('上傳過程中發生錯誤');
+        // 自動加載選中的產品的圖片
+        $.ajax({
+            url: '@Url.Action("GetProductImages", "Images")',
+            type: 'GET',
+            data: { productId: selectedProductId },
+            success: function (response) {
+                if (response.success) {
+                    $('#imageContainer').empty();
+                    response.images.forEach(function (image) {
+                        $('#imageContainer').append('<img src="' + image.Path + '" class="product-image" alt="Product Image" />');
+                    });
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert("無法加載圖片，請稍後再試。");
+            }
+        });
+    }
+        $('#uploadForm').submit(function (e) {
+            e.preventDefault(); // 阻止表單的默認提交行為
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '@Url.Action("UploadImage", "Images")',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        alert('圖片上傳成功，路徑為：' + response.path);
+
+                        window.location.href = '@Url.Action("Index", "Images")' + '?productId=' + productId;
+                        /*location.reload();*/
+                    } else {
+                        alert('圖片上傳失敗：' + response.message);
                     }
-                });
+                },
+                error: function () {
+                    alert('上傳圖片時出錯。');
+                }
             });
         });
+    });
+    </script>
+
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        // 當下拉框改變時，發送請求獲取對應產品的圖片
+        $('#productSelect').change(function () {
+            var productId = $(this).val();
+            $('#productId').val(productId);
+            localStorage.setItem('selectedProductId', productId);
+
+            // 發送 AJAX 請求
+            $.ajax({
+                url: '@Url.Action("GetProductImages", "Images")', // 後端方法URL
+                type: 'GET',
+                data: { productId: productId },
+                success: function (response) {
+                    if (response.success) {
+                        // 清空舊的圖片
+                        $('#imageContainer').empty();
+
+                        // 添加新的圖片
+                        response.images.forEach(function (image) {
+                            $('#imageContainer').append('<img src="' + image.Path + '" class="product-image" alt="Product Image" />');
+                        });
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("無法加載圖片，請稍後再試。");
+                }
+            });
+        });
+    });
     </script>
 }
