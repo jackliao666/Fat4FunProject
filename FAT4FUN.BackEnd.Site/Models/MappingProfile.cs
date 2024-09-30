@@ -32,6 +32,13 @@ namespace FAT4FUN.BackEnd.Site.Models
             CreateMap<Product2Dto, ProductSku>();
             CreateMap<SkuItemDto, SkuItem>();
 
+            //訂單管理
+            CreateMap<OrderVm, OrderDto>().ReverseMap();
+            CreateMap<OrderItemVM, OrderItemDto>().ReverseMap();
+
+
+
+
 
 
 
