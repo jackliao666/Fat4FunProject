@@ -183,7 +183,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="ImageSelectListItem.cs" />
     <Compile Include="Models\CustomPrincipal.cs" />
     <Compile Include="Models\DAHelper.cs" />
     <Compile Include="Models\Dtos\LoginDto.cs" />
@@ -257,6 +256,24 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Images\a1.jpg" />
+    <Content Include="Images\a2.jpg" />
+    <Content Include="Images\a3.jpg" />
+    <Content Include="Images\a4.jpg" />
+    <Content Include="Images\a5.jpg" />
+    <Content Include="Images\a7.jpg" />
+    <Content Include="Images\a8.jpg" />
+    <Content Include="Images\bg1.jpg" />
+    <Content Include="Images\bg2.jpg" />
+    <Content Include="Images\bgm-monkey.jpg" />
+    <Content Include="Images\cart.jpg" />
+    <Content Include="Images\ii1.jpg" />
+    <Content Include="Images\ii2.jpg" />
+    <Content Include="Images\ii3.jpg" />
+    <Content Include="Images\ii4.jpg" />
+    <Content Include="Images\ii5.jpg" />
+    <Content Include="Images\LOGO.jpg" />
+    <Content Include="Images\logo1.jpg" />
     <Content Include="img\undraw_posting_photo.svg" />
     <Content Include="img\undraw_profile.svg" />
     <Content Include="img\undraw_profile_1.svg" />
@@ -1954,9 +1971,30 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\a1.webp" />
+    <Content Include="Images\a2.webp" />
+    <Content Include="Images\a3.webp" />
+    <Content Include="Images\a4.webp" />
+    <Content Include="Images\a5.webp" />
+    <Content Include="Images\a6.webp" />
+    <Content Include="Images\a7.webp" />
+    <Content Include="Images\a8.webp" />
+    <Content Include="Images\bg.webp" />
+    <Content Include="Images\bg1.webp" />
+    <Content Include="Images\bg2.webp" />
+    <Content Include="Images\ii1.webp" />
+    <Content Include="Images\ii2.webp" />
+    <Content Include="Images\ii3.webp" />
+    <Content Include="Images\ii4.webp" />
+    <Content Include="Images\ii5.webp" />
+    <Content Include="Images\ii6.webp" />
+    <Content Include="Images\iloveimg-converted.zip" />
+    <Content Include="Images\logo.webp" />
+    <Content Include="Images\logo1.webp" />
+    <Content Include="Images\monkeylogo.webp" />
+    <Content Include="Images\Register.webp" />
     <None Include="packages.config" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.js.map" />
     <Content Include="Scripts\vendor\bootstrap\js\bootstrap.bundle.min.js.map" />

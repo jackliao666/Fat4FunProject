@@ -22,7 +22,9 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             var model = new ImageVm();
 
             // 獲取所有產品的列表
-            model.Products = _db.Products.Select(p => new SelectListItem
+            model.Products = _db.Products
+                .OrderBy(p=>p.Name)
+                .Select(p => new SelectListItem
             {
                 Value = p.Id.ToString(),
                 Text = p.Name
@@ -54,29 +56,28 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
 
         [HttpGet]
-        public ActionResult GetProductImages(int productId, int imageId)
+        public ActionResult GetProductImages(int productId)
         {
-            // 根據 productId 和 imageId 從資料庫中查找圖片
-            var image = _db.Images.FirstOrDefault(i => i.ProductId == productId && i.Id == imageId);
+            // 根據 productId 從資料庫中查找該產品的所有圖片
+            var images = _db.Images
+                            .Where(i => i.ProductId == productId)
+                            .OrderBy(i => i.Sort)
+                            .Select(i => new
+                            {
+                                Id = i.Id,
+                                Path = i.Path,
+                                Sort = i.Sort
+                            })
+                            .ToList();
 
-            if (image == null)
+            if (images == null || images.Count == 0)
             {
-                // 返回默認佔位圖片
-                string defaultImagePath = Server.MapPath("~/Images/default.jpg");
-                return File(defaultImagePath, "image/jpeg");
+                // 如果沒有找到圖片，返回默認圖片
+                return Json(new { success = false, message = "未找到圖片" }, JsonRequestBehavior.AllowGet);
             }
 
-            // 獲取圖片的物理路徑
-            string fullPath = Server.MapPath(image.Path);
-
-            if (!System.IO.File.Exists(fullPath))
-            {
-                // 如果圖片文件不存在，返回 404 或者錯誤
-                return HttpNotFound("圖片文件不存在");
-            }
-
-            // 返回圖片文件
-            return File(fullPath, "image/jpeg"); // 假設圖片是 JPEG 格式，根據實際格式調整
+            // 返回圖片數據
+            return Json(new { success = true, images = images }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
