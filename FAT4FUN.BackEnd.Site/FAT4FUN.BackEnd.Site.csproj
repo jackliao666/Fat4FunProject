@@ -193,6 +193,7 @@
     <Compile Include="Models\Dtos\ProductSkuDto.cs" />
     <Compile Include="Models\Dtos\ProductSkusDto.cs" />
     <Compile Include="Models\Dtos\RegisterDto.cs" />
+    <Compile Include="Models\Dtos\SkuItemDto.cs" />
     <Compile Include="Models\Dtos\UserCheckDto.cs" />
     <Compile Include="Models\Dtos\UserDto.cs" />
     <Compile Include="Models\EFModels\AppDbContext.cs" />
@@ -224,12 +225,14 @@
     <Compile Include="Models\Services\UserService.cs" />
     <Compile Include="Models\ViewModels\ChangePasswordVm.cs" />
     <Compile Include="Models\ViewModels\EditProfileVm.cs" />
+    <Compile Include="Models\ViewModels\ImageVm.cs" />
     <Compile Include="Models\ViewModels\LoginVm.cs" />
     <Compile Include="Models\ViewModels\Product2Vm.cs" />
     <Compile Include="Models\ViewModels\ProductSkusVm.cs" />
     <Compile Include="Models\ViewModels\ProductSkuVm.cs" />
     <Compile Include="Models\ViewModels\ProductVm.cs" />
     <Compile Include="Models\ViewModels\RegisterVm.cs" />
+    <Compile Include="Models\ViewModels\SkuItemVm.cs" />
     <Compile Include="Models\ViewModels\UserVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
