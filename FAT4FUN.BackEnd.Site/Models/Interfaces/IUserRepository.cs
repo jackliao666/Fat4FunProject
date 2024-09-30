@@ -16,6 +16,8 @@ namespace FAT4FUN.BackEnd.Site.Models.Interfaces
         UserDto Get(string account);
         bool IsAccountExist(string account);
         void Update(UserDto userIndb);
+        List<UserCheckDto> GetAllUsers();
+        void UpdateUserStatus(int userId, bool status);
     }
 
 }

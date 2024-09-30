@@ -19,6 +19,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
     {
         // GET: Users
         
+        
         public ActionResult Index()
         {
             return View();
@@ -200,6 +201,27 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return View(vm); // 密碼修改失敗，返回修改密碼頁面
 
         }
+
+        public ActionResult UserEditStatus(int userId, bool status)
+        {
+            var service = new UserService();
+            var updatedUsers = service.UpdateUserStatus(userId, status);
+
+            return View("UserCheck", updatedUsers);
+
+
+        }
+
+        public ActionResult UserCheck()     
+        {
+            var service = new UserService();
+            var users = service.GetAllUser();
+            return View(users);
+        }
+
+
+
+
 
         private Result HandleChangePassword(string account, ChangePasswordVm vm)
         {

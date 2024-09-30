@@ -3,6 +3,7 @@ using FAT4FUN.BackEnd.Site.Models.EFModels;
 using FAT4FUN.BackEnd.Site.Models.Infra;
 using FAT4FUN.BackEnd.Site.Models.Interfaces;
 using FAT4FUN.BackEnd.Site.Models.Repositories;
+using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
@@ -15,13 +16,13 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
     {
         private IUserRepository _repo;
         private readonly AppDbContext _db;
-        public UserService() 
+        public UserService()
         {
             _repo = new UserRepository();
             _db = new AppDbContext();
         }
 
-        public UserService (IUserRepository repo)
+        public UserService(IUserRepository repo)
         {
             _repo = repo;
         }
@@ -72,14 +73,14 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
         public Result GetUserRole(string account)
         {
             //根據帳號查詢使用者
-            var user  = _db.Users.FirstOrDefault(x => x.Account == account);
-            if (user == null )
+            var user = _db.Users.FirstOrDefault(x => x.Account == account);
+            if (user == null)
             {
                 return Result.Fail("無此使用者");
             }
 
             //查詢該使用者權限
-            var role =  _db.Roles.FirstOrDefault(r => r.UserId == user.Id);
+            var role = _db.Roles.FirstOrDefault(r => r.UserId == user.Id);
             if (role == null)
             {
                 return Result.Fail("此帳號無權限");
@@ -91,7 +92,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
         {
             //找出user
             UserDto user = _repo.Get(dto.Account);
-            if(user == null) return Result.Fail("帳號或密碼錯誤");
+            if (user == null) return Result.Fail("帳號或密碼錯誤");
 
             //判斷帳號是否開通
             if (!user.IsConfirmed.HasValue || user.IsConfirmed.Value == false)
@@ -145,16 +146,35 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             {
                 throw new Exception("新舊密碼不可相同");
             }
-            if(dto.NewPassword != dto.ConfirmPassword)
+            if (dto.NewPassword != dto.ConfirmPassword)
             {
                 throw new Exception("新密碼與確認密碼必須相同");
             }
 
             userInDb.Password = newPassword;
-            
+
             _repo.Update(userInDb);
         }
-    }
 
-   
+        public List<UserVm> GetAllUser()
+        {
+            var userdto = _repo.GetAllUsers();
+            var uservm = WebApiApplication._mapper.Map<List<UserVm>>(userdto);
+
+            return uservm;
+
+        }
+
+        public List<UserVm> UpdateUserStatus(int userId, bool status)
+        {
+            _repo.UpdateUserStatus(userId, status);
+
+            
+            var userDto = _repo.GetAllUsers();
+            var userVm = WebApiApplication._mapper.Map<List<UserVm>>(userDto);
+
+            return userVm;
+        }
+
+    }
 }

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
+using System.Web.Security;
 
 namespace FAT4FUN.BackEnd.Site.Models.Repositories
 {
@@ -147,6 +149,51 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                     db.SaveChanges();
                 }
             }
+
         }
+
+        public List<UserCheckDto> GetAllUsers()
+        {
+            var users = _db.Users
+                .Include(x => x.Roles)
+                .Select(x => new UserCheckDto
+                {
+                    Id = x.Id,
+                    Account = x.Account,
+                    Address = x.Address,
+                    Name = x.Name,
+                    Email = x.Email,
+                    Gender = x.Gender,
+                    Phone = x.Phone,
+                    Status = x.Status,
+                    Roles = x.Roles.Select(r => r.Id)
+
+                })
+                .ToList();
+            return users;
+        }
+
+
+        public void UpdateUserStatus(int userId, bool status)
+        {
+            var users = _db.Users
+               .Include(x => x.Roles)
+               .Select(x => new UserCheckDto
+               {
+                   Id = x.Id,
+                   Account = x.Account,
+                   Address = x.Address,
+                   Name = x.Name,
+                   Email = x.Email,
+                   Gender = x.Gender,
+                   Phone = x.Phone,
+                   Status = x.Status,
+                   Roles = x.Roles.Select(r => r.Id)
+
+               })
+               .ToList();
+        }
+
+        
     }
 }
