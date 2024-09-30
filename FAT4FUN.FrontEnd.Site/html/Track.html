@@ -26,7 +26,6 @@
         main {
             background-color: #ffffff; /* 主要區域的背景設置為白色 */
             padding: 20px;
-            border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 加陰影效果 */
             font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
         }
@@ -131,21 +130,23 @@
             <!-- 这里放置页面主要内容 -->
             <div class="container py-5" style="margin-top: 140px">
                 <!-- 頁籤區域 -->
-                <h1 class="text-dark mb-5">追蹤商品</h1>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link" href="Order.html">訂單查詢</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="track.html">追蹤商品</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="QA.html">Q&A</a>
-                    </li>
-                </ul>
+                <div>
+                    <h1 class="text-dark mb-5">追蹤商品</h1>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link" href="Order.html">訂單查詢</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="track.html">追蹤商品</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="QA.html">Q&A</a>
+                        </li>
+                    </ul>
+                </div>
 
                 <section class="mt-4">
                     <!-- 追蹤訂單表格 -->
@@ -165,20 +166,20 @@
                                 <tbody>
                                     <tr v-for="(item, index) in MemberFollowLists" :key="index">
                                         <td style="width:150px">{{ formatDate(item.createDate) }}</td>
-                                        <td>
+                                        <td style="width:300px">
                                             <!-- 點擊圖片觸發模態框 -->
                                             <img :src="item.image"
-                                                 alt="商品圖片"
+                                                 alt="item.name"
                                                  class="img-fluid"
-                                                 style="width: 80px; height: 80px; cursor: pointer;"
-                                                 @click="openModal(index)" />
+                                                 style="object-fit: fill; cursor: pointer;"
+                                                 @click="goToPcDetail(item.productId)" />
                                         </td>
                                         <td class="text-start">{{ item.name }}</td>
                                         <td class="text-end">{{ formatCurrency(item.price) }}</td>
                                         <td style="width:250px">
                                             <button class="btn btn-primary mx-3" 
                                                     @click.stop="addToCart(item.productSkuId)">加入購物車</button>
-                                            <button class="btn btn-danger" @click="removeItem(index)">移除</button>
+                                            <button class="btn btn-danger" @click="removeItem(item)">移除</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -186,20 +187,7 @@
                         </div>
                     </div>
 
-                    <!-- 模態框區域 -->
-                    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="imageModalLabel">{{ modalTitle }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    <img :src="modalImage" alt="商品圖片" class="img-fluid" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  
 
                 </section>
 
@@ -220,8 +208,6 @@
             data() {
                 return {
                     MemberFollowLists: [],
-                    modalImage: '', // 模態框圖片
-                    modalTitle: '', // 模態框標題
                     userId: localStorage.getItem("userId"), // 新增 userId
                     products: [], // 全部商品數據
 
@@ -353,18 +339,49 @@
                     });
                 },
 
-                removeItem(index) {
-                    // 刪除對應的商品
-                    this.orderList.splice(index, 1);
+                goToPcDetail(productId) {
+                    window.location.href = `PcDetail.html?id=${productId}`;
                 },
-                openModal(index) {
-                    // 根據點擊的商品索引，顯示相應的模態框
-                    const item = this.orderList[index];
-                    this.modalImage = item.image;
-                    this.modalTitle = item.name;
-                    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
-                    modal.show();
+
+                async removeItem(item) {
+
+                    // 檢查 item 是否存在於 cartItems
+                    const index = this.MemberFollowLists.indexOf(item);
+                    if (index > -1) {
+                        this.MemberFollowLists.splice(index, 1); // 刪除商品
+                    }
+
+                    const apiUrl = `/api/Members/Track/RemoveItem/${item.id}`;
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                userId: item.userId,
+                                memberFollowListsId: item.id,
+                                productSkuId: item.productSkuId,
+                            }),
+                        });
+                        if (!response.ok) {
+                            throw new Error(
+                                `Failed to remove item: ${response.statusText}`
+                            );
+                        }
+
+                        this.fetchTeack(userId);
+                        const data = await response.json();
+
+                        // 將獲取到的資料賦值給 cartItems
+                        this.MemberFollowLists = data;
+
+                        this.MemberFollowLists = this.MemberFollowLists.filter(MemberFollowLists => MemberFollowLists.id !== item?.id);
+                    } catch (error) {
+                        console.error("Error removing item:", error);
+                    }
                 },
+ 
             },
         });
         app.component("header-component", HeaderComponent);

@@ -32,10 +32,6 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
                 .WithRequired(e => e.Brand)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<OrderItem>()
-                .Property(e => e.SkuItemName)
-                .IsFixedLength();
-
             modelBuilder.Entity<Order>()
                 .Property(e => e.No)
                 .IsUnicode(false);

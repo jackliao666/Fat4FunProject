@@ -47,7 +47,7 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
 
         public bool Status { get; set; }
 
-        public bool? IsConfirmde { get; set; }
+        public bool? IsConfirmed { get; set; }
 
         [StringLength(50)]
         public string ConfirmCode { get; set; }
@@ -55,9 +55,6 @@ namespace FAT4FUN.FrontEnd.Site.Models.EFModels
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifyDate { get; set; }
-
-
-        
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Carts { get; set; }

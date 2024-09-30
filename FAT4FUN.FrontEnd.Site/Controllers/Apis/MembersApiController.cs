@@ -143,6 +143,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
                         Price = f.Product.ProductSkus
                         .Select(sku => sku.Sale)
                         .FirstOrDefault(), 
+                        Image=f.Product.Images.FirstOrDefault().Path,// 假設你只需要第一張圖片
                         CreateDate =f.CreateDate          
                     }).ToList();
 

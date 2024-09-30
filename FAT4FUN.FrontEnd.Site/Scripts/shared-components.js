@@ -89,14 +89,14 @@ const HeaderComponent = {
 
         <div class="d-flex">
           <a
-            href="Member.html"
+            href="Order.html"
             class="ms-5 btn btn-link"
             :class="{'active-link': isActiveLink('Login.html')}"
           >
             <i class="bi bi-person-circle"></i>
           </a>
           <a
-            href="Login.html"
+            href="Order.html"
             class="ms-5 btn btn-link"
             :class="{'active-link': isActiveLink('Login.html')}"
           >
