@@ -5,12 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
+using System.Web.Security;
 
 namespace FAT4FUN.BackEnd.Site.Models.Repositories
 {
-    public class UserRepository:IUserRepository
+    public class UserRepository : IUserRepository
     {
-       private AppDbContext _db;
+        private AppDbContext _db;
 
         public UserRepository()
         {
@@ -49,27 +51,45 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             _db.SaveChanges();
         }
 
-
-
-        public void Create(RegisterDto dto)
+        public void AssignRoleToUser(int userId, int roleId)
         {
-            _db.Users.Add(new User
+            var userRole = new Role
+            {
+                UserId = userId,
+                Role1 = roleId
+            };
+
+            _db.Roles.Add(userRole);
+            _db.SaveChanges();
+        }
+
+        public int Create(RegisterDto dto)
+        {
+            // 轉換 DTO 為 User Entity
+            var user = new User
             {
                 Account = dto.Account,
-                Email = dto.Email,
                 Password = dto.EncryptedPassword,
+                Email = dto.Email,
                 Name = dto.Name,
                 Phone = dto.Phone,
-                ConfirmCode = dto.ConfirmCode,
-                IsConfirmed = dto.IsConfirmed,
                 Gender = dto.Gender,
                 Address = dto.Address,
-                CreateDate = DateTime.Now,  
-                ModifyDate = DateTime.Now   
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                IsConfirmed = dto.IsConfirmed,
+                ConfirmCode = dto.ConfirmCode,
+                Status = true,
+            };
 
-            });
-
+            // 將使用者新增到資料庫
+            _db.Users.Add(user);
             _db.SaveChanges();
+
+            // 回傳使用者的 Id
+            return user.Id;
+
+
         }
 
         public UserDto Get(string account)
@@ -77,7 +97,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             var user = _db.Users.FirstOrDefault(x => x.Account == account);
             if (user == null) return null;
 
-            return WebApiApplication._mapper.Map<UserDto>(user); 
+            return WebApiApplication._mapper.Map<UserDto>(user);
         }
 
         public UserDto Get(int userId)
@@ -104,5 +124,76 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             var user = _db.Users.AsNoTracking().FirstOrDefault(x => x.Account == account);
             return user != null;
         }
+
+        public void Update(UserDto dto)
+        {
+            //User user = WebApiApplication._mapper.Map<User>(dto);
+            //var db = new AppDbContext();
+            //db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+            //db.SaveChanges();
+
+            using (var db = new AppDbContext())
+            {
+                var user = db.Users.Find(dto.Id);
+                if (user != null)
+                {
+                    // 手動更新需要更新的屬性
+                    user.Name = dto.Name;
+                    user.Phone = dto.Phone;
+                    user.Email = dto.Email;
+                    user.Address = dto.Address;
+                    user.Password = dto.Password;
+
+                    // 確保其他不應被修改的屬性保持原樣
+
+                    db.SaveChanges();
+                }
+            }
+
+        }
+
+        public List<UserCheckDto> GetAllUsers()
+        {
+            var users = _db.Users
+                .Include(x => x.Roles)
+                .Select(x => new UserCheckDto
+                {
+                    Id = x.Id,
+                    Account = x.Account,
+                    Address = x.Address,
+                    Name = x.Name,
+                    Email = x.Email,
+                    Gender = x.Gender,
+                    Phone = x.Phone,
+                    Status = x.Status,
+                    Roles = x.Roles.Select(r => r.Id)
+
+                })
+                .ToList();
+            return users;
+        }
+
+
+        public void UpdateUserStatus(int userId, bool status)
+        {
+            var users = _db.Users
+               .Include(x => x.Roles)
+               .Select(x => new UserCheckDto
+               {
+                   Id = x.Id,
+                   Account = x.Account,
+                   Address = x.Address,
+                   Name = x.Name,
+                   Email = x.Email,
+                   Gender = x.Gender,
+                   Phone = x.Phone,
+                   Status = x.Status,
+                   Roles = x.Roles.Select(r => r.Id)
+
+               })
+               .ToList();
+        }
+
+        
     }
 }

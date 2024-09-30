@@ -21,5 +21,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Dtos
 
         public string Address { get; set; }
         public bool Gender { get; set; }
+
+        public int Roles { get; set; }
     }
 }

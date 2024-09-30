@@ -10,10 +10,14 @@ namespace FAT4FUN.BackEnd.Site.Models.Interfaces
     public interface IUserRepository
     {
         void Active(int userId);
-        void Create(RegisterDto dto);
+        void AssignRoleToUser(int userId, int role);
+        int Create(RegisterDto dto);
         UserDto Get(int userId);
         UserDto Get(string account);
         bool IsAccountExist(string account);
+        void Update(UserDto userIndb);
+        List<UserCheckDto> GetAllUsers();
+        void UpdateUserStatus(int userId, bool status);
     }
 
 }

@@ -186,13 +186,15 @@
     <Compile Include="ImageSelectListItem.cs" />
     <Compile Include="Models\CustomPrincipal.cs" />
     <Compile Include="Models\DAHelper.cs" />
+    <Compile Include="Models\Dtos\ChangePasswordDto.cs" />
+    <Compile Include="Models\Dtos\EditProfileDto.cs" />
     <Compile Include="Models\Dtos\LoginDto.cs" />
     <Compile Include="Models\Dtos\Product2Dto.cs" />
     <Compile Include="Models\Dtos\ProductDto.cs" />
     <Compile Include="Models\Dtos\ProductSkuDto.cs" />
     <Compile Include="Models\Dtos\ProductSkusDto.cs" />
     <Compile Include="Models\Dtos\RegisterDto.cs" />
-    <Compile Include="Models\Dtos\SkuItemDto.cs" />
+    <Compile Include="Models\Dtos\UserCheckDto.cs" />
     <Compile Include="Models\Dtos\UserDto.cs" />
     <Compile Include="Models\EFModels\AppDbContext.cs" />
     <Compile Include="Models\EFModels\Brand.cs" />
@@ -221,19 +223,21 @@
     <Compile Include="Models\Services\ProductService.cs" />
     <Compile Include="Models\Services\ProductSkuService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
-    <Compile Include="Models\ViewModels\ImageVm.cs" />
+    <Compile Include="Models\ViewModels\ChangePasswordVm.cs" />
+    <Compile Include="Models\ViewModels\EditProfileVm.cs" />
     <Compile Include="Models\ViewModels\LoginVm.cs" />
     <Compile Include="Models\ViewModels\Product2Vm.cs" />
     <Compile Include="Models\ViewModels\ProductSkusVm.cs" />
     <Compile Include="Models\ViewModels\ProductSkuVm.cs" />
     <Compile Include="Models\ViewModels\ProductVm.cs" />
     <Compile Include="Models\ViewModels\RegisterVm.cs" />
-    <Compile Include="Models\ViewModels\SkuItemVm.cs" />
+    <Compile Include="Models\ViewModels\UserVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\Images\user-icon.mp4" />
+    <Content Include="Content\NavFooter.css" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="Content\sb-admin-2.min.css" />
     <Content Include="favicon.ico" />
@@ -263,6 +267,9 @@
     <Content Include="img\undraw_profile_2.svg" />
     <Content Include="img\undraw_profile_3.svg" />
     <Content Include="img\undraw_rocket.svg" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\js\demo\chart-area-demo.js" />
     <Content Include="Scripts\js\demo\chart-bar-demo.js" />
     <Content Include="Scripts\js\demo\chart-pie-demo.js" />
@@ -1951,6 +1958,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Users\EditProfile.cshtml" />
+    <Content Include="Views\Users\ChangePassword.cshtml" />
+    <Content Include="Views\Users\UserCheck.cshtml" />
+    <Content Include="Views\Users\UserEditStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -58,13 +58,13 @@ Santiago
 			add Register.cshtml , RegisterConfirm.cshtml (�����g action)
 		modify _Layout.cshtml , add Register link
 
-[V] ��@ �s�|�� Email �T�{�\��
-	�H�̪���},�� https://.../Users/ActiveRegister?userId=6&confirmCode=fa229493609a47f0a404e09fc45a142e
+[V] ��@ �s�|�� Emai	�H�̪���},�� https://.../Users/ActiveRegister?userId=9&confirmCode=1d23f5c0fd0d4fe285c75c8c6f7cd9d6
+l �T�{�\��
 	modify MembersController , add ActiveRegister Action
 		update isConfirm=1, confirmCode=null
 	add ActiveRegister.cshtml
 
-[Working on] ��@�n�J�n�X�\��
+[V] ��@�n�J�n�X�\��
 	�u���b�K���T�B�}�q�|���~���\�n�J
 	modify web.config, add <authentication mode="Forms">
 	add LoginVm, LoginDto
@@ -79,4 +79,41 @@ Santiago
 	modify �N About �令�ݭn�n�J�~���˵�
 
 	modify UserService , IUserRepository, �s�W Login ��������
+
+[V] �v���n�J
+
+�b Global.asax.cs �[�J Application_AuthenticateRequest �� GetRoleNameFromNumber
+�b UserService �[�J Result GetUserRole 
+�ק� usercontroller Login Action,  �s�W var service = new UserService();  
+
+var roleResult = service.GetUserRole(vm.Account);
+if (!roleResult.IsSuccess)
+  {
+	// �p�G������⥢�ѡA��ܿ��~�T��
+    ModelState.AddModelError(string.Empty, roleResult.ErrorMessage);
+    return View(vm);
+ }
+// �������ƾ�
+int userRole = (int)roleResult.Data;
+
+
+
+[V] �v���ᤩ
+Register �s�Wroles ��� �Ыح��u�b��ɯ��ܨ���
+
+
+[V]��@ �ק�ӤH�򥻸��
+	modify MembersController, add EditProfile action, �n�[[Authorize]
+	add EditProfileVm , add EditProfileDto classes
+		�����\�ק� account, password
+		�W�[Mapping config 
+	add EditProfile view page
+
+[V]��@ �ܧ�K�X
+modify MembersController, add EditProfile action, �n�[[Authorize]
+	add ChangePassword , add ChangePasswordDto classes
+		�W�[Mapping config 
+	add ChangePassword view page
+	modify MemberService , add ChangePassword method
+
 	

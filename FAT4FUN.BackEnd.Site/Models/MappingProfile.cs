@@ -39,6 +39,16 @@ namespace FAT4FUN.BackEnd.Site.Models
 
 
 
+            CreateMap<UserDto, EditProfileVm>();
+
+            CreateMap<EditProfileVm, EditProfileDto>();
+
+            CreateMap<UserDto, ChangePasswordDto>();
+
+            CreateMap<ChangePasswordVm, ChangePasswordDto>();
+
+            CreateMap<UserCheckDto, UserVm>();
+
         }
     }
 }
