@@ -3,8 +3,57 @@
 @{
     ViewBag.Title = "UserCheck";
 }
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
 
-<h2>使用者資訊</h2>
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #4CAF50;
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+</style>
+
+
+
+
+<h2>UserCheck</h2>
 
 <!-- 上下架篩選功能 -->
 <label for="statusFilter" class="mr-2">顯示帳號狀態：</label>
@@ -16,89 +65,112 @@
     </select>
 </div>
 
-
 <table class="table" id="userTable">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Account)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        @*<th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>*@
-        <th>
-            @Html.DisplayNameFor(model => model.Phone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Address)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th></th>
-    </tr>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Account)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
 
-    @foreach (var item in Model)
-    {
-        <tr data-status="@item.Status.ToString().ToLower()">
-            <td>
-                @Html.DisplayFor(modelItem => item.Account)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.Gender)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @if (item.Status)
-                {
-                    <span class="badge badge-success">啟用</span>
-                }
-                else
-                {
-                    <span class="badge badge-secondary">不啟用</span>
-                }
-                @*@Html.DisplayFor(modelItem => item.Status)*@
-            </td>
-
-
-            <td>
-                @Html.ActionLink("Edit", "EditUser", new { id = item.Id }, new { @class = "btn btn-primary" }) <!-- Edit button -->
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Roles)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
         </tr>
-    }
+    </thead>
+    
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-status="@item.Status.ToString().ToLower()">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Account)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Roles)
+                </td>
+
+                <td>
+                    <label class="switch">
+                        <input type="checkbox" class="toggle-status" data-id="@item.Id" @(item.Status ? "checked" : "")>
+                        <span class="slider"></span>
+                    </label>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+    
 
 </table>
-
-
 @section Scripts {
-    <script>document.getElementById("statusFilter").addEventListener("change", function () {
-            var selectedValue = this.value;
-            var rows = document.querySelectorAll("#userTable tbody tr");
+    <script>
+document.getElementById("statusFilter").addEventListener("change", function () {
+    var selectedValue = this.value;
+    var rows = document.querySelectorAll("#userTable tbody tr"); // 只選擇 tbody 中的 tr
 
-            rows.forEach(function (row) {
-                var status = row.getAttribute("data-status");
+    rows.forEach(function (row) {
+        var status = row.getAttribute("data-status");
 
-                if (selectedValue === "all" || status === selectedValue) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
+        if (selectedValue === "all" || status === selectedValue) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+
+
+     // 滑動開關的狀態切換
+        $('.toggle-status').change(function () {
+            var userId = $(this).data('id');
+            var newStatus = $(this).prop('checked');
+
+            $.ajax({
+                url: '@Url.Action("ToggleUserStatus", "Users")',
+                type: 'POST',
+                data: {
+                    id: userId,
+                    status: newStatus
+                },
+                success: function (response) {
+                    if (response.success) {
+                        location.reload(); // 成功後刷新頁面
+                    } else {
+                        alert("狀態更新失敗");
+                    }
+                },
+                error: function () {
+                    alert("發生錯誤，請稍後再試");
                 }
             });
-        });</script>
+        });
+    </script>
 }

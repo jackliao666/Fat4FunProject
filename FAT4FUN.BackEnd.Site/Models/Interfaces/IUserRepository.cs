@@ -1,4 +1,5 @@
 ﻿using FAT4FUN.BackEnd.Site.Models.Dtos;
+using FAT4FUN.BackEnd.Site.Models.EFModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,11 @@ namespace FAT4FUN.BackEnd.Site.Models.Interfaces
         bool IsAccountExist(string account);
         void Update(UserDto userIndb);
         List<UserCheckDto> GetAllUsers();
-        void UpdateUserStatus(int userId, bool status);
+        void UpdateUserStatus(UserCheckDto userInDb );
+        User GetUserById(int id);
+        bool GetStatus(string account);
+        void UpdateUserStatus(int userId, bool newStatus);
+       
     }
 
 }

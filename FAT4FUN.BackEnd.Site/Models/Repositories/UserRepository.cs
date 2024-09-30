@@ -127,10 +127,6 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
 
         public void Update(UserDto dto)
         {
-            //User user = WebApiApplication._mapper.Map<User>(dto);
-            //var db = new AppDbContext();
-            //db.Entry(user).State = System.Data.Entity.EntityState.Modified;
-            //db.SaveChanges();
 
             using (var db = new AppDbContext())
             {
@@ -166,7 +162,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                     Gender = x.Gender,
                     Phone = x.Phone,
                     Status = x.Status,
-                    Roles = x.Roles.Select(r => r.Id)
+                    Roles = x.Roles.Select(r => r.Role1)
 
                 })
                 .ToList();
@@ -174,24 +170,41 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
         }
 
 
-        public void UpdateUserStatus(int userId, bool status)
+        public void UpdateUserStatus(UserCheckDto dto)
         {
-            var users = _db.Users
-               .Include(x => x.Roles)
-               .Select(x => new UserCheckDto
-               {
-                   Id = x.Id,
-                   Account = x.Account,
-                   Address = x.Address,
-                   Name = x.Name,
-                   Email = x.Email,
-                   Gender = x.Gender,
-                   Phone = x.Phone,
-                   Status = x.Status,
-                   Roles = x.Roles.Select(r => r.Id)
+            using (var db = new AppDbContext())
+            {
+                var user = db.Users.Find(dto.Id);
+                if (user != null)
+                {
+                    // 手動更新需要更新的屬性
+                    user.Status = dto.Status;
 
-               })
-               .ToList();
+                    // 確保其他不應被修改的屬性保持原樣
+
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public User GetUserById(int id)
+        {
+            return _db.Users.FirstOrDefault(x => x.Id == id);
+        }
+
+        public bool GetStatus(string account)
+        {
+            return _db.Users.FirstOrDefault(x => x.Account == account).Status;
+        }
+
+        public void UpdateUserStatus(int userId, bool newStatus)
+        {
+            var user = _db.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                user.Status = newStatus;
+                _db.SaveChanges();
+            }
         }
 
         

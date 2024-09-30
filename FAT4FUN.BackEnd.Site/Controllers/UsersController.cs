@@ -202,14 +202,20 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         }
 
-        public ActionResult UserEditStatus(int userId, bool status)
+        [HttpPost]
+        public JsonResult ToggleUserStatus(int id, bool status)
         {
-            var service = new UserService();
-            var updatedUsers = service.UpdateUserStatus(userId, status);
-
-            return View("UserCheck", updatedUsers);
-
-
+            try
+            {
+                var service = new UserService();
+                service.UpdateUserStatus(id, status); // 使用你定義好的服務方法來更新狀態
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // 可以記錄錯誤訊息
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
         public ActionResult UserCheck()     

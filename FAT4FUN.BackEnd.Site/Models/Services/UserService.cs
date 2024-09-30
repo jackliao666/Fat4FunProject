@@ -92,8 +92,9 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
         {
             //找出user
             UserDto user = _repo.Get(dto.Account);
+            bool status = _repo.GetStatus(dto.Account);
             if (user == null) return Result.Fail("帳號或密碼錯誤");
-
+            if (status == false) return Result.Fail("帳號被封鎖 請通知管理員");
             //判斷帳號是否開通
             if (!user.IsConfirmed.HasValue || user.IsConfirmed.Value == false)
             {
@@ -158,23 +159,63 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
 
         public List<UserVm> GetAllUser()
         {
+           
+
             var userdto = _repo.GetAllUsers();
             var uservm = WebApiApplication._mapper.Map<List<UserVm>>(userdto);
+            foreach (var item in uservm)
+            {
+                if (item.Roles != null && item.Roles.Any())
+                {
+                    var updatedRoles = new List<string>();
+                    foreach (var roleId in item.Roles)
+                    {
+                        var rold = int.Parse(roleId);
+                        var roleString = _db.RolesStrings.FirstOrDefault(x=> x.Id == rold).Roles;
+                        if (roleString != null)
+                        {
+                            // 可以在這裡將 roleString 轉換為對應的角色 ID 或者其他需要的內容
+                            // 如果 roleString 是數字型，可以解析它，否則你可以設計一個邏輯來處理
+                            // 假設你是想把 RoleString 的數字轉成角色 ID 或類似：
+                            updatedRoles.Add(roleString+"、");
+                        }
+
+                    }
+
+                    item.Roles = updatedRoles;
+                }
+                
+            }
 
             return uservm;
 
         }
 
-        public List<UserVm> UpdateUserStatus(int userId, bool status)
+        //internal void UpdateUserStatus(UserCheckDto dto)
+        //{
+
+        //    UserCheckDto userIndb = _repo.GetAllUsers().FirstOrDefault(x => x.Id == dto.Id);
+        //    userIndb.Name = dto.Name;
+        //    userIndb.Phone = dto.Phone;
+        //    userIndb.Email = dto.Email;
+        //    userIndb.Address = dto.Address;
+        //    userIndb.Gender = dto.Gender;
+        //    userIndb.Status = dto.Status;
+
+        //    _repo.UpdateUserStatus(userIndb);
+
+        //}
+
+        internal UserVm GetUser(int id)
         {
-            _repo.UpdateUserStatus(userId, status);
-
-            
-            var userDto = _repo.GetAllUsers();
-            var userVm = WebApiApplication._mapper.Map<List<UserVm>>(userDto);
-
-            return userVm;
+            var user = _repo.GetUserById(id);
+            var vm = WebApiApplication._mapper.Map<UserVm>(user);
+            return vm;
         }
 
+        public void UpdateUserStatus(int id, bool status)
+        {
+            _repo.UpdateUserStatus(id, status);
+        }
     }
 }
