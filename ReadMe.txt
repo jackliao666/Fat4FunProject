@@ -19,10 +19,13 @@ JK
     add series.json
 [v]Device商品頁面
 [v]Hots商品頁面
-[working on]後台 商品管理 
+[v]後台 商品管理 
 	產品資訊頁
 	商品類別管理頁
 	品牌管理頁
+	規格管理頁
+	圖片管理頁
+[working] 美化網頁中
 	
 	
 
