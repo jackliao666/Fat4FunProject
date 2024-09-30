@@ -1,0 +1,134 @@
+﻿@model IEnumerable<FAT4FUN.BackEnd.Site.Models.ViewModels.Product2Vm>
+
+@*@{
+        ViewBag.Title = "Index";
+    }*@
+<style>
+    .table th, .table td {
+        text-align: center; /* 讓文字水平置中 */
+        vertical-align: middle; /* 讓文字垂直置中 */
+        white-space: nowrap; /* 禁止文字換行 */
+        overflow: hidden; /* 隱藏超出部分 */
+        text-overflow: ellipsis; /* 用省略號表示超出部分 */
+    }
+
+        .table th:nth-child(3), .table td:nth-child(3) {
+            width: 30%; /* 調整規格欄位的寬度 */
+        }
+
+    .small-input {
+        width: 150px; /* 根據需求調整這個數值 */
+    }
+
+    .price-display {
+        display: inline-block;
+        min-width: 100%;
+        text-align: center;
+    }
+</style>
+<h2>規格資訊</h2>
+
+
+
+
+<p>
+    @Html.ActionLink("新增規格", "Create", null, new { @class = "btn btn-primary mb-3 " })
+</p>
+<table class="table table-bordered table-striped" id="productTable">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                規格
+            </th>
+            <th>
+                價格
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>
+                    @if (item.ProductSkus != null && item.ProductSkus.Any())
+                    {
+                        <select class="form-control form-control-sm sku-select" data-product-id="@item.Id">
+                            @foreach (var sku in item.ProductSkus)
+                            {
+                                foreach (var skuItem in sku.SkuItems)
+                                {
+                                    <option value="@skuItem.Key" data-price="@skuItem.Price"
+                                            @(sku == item.ProductSkus.First() && skuItem == sku.SkuItems.First() ? "selected" : "")>
+                                        @sku.Name - @skuItem.Value
+                                    </option>
+                                }
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <select class="form-control form-control-sm" disabled>
+                            <option>無</option>
+                        </select>
+                    }
+                </td>
+                <td class="price-display" id="price-display-@item.Id">
+                    @if (item.ProductSkus != null && item.ProductSkus.Any() && item.ProductSkus.First().SkuItems.Any())
+                    {
+                        @item.ProductSkus.First().SkuItems.First().Price
+                    }
+                    else
+                    {
+                        <span>--</span>
+                    }
+                </td>
+
+
+                <td>
+
+                    @Html.ActionLink("新增", "Create2", new { id = item.Id }, new { @class = "btn btn-sm btn-success" })|
+                    @Html.ActionLink("編輯", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" }) 
+                    @*@Html.ActionLink("刪除", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })*@
+                    @*@Html.ActionLink("刪除", "Delete", new { id = item.Id, skuId = item.ProductSkus.FirstOrDefault()?.,skuitemId = item.ProductSku.SkuItems. }, new { @class = "btn btn-sm btn-danger" })*@
+                </td>
+            </tr>
+        }
+
+</table>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 更新所有規格選擇的初始價格
+            document.querySelectorAll('.sku-select').forEach(function (select) {
+                var productId = select.getAttribute('data-product-id');
+                var selectedOption = select.options[select.selectedIndex];
+                var priceDisplay = document.getElementById('price-display-' + productId);
+
+                if (priceDisplay) {
+                    priceDisplay.textContent = selectedOption.getAttribute('data-price') || '--';
+                }
+
+                // 當選擇規格時，更新價格顯示
+                select.addEventListener('change', function () {
+                    var selectedOption = this.options[this.selectedIndex];
+                    var price = selectedOption.getAttribute('data-price');
+
+                    if (priceDisplay) {
+                        priceDisplay.textContent = price || '--';
+                    }
+                });
+            });
+        });
+    </script>
+}

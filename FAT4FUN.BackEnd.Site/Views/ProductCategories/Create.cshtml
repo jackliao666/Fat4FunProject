@@ -1,0 +1,67 @@
+﻿@model FAT4FUN.BackEnd.Site.Models.EFModels.ProductCategory
+
+@*@{
+    ViewBag.Title = "新增商品類別";
+}*@
+
+<style>
+    /* 自定義樣式，調整輸入框的大小 */
+    .small-input {
+        width: 300px; /* 調整寬度，可以根據需要進一步修改 */
+    }
+</style>
+
+<h2 class="my-4">新增商品類別</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>商品類別</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group row">
+        <label class="control-label col-md-2 col-form-label">商品類別</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入類別" } })
+            @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+        <!-- 排序 -->
+        @*<div class="form-group row">
+            @Html.LabelFor(model => model.DisplayOrder, htmlAttributes: new { @class = "control-label col-md-2 col-form-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <!-- 狀態 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">狀態管理</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Status, new SelectList(new[]
+                {
+                    new { Value = "true", Text = "啟用" },
+                    new { Value = "false", Text = "不啟用" }
+                }, "Value", "Text"), new { @class = "form-control small-input" })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 保存按鈕 -->
+        <div class="form-group row">
+            <div class="col-md-10 offset-md-2">
+                <input type="submit" value="新增" class="btn btn-primary" />
+                @Html.ActionLink("返回列表", "Index", null, new { @class = "btn btn-secondary ml-2" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

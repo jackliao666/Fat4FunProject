@@ -23,6 +23,7 @@ namespace FAT4FUN.BackEnd.Site.Models.EFModels
         public virtual DbSet<ProductSku> ProductSkus { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SkuItem> SkuItems { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -31,10 +32,6 @@ namespace FAT4FUN.BackEnd.Site.Models.EFModels
                 .HasMany(e => e.Products)
                 .WithRequired(e => e.Brand)
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<OrderItem>()
-                .Property(e => e.SkuItemName)
-                .IsFixedLength();
 
             modelBuilder.Entity<Order>()
                 .Property(e => e.No)

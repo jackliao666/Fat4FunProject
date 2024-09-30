@@ -21,14 +21,16 @@ namespace FAT4FUN.BackEnd.Site.Models.Dtos
         public string BrandName { get; set; }    
         public string Name { get; set; }    
         public string Description { get; set; }
+        public int ProductSkuId { get; set; }
         public string ProductSkuName { get; set; }
         public int Price { get; set; }
         public int Sale { get; set; }
         public bool Status { get; set; }      
         public DateTime CreateDate { get; set; }    
         public DateTime ModifyDate { get; set; }
-        public List<ProductSkuDto> ProductSkus { get; set;}
-        
+        public ProductSkuDto ProductSku { get; set; }
+        public List<ProductSkusDto> ProductSkus { get; set; }
+
 
     }
 }   

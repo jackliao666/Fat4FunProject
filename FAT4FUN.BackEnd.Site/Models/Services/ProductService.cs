@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using System.Drawing.Printing;
+using System.Web.UI;
 
 namespace FAT4FUN.BackEnd.Site.Models.Services
 {
@@ -23,8 +26,6 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
             _repo = repo;
         }
 
-        
-
         // 獲取所有產品並轉換為 ViewModel
         public List<ProductVm> GetProducts()
         {
@@ -39,6 +40,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
                 BrandName = dto.BrandName,
                 Name = dto.Name,
                 Description = dto.Description,
+                ProductSkuId = dto.ProductSkus != null && dto.ProductSkus.Any() ? dto.ProductSkus.First().Id : 0,
                 Price = dto.ProductSkus != null && dto.ProductSkus.Any() ? dto.ProductSkus.First().Price : 0, // 假設每個產品至少有一個規格
                 Sale = dto.ProductSkus != null && dto.ProductSkus.Any() ? dto.ProductSkus.First().Sale : 0,
                 Status = dto.Status,
@@ -108,6 +110,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
                 BrandName = productDto.BrandName,
                 Name = productDto.Name,
                 Description = productDto.Description,
+                ProductSkuId = productDto.ProductSkus != null && productDto.ProductSkus.Any() ? productDto.ProductSkus.First().Id:0,
                 ProductSkuName = productDto.ProductSkus != null && productDto.ProductSkus.Any() ? productDto.ProductSkus.First().Name : null, // 獲取第一個 SKU 的名稱
                 Price = productDto.ProductSkus != null && productDto.ProductSkus.Any() ? productDto.ProductSkus.First().Price : 0, // 假設每個產品至少有一個規格
                 Sale = productDto.ProductSkus != null && productDto.ProductSkus.Any() ? productDto.ProductSkus.First().Sale : 0,
@@ -119,36 +122,75 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
 
         }
 
-        public void UpdateProduct(ProductDto productDto)
+        public int Update(ProductDto productDto)
+        {
+            var createdProductId = _repo.Update(productDto);
+  
+            var productskuDto = new ProductSkuDto
+            {
+                Id = productDto.ProductSkuId,
+                ProductId = createdProductId,
+                Name = productDto.Name,
+                Price = productDto.Price,
+                Sale = productDto.Sale,
+            };
+            
+            _repo.UpdateSkus(productskuDto);
+
+            return createdProductId;
+        }
+
+        public void Delete(int id)
+        {
+            var productDto = _repo.GetProductId(id);
+            if (productDto != null)
+            {
+                // 刪除所有與該產品相關的 SKUs
+                var skus = _repo.GetProductId(id);
+                if (productDto != null)
+                {
+                    // 呼叫 Repository 層刪除產品及其 SKU
+                    _repo.DeleteProductWithSkus(productDto);
+                }
+            }
+        }
+
+        public IPagedList<ProductDto> GetFilteredProducts(string categoryName, string brandName, string productName, int page = 1, int pageSize = 10)
+        {
+            
+            
+
+            return _repo.GetProductsByFilter(categoryName, brandName, productName, page, pageSize);
+        }
+        public IPagedList<ProductVm> ConverToVm(string categoryName, string brandName, string productName, int page = 1, int pageSize = 10)
         {
 
-
-            var createdProductId = _repo.Create(productDto);
-            // 將 ViewModel 轉換為 DTO
-            var productDto = new ProductDto
+            IPagedList<ProductDto> products = GetFilteredProducts(categoryName, brandName, productName,page,pageSize);
+            List<ProductVm> productVms = products.Select(dto => new ProductVm
             {
-                Id = vm.Id,
-                CategoryId = vm.CategoryId,
-                CategoryName = vm.CategoryName,
-                BrandId = vm.BrandId,
-                BrandName = vm.BrandName,
-                Name = vm.Name,     
-                Description = vm.Description,
-                Status = vm.Status,      
-                ModifyDate = DateTime.Now, // 更新修改時間
-                ProductSkus = new List<ProductSkuDto>
+                Id = dto.Id,
+                CategoryName = dto.CategoryName,
+                BrandName = dto.BrandName,
+                Name = dto.Name,
+                Description = dto.Description,
+                ProductSkuId = dto.ProductSkuId,
+                ProductSkuName = dto.ProductSkuName,
+                //ProductSku = dto.ProductSku.Price,  
+                Status = dto.Status,
+                CreateDate = dto.CreateDate,
+                ModifyDate = dto.ModifyDate,
+                ProductSkus = dto.ProductSkus.Select(s => new ProductSkusVm
                 {
-                    new ProductSkuDto // 使用 new 創建 ProductSkuDto 物件
-                    {
-                        ProductId = vm.Id, 
-                        Name = vm.ProductSkus.ProductSkuName, 
-                        Price = vm.ProductSkus.Price, 
-                        Sale = vm.ProductSkus.Sale 
-                    }
-                }
-            };
+                    Id = s.Id,
+                    ProductId = s.ProductId,
+                    ProductSkuName = s.Name,
+                    Price = s.Price,
+                    Sale = s.Sale,
+                }).ToList(),
+            }).ToList();
 
-            _repo.Update(productDto);
+            return new StaticPagedList<ProductVm>(productVms, page, pageSize, products.TotalItemCount);
         }
+        
     }
 }

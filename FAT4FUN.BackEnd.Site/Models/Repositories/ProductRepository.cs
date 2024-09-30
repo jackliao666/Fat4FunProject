@@ -9,6 +9,8 @@ using FAT4FUN.BackEnd.Site.Models.Dtos;
 using System.Data;
 using FAT4FUN.BackEnd.Site.Models.Interfaces;
 using System.Web.Configuration;
+using PagedList;
+using System.Drawing.Printing;
 
 namespace FAT4FUN.BackEnd.Site.Models.Repositories
 {
@@ -36,9 +38,10 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                     Status = p.Status,
                     CreateDate = p.CreateDate,
                     ModifyDate = p.ModifyDate,
-                    ProductSkus = p.ProductSkus.Select(s => new ProductSkuDto
+                    ProductSkus = p.ProductSkus.Select(s => new ProductSkusDto
                     {
-
+                        Id = s.Id,
+                        ProductId = s.ProductId,
                         Name = s.Name,
                         Price = s.Price,
                         Sale = s.Sale,
@@ -49,7 +52,8 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
 
             return products;
         }
-       
+        
+
         public int Create(ProductDto productDto)
         {
             if (productDto == null)
@@ -69,7 +73,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             product.CreateDate = DateTime.Now;
             product.ModifyDate = DateTime.Now;
 
-            // 新增 Product 到資料庫
+            // 新增 Product 到資料庫  
             _db.Products.Add(product);
             _db.SaveChanges(); // 保存變更，讓資料庫生成 Product 的自動遞增 Id
 
@@ -115,8 +119,10 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                     Status = p.Status,
                     CreateDate = p.CreateDate,
                     ModifyDate = p.ModifyDate,
-                    ProductSkus = p.ProductSkus.Select(s => new ProductSkuDto
+                    ProductSkus = p.ProductSkus.Select(s => new ProductSkusDto
                     {
+                        Id = s.Id,
+                        ProductId = s.ProductId,
                         Name = s.Name,
                         Price = s.Price,
                         Sale = s.Sale,
@@ -128,56 +134,116 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
 
         }
 
-        public void Update(ProductDto ProductDto)
+
+        public int Update(ProductDto productDto)
         {
+
             var product = _db.Products
-        .Include(p => p.ProductSkus)
-        .FirstOrDefault(p => p.Id == ProductDto.Id);
+                .Include(p => p.ProductSkus)
+                .FirstOrDefault(p => p.Id == productDto.Id);
             if (product == null)
             {
                 throw new Exception("Product not found.");
             }
-
+            var product1 = WebApiApplication._mapper.Map<Product>(productDto);
             // 更新產品實體的屬性
-            product.Name = ProductDto.Name;
-            product.Description = ProductDto.Description;
-            product.Status = ProductDto.Status;
-            product.ModifyDate = ProductDto.ModifyDate;
-            product.ProductCategoryId = ProductDto.CategoryId;
-            product.BrandId = ProductDto.BrandId;
-
-            // 更新 SKU 的邏輯
-            if (ProductDto.ProductSkus != null && ProductDto.ProductSkus.Any())
-            {
-                foreach (var skuDto in ProductDto.ProductSkus)
-                {
-                    var existingSku = product.ProductSkus.FirstOrDefault(s => s.Id == skuDto.ProductId);
-
-                    if (existingSku != null)
-                    {
-                        // 更新現有 SKU 的屬性
-                        existingSku.Name = skuDto.Name;
-                        existingSku.Price = skuDto.Price;
-                        existingSku.Sale = skuDto.Sale;
-                    }
-                    else
-                    {
-                        // 添加新的 SKU 到產品中
-                        var newSku = new ProductSku
-                        {
-                            Name = skuDto.Name,
-                            Price = skuDto.Price,
-                            Sale = skuDto.Sale,
-                            ProductId = product.Id
-                        };
-
-                        product.ProductSkus.Add(newSku);
-                    }
-                }
-            }
-
+            product.Name = productDto.Name;
+            product.Description = productDto.Description;
+            product.Status = productDto.Status;
+            product.ModifyDate = productDto.ModifyDate; 
+            
             // 保存更改至資料庫
             _db.SaveChanges();
+            return product.Id;
         }
+
+        public void UpdateSkus(ProductSkuDto productSkuDto)
+        {
+   
+            // 確保 DTO 包含 Id
+            if (productSkuDto.Id <= 0)
+            {
+                throw new ArgumentException("Product SKU ID must be greater than zero.", nameof(productSkuDto.Id));
+            }
+
+            // 從資料庫中查找現有的 SKU 實體
+            var existingSku = _db.ProductSkus.Find(productSkuDto.Id);
+
+            if (existingSku == null)
+            {
+                throw new Exception("Product SKU not found.");
+            }
+
+            // 將屬性從 DTO 更新到現有的 SKU 實體
+            existingSku.Name = productSkuDto.Name;
+            existingSku.Price = productSkuDto.Price;
+            existingSku.Sale = productSkuDto.Sale;
+
+            // 如果有其他需要更新的屬性，請在這裡添加
+
+            // 標記實體為已修改
+            _db.Entry(existingSku).State = System.Data.Entity.EntityState.Modified;
+
+            // 保存更改
+            _db.SaveChanges();
+        }
+        public void DeleteProductWithSkus(ProductDto productDto)
+        {
+            // 將 DTO 轉換回 Product 實體
+           
+            foreach (var skuDto in productDto.ProductSkus)
+            {
+                // 先從資料庫中查詢 SKU 實體
+                var skuEntity = _db.ProductSkus.Find(skuDto.Id);
+                if (skuEntity != null)
+                {
+                    _db.ProductSkus.Remove(skuEntity);
+                }
+            }
+       
+            var productEntity = _db.Products.Find(productDto.Id);
+                if (productEntity == null)
+                {
+                    throw new Exception("Product not found.");
+                }           
+
+            // 刪除 Product
+            _db.Products.Remove(productEntity);
+
+            // 儲存變更到資料庫
+            _db.SaveChanges();
+        }
+
+        public IPagedList<ProductDto> GetProductsByFilter(string categoryName, string brandName, string productName,  int page = 1, int pageSize = 10)
+        {
+            
+            var products = GetProducts().ToList();
+
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                products = products.Where(p => p.CategoryName.Contains(categoryName)).ToList();
+            }
+            if (!string.IsNullOrEmpty(brandName))
+            {
+                products = products.Where(p => p.BrandName.Contains(brandName)).ToList();
+            }
+            if (!string.IsNullOrEmpty(productName))
+            {
+                products = products.Where(p => p.Name.Contains(productName)).ToList();
+            }
+            //if (minPrice.HasValue)
+            //{
+            //    products = products.Where(p => p.Price >= minPrice.Value).ToList();
+            //}
+            //if (maxPrice.HasValue)
+            //{
+            //    products = products.Where(p => p.Price <= maxPrice.Value).ToList();
+            //}
+
+            
+            return products.OrderBy(p => p.Id).ToPagedList(page, pageSize);
+        }
+
     }
+
 }

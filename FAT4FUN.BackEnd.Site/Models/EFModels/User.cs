@@ -30,7 +30,7 @@ namespace FAT4FUN.BackEnd.Site.Models.EFModels
         public string Account { get; set; }
 
         [Required]
-        [StringLength(64)]
+        [StringLength(50)]
         public string Password { get; set; }
 
         [Required]
@@ -47,14 +47,14 @@ namespace FAT4FUN.BackEnd.Site.Models.EFModels
 
         public bool Status { get; set; }
 
+        public bool? IsConfirmed { get; set; }
+
+        [StringLength(50)]
+        public string ConfirmCode { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifyDate { get; set; }
-
-        public bool? IsConfirmed { get; set; }
-
-        [StringLength(70)]
-        public string ConfirmCode { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Carts { get; set; }

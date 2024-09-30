@@ -1,0 +1,86 @@
+﻿@model FAT4FUN.BackEnd.Site.Models.ViewModels.ImageVm
+
+<h2>圖片管理</h2>
+
+<!-- 產品選擇 -->
+<form id="productForm" method="get" action="@Url.Action("Index", "Images")">
+    <label for="productSelect">選擇產品：</label>
+    <select id="productSelect" name="productInfo" onchange="this.form.submit();">
+        @foreach (var product in Model.Products)
+        {
+            @* 將 productId 和 imageId 一起放入 option 的 value 屬性 *@
+            <option value="@product.Value-@product.ImageId" @(Model.SelectedProductId.ToString() == product.Value ? "selected" : "")>
+                @product.Text
+            </option>
+        }
+    </select>
+</form>
+
+<!-- 圖片列表展示 -->
+<h3>產品圖片</h3>
+<div id="imageList">
+    @if (Model.Images != null && Model.Images.Any())
+    {
+        <ul>
+            @foreach (var image in Model.Images)
+            {
+                <li>
+                    <img src="@image.Path" alt="Product Image" style="width:100px;height:100px;" />
+                    <p>排序：@image.Sort</p>
+                    @*<p>上傳時間：@image.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")</p>*@
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>沒有圖片可顯示。</p>
+    }
+</div>
+
+<!-- 圖片上傳 -->
+<h3>上傳新圖片</h3>
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="hidden" name="productId" value="@Model.SelectedProductId" />
+    <label for="sortInput">排序：</label>
+    <input type="number" id="sortInput" name="sort" value="0" required />
+
+    <label for="fileInput">選擇圖片文件：</label>
+    <input type="file" id="fileInput" name="file" required />
+
+    <button type="submit">上傳圖片</button>
+</form>
+
+<!-- 使用 jQuery 處理上傳 -->
+@section scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#uploadForm').submit(function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '@Url.Action("UploadImage", "Images")',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.success) {
+                            alert('圖片上傳成功！');
+                            // 上傳成功後刷新頁面以顯示新的圖片
+                            window.location.reload();
+                        } else {
+                            alert('上傳失敗: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('上傳過程中發生錯誤');
+                    }
+                });
+            });
+        });
+    </script>
+}
