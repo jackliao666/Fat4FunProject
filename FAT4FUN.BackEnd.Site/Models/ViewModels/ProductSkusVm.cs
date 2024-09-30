@@ -14,5 +14,6 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
         public int Price { get; set; }
         public int Sale { get; set; }
         public List<SkuItemVm> SkuItems { get; set; }
+
     }
 }
