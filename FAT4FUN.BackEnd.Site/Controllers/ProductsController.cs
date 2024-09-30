@@ -24,9 +24,9 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         [HttpGet]
         public ActionResult Index(string categoryName, string brandName, string productName, int page = 1, int pageSize = 10)
         {
-           var productVms = _productService.ConverToVm(categoryName, brandName, productName, page, pageSize);
+           var productVm = _productService.ConverToVm(categoryName, brandName, productName, page, pageSize);
             
-            return View(productVms);
+            return View(productVm);
         }
         [HttpGet]
         public ActionResult Create()

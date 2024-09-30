@@ -170,7 +170,7 @@
                     @Html.DisplayFor(modelItem => item.ModifyDate)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+                    @Html.ActionLink("編輯", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
                     @*using (Html.BeginForm("Delete", "Products", FormMethod.Post, new { @class = "d-inline" }))
                         {
                             @Html.AntiForgeryToken() <!-- 防止 CSRF 攻擊 -->

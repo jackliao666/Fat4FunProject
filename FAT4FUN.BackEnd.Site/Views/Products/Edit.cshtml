@@ -1,123 +1,114 @@
 ﻿@model FAT4FUN.BackEnd.Site.Models.ViewModels.ProductVm
 
-@{
-    ViewBag.Title = "Edit";
-}
+@*@{
+        ViewBag.Title = "Edit";
+    }*@
 
-<h2>Edit</h2>
+<h2 class="my-4">編輯商品</h2>
+
+<style>
+    .small-input {
+        width: 300px; /* 調整輸入框和下拉選單的寬度 */
+    }
+</style>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>ProductVm</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.Id)
-    @Html.HiddenFor(model => model.CategoryId)
-    @Html.HiddenFor(model => model.BrandId)
-    @Html.HiddenFor(model => model.ProductSkuId)
 
+    <div class="form-horizontal">
+        <h4>商品資訊</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.CategoryId)
+        @Html.HiddenFor(model => model.BrandId)
+        @Html.HiddenFor(model => model.ProductSkuId)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DisplayFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.BrandName, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DisplayFor(model => model.BrandName, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    @*<div class="form-group">
-            @Html.LabelFor(model => model.ProductSkuId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <!-- 類別名稱 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">類別名稱</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ProductSkuId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProductSkuId, "", new { @class = "text-danger" })
+                @Html.DisplayFor(model => model.CategoryName, new { @class = "form-control small-input" })
             </div>
-        </div>*@
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ProductSkuName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ProductSkuName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ProductSkuName, "", new { @class = "text-danger" })
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+        <!-- 品牌名稱 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">品牌名稱</label>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.BrandName, new { @class = "form-control small-input" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Sale, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Sale, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Sale, "", new { @class = "text-danger" })
+        <!-- 商品名稱 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">商品名稱</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入商品名稱" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.Status)
+        <!-- 商品描述 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">商品描述</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control small-input" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- SKU名稱 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">規格名稱</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductSkuName, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入 SKU 名稱" } })
+                @Html.ValidationMessageFor(model => model.ProductSkuName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 價格 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">價格</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入價格" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 折扣 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">特價</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Sale, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入折扣" } })
+                @Html.ValidationMessageFor(model => model.Sale, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 狀態管理 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">狀態管理</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Status, new SelectList(new[]
+                {
+                    new { Value = "true", Text = "啟用" },
+                    new { Value = "false", Text = "不啟用" }
+                }, "Value", "Text"), new { @class = "form-control small-input" })
                 @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
             </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.CreateDate, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DisplayFor(model => model.CreateDate, new { htmlAttributes = new { @class = "form-control" } })
+        <!-- 保存按鈕 -->
+        <div class="form-group row">
+            <div class="col-md-10 offset-md-2">
+                <input type="submit" value="保存" class="btn btn-primary" />
+                @Html.ActionLink("返回列表", "Index", null, new { @class = "btn btn-secondary ml-2" })
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ModifyDate, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DisplayFor(model => model.ModifyDate, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

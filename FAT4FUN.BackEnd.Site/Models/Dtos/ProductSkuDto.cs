@@ -12,6 +12,6 @@ namespace FAT4FUN.BackEnd.Site.Models.Dtos
         public string Name { get; set; }
         public int Price { get; set; }
         public int Sale { get; set; }
-        //public SkuItemDto SkuItems { get; set; }
+        public List<SkuItemDto> SkuItems { get; set; }
     }
 }   
