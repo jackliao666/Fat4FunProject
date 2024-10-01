@@ -91,12 +91,12 @@ const HeaderComponent = {
           <a
             href="Order.html"
             class="ms-5 btn btn-link"
-            :class="{'active-link': isActiveLink('Login.html')}"
+            :class="{'active-link': isActiveLink('Order.html')}"
           >
             <i class="bi bi-person-circle"></i>
           </a>
           <a
-            href="Order.html"
+            href="Login.html"
             class="ms-5 btn btn-link"
             :class="{'active-link': isActiveLink('Login.html')}"
           >

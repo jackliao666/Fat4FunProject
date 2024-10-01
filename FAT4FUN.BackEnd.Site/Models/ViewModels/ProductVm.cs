@@ -35,9 +35,11 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
         public string ProductSkuName { get; set; }
 
         [Display(Name = "定價")]
+        
         public int Price { get; set; }
-
+        
         [Display(Name = "特價")]
+        
         public int Sale { get; set; }
 
         [Display(Name ="上下架設定")]
