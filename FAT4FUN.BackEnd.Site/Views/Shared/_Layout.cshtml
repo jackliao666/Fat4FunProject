@@ -62,11 +62,27 @@
             justify-content: space-between; /* 让内容撑满高度 */
             min-height: calc(100vh - 56px); /* 确保最小高度占满全屏 */
         }
+        .w-100 {
+            margin: 0; /* 确保内容区域没有多余的外边距 */
+            padding: 0; /* 确保内容区域没有多余的内边距 */
+            width: 100%; /* 占满全宽 */
+            height: 100vh; /* 占满全高 */
+        }
+
+        body, html, #page-top {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* 确保所有容器高度为 100% */
+        }
+        #page-top {
+            width: 100%; /* 确保页面顶层容器宽度为 100% */
+            overflow-x: hidden; /* 禁止水平方向上的滚动条 */
+            background-color: #f8f9fc; /* 设置背景色，可以根据需要修改 */
+
+        }
+        
     </style>
 </head>
-
-
-    
     
     <body id="page-top">
 
@@ -77,8 +93,8 @@
             @if (!isLoginPage && User.Identity.IsAuthenticated)
             {
                 <!-- Sidebar -->
-            <ul class="navbar-nav  sidebar sidebar-dark accordion fixed-sidebar" style="color: #6a6e99" id="accordionSidebar">  
-                @*<ul class="navbar-nav sidebar sidebar-dark accordion position-fixed" style="color: #6a6e99; " id="accordionSidebar">*@
+                <ul class="navbar-nav  sidebar sidebar-dark accordion fixed-sidebar" style="color: #6a6e99" id="accordionSidebar">
+                    @*<ul class="navbar-nav sidebar sidebar-dark accordion position-fixed" style="color: #6a6e99; " id="accordionSidebar">*@
                     <!-- Sidebar - Brand -->
                     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Home/Index">
                         <img src="~/Images/LOGO.jpg" alt="Fat4Fun Logo" style="width: 65px; height: 65px; margin-right: 10px;">
@@ -191,8 +207,8 @@
 
                     <!-- Sidebar Toggler (Sidebar) -->
                     <!--<div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>-->
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>-->
 
 
 
@@ -200,47 +216,47 @@
 
                 </ul>
                 <!-- End of Sidebar -->
-                }
-                <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column content-wrapper">
-
-            @if (!isLoginPage && User.Identity.IsAuthenticated)
-            {
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    @*Topbar Navbar*@
-                    <ul class="navbar-nav ml-auto">
-                        @*Nav Item - User Information*@
-                        <li class="nav-item dropdown no-arrow">
-                            <ul class="navbar-nav flex-grow-1">
-                                <li><a href="~/Users/EditProfile" class="nav-link"><video src="~/Content/Images/user-icon.mp4" autoplay loop muted playsinline style="width: 50px; margin-right: 10px;"></video>&nbsp;&nbsp;@User.Identity.Name</a></li>
-                                <li>@Html.ActionLink("登出", "Logout", "Users", new { area = "" }, new { @class = "nav-link" })</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
             }
-            <!-- Main Content -->
-            <div id="content" class="mx-4">
+          
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column  @(isLoginPage ? "w-100" : "content-wrapper")">
 
-                @*Topbar*@
+                @if (!isLoginPage && User.Identity.IsAuthenticated)
+                {
+                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                        @*Topbar Navbar*@
+                        <ul class="navbar-nav ml-auto">
+                            @*Nav Item - User Information*@
+                            <li class="nav-item dropdown no-arrow">
+                                <ul class="navbar-nav flex-grow-1">
+                                    <li><a href="~/Users/EditProfile" class="nav-link"><video src="~/Content/Images/user-icon.mp4" autoplay loop muted playsinline style="width: 50px; margin-right: 10px;"></video>&nbsp;&nbsp;@User.Identity.Name</a></li>
+                                    <li>@Html.ActionLink("登出", "Logout", "Users", new { area = "" }, new { @class = "nav-link" })</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                }
+                <!-- Main Content -->
+                <div id="content" class="mx-4">
+
+                    @*Topbar*@
 
 
 
-                <!-- End of Topbar -->
-                <!-- Begin Page Content -->
-                @RenderBody()
-                <!-- /.container-fluid -->
-                <!-- Footer -->
+                    <!-- End of Topbar -->
+                    <!-- Begin Page Content -->
+                    @RenderBody()
+                    <!-- /.container-fluid -->
+                    <!-- Footer -->
 
+                </div>
+                <!-- End of Main Content -->
+                <!-- End of Footer -->
             </div>
-            <!-- End of Main Content -->
-           
-            <!-- End of Footer -->
-        </div>
-                <!-- End of Content Wrapper -->
+            <!-- End of Content Wrapper -->
 
-</div>
+        </div>
 
 
 
