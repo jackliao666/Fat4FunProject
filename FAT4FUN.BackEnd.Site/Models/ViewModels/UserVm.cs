@@ -1,7 +1,10 @@
-﻿using System;
+﻿using FAT4FUN.BackEnd.Site.Models.EFModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Resources;
+using System.Security.Cryptography;
 using System.Web;
 
 namespace FAT4FUN.BackEnd.Site.Models.ViewModels
@@ -31,7 +34,10 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
         public bool Status { get; set; }
 
         [Display(Name = "權限")]
-        public IEnumerable<int> Roles { get; set; }
+        public IEnumerable<string> Roles { get; set; }
+
+       
+
 
 
     }

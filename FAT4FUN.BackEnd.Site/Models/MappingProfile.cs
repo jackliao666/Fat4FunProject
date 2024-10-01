@@ -49,6 +49,8 @@ namespace FAT4FUN.BackEnd.Site.Models
 
             CreateMap<UserCheckDto, UserVm>();
 
+            CreateMap<UserVm, User>().ReverseMap();
+
         }
     }
 }

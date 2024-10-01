@@ -207,6 +207,7 @@
     <Compile Include="Models\EFModels\ProductCategory.cs" />
     <Compile Include="Models\EFModels\ProductSku.cs" />
     <Compile Include="Models\EFModels\Role.cs" />
+    <Compile Include="Models\EFModels\RolesString.cs" />
     <Compile Include="Models\EFModels\SkuItem.cs" />
     <Compile Include="Models\EFModels\sysdiagram.cs" />
     <Compile Include="Models\EFModels\User.cs" />
