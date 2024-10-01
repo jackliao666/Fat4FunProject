@@ -22,6 +22,7 @@ namespace FAT4FUN.BackEnd.Site.Models.EFModels
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductSku> ProductSkus { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<RolesString> RolesStrings { get; set; }
         public virtual DbSet<SkuItem> SkuItems { get; set; }
         public virtual DbSet<User> Users { get; set; }
 

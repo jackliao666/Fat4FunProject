@@ -133,7 +133,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                     //FormsAuthentication.SetAuthCookie(vm.Account, true);
 
                     // 登入成功後的重定向
-                    return RedirectToAction("EditProfile", "Users");
+                    return RedirectToAction("Index", "Home");
 
                 }
                 else
@@ -202,24 +202,60 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         }
 
-        public ActionResult UserEditStatus(int userId, bool status)
+        [HttpPost]
+        public JsonResult ToggleUserStatus(int id, bool status)
         {
-            var service = new UserService();
-            var updatedUsers = service.UpdateUserStatus(userId, status);
-
-            return View("UserCheck", updatedUsers);
-
-
+            try
+            {
+                var service = new UserService();
+                service.UpdateUserStatus(id, status); // 使用你定義好的服務方法來更新狀態
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // 可以記錄錯誤訊息
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
+        [MyAuthorize(Functions ="0,4")]
         public ActionResult UserCheck()     
         {
             var service = new UserService();
             var users = service.GetAllUser();
+
+            var roles = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "0", Text = "Admin" },
+        new SelectListItem { Value = "1", Text = "Manager" },
+        new SelectListItem { Value = "2", Text = "Designer" },
+        new SelectListItem { Value = "3", Text = "Sales" },
+        new SelectListItem { Value = "4", Text = "Human Resources" },
+        new SelectListItem { Value = "5", Text = "Members" }
+    };
+
+           
+
+            // 將最終的角色列表傳遞到 ViewBag
+            ViewBag.Roles = roles;
+
             return View(users);
         }
 
-
+        public JsonResult UpdateUserRole(int id, int newRole)
+        {
+            try
+            {
+                var service = new UserService();
+                service.UpdateUserRole(id, newRole); // 調用服務方法更新使用者的角色
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // 記錄錯誤訊息
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
 
 
 

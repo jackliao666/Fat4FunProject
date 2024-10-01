@@ -1,105 +1,188 @@
 ﻿@model FAT4FUN.BackEnd.Site.Models.ViewModels.ImageVm
 
-<h2>圖片管理</h2>
+<h2 class="text-center my-4">圖片管理</h2>
 
+<style>
+    /* 設置圖片容器為grid布局 */
+    #imageContainer {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-gap: 20px; /* 調整圖片間距 */
+        padding: 10px;
+    }
 
+    /* 固定圖片容器的大小，並增加一些視覺效果 */
+    .image-wrapper {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
 
-<div>
+        /* 當鼠標懸停時，圖片容器放大 */
+        .image-wrapper:hover {
+            transform: scale(1.05); /* 放大圖片效果 */
+        }
+
+        /* 使圖片自適應容器 */
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+    /* 調整上傳表單 */
+    .upload-form {
+        margin-top: 30px;
+    }
+
+        .upload-form input[type="file"],
+        .upload-form input[type="number"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+    .btn-upload {
+        background-color: #007bff;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-upload:hover {
+            background-color: #0056b3; /* 修改按鈕懸停效果 */
+        }
+
+    .product-image {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+    .custom-select {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .image-index {
+        position: absolute;
+        top: 10px; /* 控制数字的垂直位置 */
+        left: 10px; /* 控制数字的水平位置 */
+        color: white; /* 数字颜色 */
+        font-weight: bold; /* 字体加粗 */
+        background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+        padding: 2px 5px; /* 内边距 */
+        border-radius: 5px; /* 圆角 */
+        z-index: 1; /* 确保数字在上层 */
+        opacity: 1; /* 確保數字保持可見 */
+    }
+    /* 隱藏預設的檔案選擇按鈕 */
+    input[type="file"] {
+        display: none;
+    }
+
+    /* 自訂檔案選擇按鈕樣式 */
+    .custom-file-upload {
+        display: inline-block;
+        padding: 10px 20px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border-radius: 20px;
+        transition: background-color 0.3s ease;
+        border: none;
+    }
+
+        .custom-file-upload:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container">
     <!-- 產品下拉選單 -->
-    <select id="productSelect">
-        @foreach (var product in Model.Products)
-        {
-            <option value="@product.Value">@product.Text</option>
-        }
-    </select>
-</div>
-
-
-<!-- 圖片顯示區域 -->
-<div id="imageContainer">
-    @foreach (var image in Model.Images)
-    {
-        <img src="@Url.Content(image.Path)" alt="Image for product @Model.SelectedProductId" class="product-image" />
-    }
-</div>
-
-
-<!-- 產品選擇 -->
-@*<form id="productForm" method="get" action="@Url.Action("Index", "Images")">
-    <label for="productSelect">选择产品：</label>
-    <select id="productSelect" name="productId" onchange="this.form.submit();">
-        @foreach (var product in Model.Products)
-        {
-            <option value="@product.Value" @(Model.SelectedProductId == int.Parse(product.Value) ? "selected" : "")>
-                @product.Text
-            </option>
-        }
-    </select>
-</form>*@
-
-<!-- 圖片列表展示 -->
-@*<h3>產品圖片</h3>
-<div id="imageList">
-    @if (Model.Images != null && Model.Images.Any())
-    {
-        <ul>
-            @foreach (var image in Model.Images)
+    <div class="form-group">
+        <label for="productSelect">選擇產品</label>
+        <select id="productSelect" class="form-control custom-select">
+            @foreach (var product in Model.Products)
             {
-                <li>
-                    <img src="@image.Path" alt="Product Image" style="width:100px;height:100px;" />
-                    <p>排序：@image.Sort</p>
-                    
-                </li>
+                <option value="@product.Value">@product.Text</option>
             }
-        </ul>
-    }
-    else
-    {
-        <p>沒有圖片可顯示。</p>
-    }
-</div>*@
+        </select>
+    </div>
 
-<!-- 圖片上傳 -->
-<h3>上傳新圖片</h3>
-<form id="uploadForm" enctype="multipart/form-data">
-    <input type="hidden" id="productId" name="productId" value="@Model.SelectedProductId" />
-    <input type="number" id="sort" name="sort" placeholder="排序" />
-    <input type="file" id="file" name="file" />
-    <button type="submit">上傳圖片</button>
-</form>
+    <!-- 圖片顯示區域 -->
+    <div id="imageContainer">
+        @foreach (var image in Model.Images.Select((img, index) => new { img, index }))
+        {
+            <div class="image-wrapper">
+                <img src="@Url.Content(image.img.Path)" alt="Image for product @Model.SelectedProductId" class="product-image" />
+                <div class="image-index">@image.index</div> <!-- 添加索引数字 -->
+            </div>
+        }
+    </div>
 
-<!-- 使用 jQuery 處理上傳 -->
-@section scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
+
+<div class="upload-form">
+    <h3>上傳新圖片</h3>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="hidden" id="productId" name="productId" value="@Model.SelectedProductId" />
+
+        <input type="number" id="sort" name="sort" class="form-control" placeholder="請輸入0,1,2" min="0" max="2" step="1" required oninput="this.value = Math.max(0, Math.min(2, this.value))" />
+
+        <!-- 自訂檔案選擇按鈕 -->
+        <label for="file" class="custom-file-upload">選擇檔案</label>
+        <input type="file" id="file" name="file" class="form-control-file" required />
+
+        <!-- 顯示檔名的元素 -->
+        <span id="fileName" class="mt-2"></span>
+
+        <!-- 按鈕容器 -->
+        <div class="button-container mt-3" style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-upload">上傳圖片</button>
+        </div>
+    </form>
+</div>
+    </div>
+    
+
+    <!-- 使用 jQuery 處理上傳 -->
+    @section scripts {
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript">
     $(document).ready(function () {
-    // 從 localStorage 中讀取選中的 productId
-    var selectedProductId = localStorage.getItem('selectedProductId');
+        // 從 localStorage 中讀取選中的 productId
+        var selectedProductId = localStorage.getItem('selectedProductId');
 
-    if (selectedProductId) {
-        $('#productSelect').val(selectedProductId); // 設置選中項
-        $('#productId').val(selectedProductId); // 更新隱藏字段
+        if (selectedProductId) {
+            $('#productSelect').val(selectedProductId); // 設置選中項
+            $('#productId').val(selectedProductId); // 更新隱藏字段
 
-        // 自動加載選中的產品的圖片
-        $.ajax({
-            url: '@Url.Action("GetProductImages", "Images")',
-            type: 'GET',
-            data: { productId: selectedProductId },
-            success: function (response) {
-                if (response.success) {
-                    $('#imageContainer').empty();
-                    response.images.forEach(function (image) {
-                        $('#imageContainer').append('<img src="' + image.Path + '" class="product-image" alt="Product Image" />');
-                    });
-                } else {
-                    alert(response.message);
+            // 自動加載選中的產品的圖片
+            $.ajax({
+                url: '@Url.Action("GetProductImages", "Images")',
+                type: 'GET',
+                data: { productId: selectedProductId },
+                success: function (response) {
+                    if (response.success) {
+                        $('#imageContainer').empty();
+                        response.images.forEach(function (image) {
+                            $('#imageContainer').append('<div class="image-wrapper"><img src="' + image.Path + '" class="product-image" alt="Product Image" /></div>');
+                        });
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("無法加載圖片，請稍後再試。");
                 }
-            },
-            error: function () {
-                alert("無法加載圖片，請稍後再試。");
-            }
-        });
-    }
+            });
+        }
+
         $('#uploadForm').submit(function (e) {
             e.preventDefault(); // 阻止表單的默認提交行為
 
@@ -114,9 +197,7 @@
                 success: function (response) {
                     if (response.success) {
                         alert('圖片上傳成功，路徑為：' + response.path);
-
                         window.location.href = '@Url.Action("Index", "Images")' + '?productId=' + productId;
-                        /*location.reload();*/
                     } else {
                         alert('圖片上傳失敗：' + response.message);
                     }
@@ -126,31 +207,21 @@
                 }
             });
         });
-    });
-    </script>
 
-
-    <script type="text/javascript">
-    $(document).ready(function () {
-        // 當下拉框改變時，發送請求獲取對應產品的圖片
         $('#productSelect').change(function () {
             var productId = $(this).val();
             $('#productId').val(productId);
             localStorage.setItem('selectedProductId', productId);
 
-            // 發送 AJAX 請求
             $.ajax({
-                url: '@Url.Action("GetProductImages", "Images")', // 後端方法URL
+                url: '@Url.Action("GetProductImages", "Images")',
                 type: 'GET',
                 data: { productId: productId },
                 success: function (response) {
                     if (response.success) {
-                        // 清空舊的圖片
                         $('#imageContainer').empty();
-
-                        // 添加新的圖片
                         response.images.forEach(function (image) {
-                            $('#imageContainer').append('<img src="' + image.Path + '" class="product-image" alt="Product Image" />');
+                            $('#imageContainer').append('<div class="image-wrapper"><img src="' + image.Path + '" class="product-image" alt="Product Image" /></div>');
                         });
                     } else {
                         alert(response.message);
@@ -162,5 +233,16 @@
             });
         });
     });
-    </script>
-}
+
+        </script>
+        <script>
+            $(document).ready(function () {
+                // 監聽檔案選擇事件
+                $('#file').on('change', function () {
+                    var fileName = $(this).val().split('\\').pop(); // 取得檔名
+                    $('#fileName').text('檔名: ' + fileName); // 顯示檔名
+                });
+            });
+        </script>
+
+    }

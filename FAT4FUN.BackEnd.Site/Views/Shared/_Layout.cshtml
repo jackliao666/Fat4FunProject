@@ -37,150 +37,189 @@
     <link href="~/Content/NavFooter.css" rel="stylesheet" />
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
-</head>
+    <style>
 
-<body id="page-top">
-
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        @if (!isLoginPage && User.Identity.IsAuthenticated)
-        {
-            <!-- Sidebar -->
-            <ul class="navbar-nav  sidebar sidebar-dark accordion" style="color: #6a6e99" id="accordionSidebar">
-
-                <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Home/Index">
-
-                    <div class="sidebar-brand-text mx-3">Fat4Fun</div>
-                </a>
-
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
-
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProfile"
-                       aria-expanded="true" aria-controls="collapseProfile">
-                        <span>個人資訊</span>
-                    </a>
-                    <div id="collapseProfile" class="collapse" aria-labelledby="headingProfile" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="/Users/EditProfile">修改個資</a>
-                            <a class="collapse-item" href="/Users/ChangePassword">變更密碼</a>
-                        </div>
-                    </div>
-                </li>
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
-
-
-
-
-                <!-- Heading -->
-                <div class="sidebar-heading">
-
-                </div>
-
-
-
-                <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmployee"
-                       aria-expanded="true" aria-controls="collapseEmployee">
-                        <span>員工管理</span>
-                    </a>
-                    <div id="collapseEmployee" class="collapse" aria-labelledby="headingEmployee" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="/Users/Register">帳戶創建</a>
-                            <a class="collapse-item" href="/Users/UserCheck">員工資料</a>
-                        </div>
-                    </div>
-                </li>
-
-
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-
-                <!-- Nav Item - Utilities Collapse Menu -->
-
-
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                       aria-expanded="true" aria-controls="collapseUtilities">
-                        @*<i class="fas fa-fw fa-wrench"></i>*@
-                        <span>商品管理</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                         data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-
-                            <a class="collapse-item" href="/Products/Index">產品資訊</a>
-                            <a class="collapse-item" href="/ProductCategories/Index">商品類別管理</a>
-                            <a class="collapse-item" href="/Images/Index">圖片管理</a>
-                            <a class="collapse-item" href="/ProductSkus/Index">規格管理</a>
-                            <a class="collapse-item" href="/Brands/Index">品牌管理</a>
-                        </div>
-                    </div>
-                </li>
-
-
-
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-
-                <!-- Nav Item - Dashboard -->
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.html">
-
-                        <span>會員管理</span>
-                    </a>
-                </li>
-
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-
-                <!-- Heading -->
-                <div class="sidebar-heading">
-
-                </div>
-
-                <!-- Nav Item - Tables -->
-                <li class="nav-item">
-                    <a class="nav-link" href="tables.html">
-                        @*<i class="fas fa-fw fa-table"></i>*@
-                        <span>訂單管理</span>
-                    </a>
-                </li>
-
-                <!-- Divider -->
-                <hr class="sidebar-divider d-none d-md-block">
-
-
-
-
-
-                <!-- Sidebar Toggler (Sidebar) -->
-                <!--<div class="text-center d-none d-md-inline">
-                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
-                </div>-->
-
-
-
-
-
-            </ul>
-            <!-- End of Sidebar -->
+        .fixed-sidebar {
+            position: fixed;
+            height: 100vh; /* 使菜单高度占据整个视口高度 */
+            width: 250px; /* 设置菜单宽度 */
+            top: 0; /* 固定在顶部 */
+            left: 0; /* 固定在左侧 */
+            background-color: #343a40; /* 根据您设计的样式，可以修改菜单背景颜色 */
         }
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        #wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* 设置最小高度为 100% 视窗高度 */
+            max-width: 86vw; /* 设置最大宽度为 100% 视窗宽度 */
+        }
 
-            <!-- Main Content -->
-            <div id="content">
+        .content-wrapper {
+            margin-left: 224px; /* 调整主内容区域的左侧边距，避免被菜单遮挡 */
+            flex-grow: 1; /* 自动占据剩余空间 */
+            display: flex;
+            flex-direction: column; /* 确保内容从上到下排列 */
+            justify-content: space-between; /* 让内容撑满高度 */
+            min-height: calc(100vh - 56px); /* 确保最小高度占满全屏 */
+        }
+        .w-100 {
+            margin: 0; /* 确保内容区域没有多余的外边距 */
+            padding: 0; /* 确保内容区域没有多余的内边距 */
+            width: 100%; /* 占满全宽 */
+            height: 100vh; /* 占满全高 */
+        }
 
-                @*Topbar*@
+        body, html, #page-top {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* 确保所有容器高度为 100% */
+        }
+        #page-top {
+            width: 100%; /* 确保页面顶层容器宽度为 100% */
+            overflow-x: hidden; /* 禁止水平方向上的滚动条 */
+            background-color: #f8f9fc; /* 设置背景色，可以根据需要修改 */
+
+        }
+        
+    </style>
+</head>
+    
+    <body id="page-top">
+
+
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+
+            @if (!isLoginPage && User.Identity.IsAuthenticated)
+            {
+                <!-- Sidebar -->
+                <ul class="navbar-nav  sidebar sidebar-dark accordion fixed-sidebar" style="color: #6a6e99" id="accordionSidebar">
+                    @*<ul class="navbar-nav sidebar sidebar-dark accordion position-fixed" style="color: #6a6e99; " id="accordionSidebar">*@
+                    <!-- Sidebar - Brand -->
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Home/Index">
+                        <img src="~/Images/LOGO.jpg" alt="Fat4Fun Logo" style="width: 65px; height: 65px; margin-right: 10px;">
+                        <div class="sidebar-brand-text mx-3">Fat4Fun</div>
+                    </a>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
+
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProfile"
+                           aria-expanded="true" aria-controls="collapseProfile">
+                            <span>個人資訊</span>
+                        </a>
+                        <div id="collapseProfile" class="collapse" aria-labelledby="headingProfile" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="/Users/EditProfile">修改個資</a>
+                                <a class="collapse-item" href="/Users/ChangePassword">變更密碼</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
+
+
+
+
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+
+                    </div>
+
+
+
+                    <!-- Nav Item - Pages Collapse Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmployee"
+                           aria-expanded="true" aria-controls="collapseEmployee">
+                            <span>員工管理</span>
+                        </a>
+                        <div id="collapseEmployee" class="collapse" aria-labelledby="headingEmployee" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="/Users/Register">帳戶創建</a>
+                                <a class="collapse-item" href="/Users/UserCheck">員工資料</a>
+                            </div>
+                        </div>
+                    </li>
+
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+
+                    <!-- Nav Item - Utilities Collapse Menu -->
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                           aria-expanded="true" aria-controls="collapseUtilities">
+                            @*<i class="fas fa-fw fa-wrench"></i>*@
+                            <span>商品管理</span>
+                        </a>
+                        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+
+                                <a class="collapse-item" href="/Products/Index">產品資訊</a>
+                                <a class="collapse-item" href="/ProductCategories/Index">商品類別管理</a>
+                                <a class="collapse-item" href="/Images/Index">圖片管理</a>
+                                <a class="collapse-item" href="/ProductSkus/Index">規格管理</a>
+                                <a class="collapse-item" href="/Brands/Index">品牌管理</a>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+
+                    <!-- Nav Item - Dashboard -->
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">
+
+                            <span>會員管理</span>
+                        </a>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+
+                    </div>
+
+                    <!-- Nav Item - Tables -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="tables.html">
+                            @*<i class="fas fa-fw fa-table"></i>*@
+                            <span>訂單管理</span>
+                        </a>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider d-none d-md-block">
+
+
+
+
+
+                    <!-- Sidebar Toggler (Sidebar) -->
+                    <!--<div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>-->
+
+
+
+
+
+                </ul>
+                <!-- End of Sidebar -->
+            }
+          
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column  @(isLoginPage ? "w-100" : "content-wrapper")">
 
                 @if (!isLoginPage && User.Identity.IsAuthenticated)
                 {
@@ -198,87 +237,37 @@
                         </ul>
                     </nav>
                 }
+                <!-- Main Content -->
+                <div id="content" class="mx-4">
+
+                    @*Topbar*@
 
 
 
+                    <!-- End of Topbar -->
+                    <!-- Begin Page Content -->
+                    @RenderBody()
+                    <!-- /.container-fluid -->
+                    <!-- Footer -->
 
-
-                <!-- End of Topbar -->
-                <!-- Begin Page Content -->
-                @RenderBody()
-                <!-- /.container-fluid -->
-                <!-- Footer -->
-
-
-
-
-
-            </div>
-            <!-- End of Main Content -->
-            <footer>
-                <div class="container">
-                    <div class="row d-flex justify-content-between align-items-start">
-                        <!-- 公司資訊 -->
-                        <div class="col-md-4 text-center">
-                            <h5>關於我們</h5>
-                            <p>
-                                Fat4Fun 是一家致力於提供高性能電競設備的公司
-                                <br />專注於滿足玩家的需求。
-                            </p>
-                        </div>
-
-                        <!-- 聯絡我們 -->
-                        <div class="col-md-4 text-center mx-auto">
-                            <h5>聯絡我們</h5>
-                            <p class="text-center">
-                                Email: support@fat4fun.com <br />
-                                電話: +886 1234-5678
-                            </p>
-                        </div>
-
-                        <!-- 社交媒體 -->
-                        <div class="col-md-4 text-center">
-                            <h5>關注我們</h5>
-                            <div class="social-icons">
-                                <a href="https://www.facebook.com/profile.php?id=100009114848126"
-                                   class="text-white">
-                                    <i class="bi bi-facebook"></i>
-                                </a>
-                                <a href="https://www.instagram.com/liaohongming/"
-                                   class="text-white">
-                                    <i class="bi bi-instagram"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 底部聲明 -->
-                    <div class="row mt-4 bottom-info">
-                        <div class="col text-center">
-                            <p class="mb-0">
-                                Fat4Fun &copy; 2024. All rights reserved.
-                                <a href="#">隱私政策</a> | <a href="#">服務條款</a>
-                            </p>
-                        </div>
-                    </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
+                <!-- End of Main Content -->
+                <!-- End of Footer -->
+            </div>
+            <!-- End of Content Wrapper -->
+
         </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
 
 
 
-    <!-- End of Page Wrapper -->
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+        <!-- End of Page Wrapper -->
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
 
-    <!-- Logout Modal-->
-    <!--<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <!-- Logout Modal-->
+        <!--<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -296,23 +285,23 @@
             </div>
         </div>
     </div>-->
-    <!-- Bootstrap core JavaScript-->
-    <script src="~/Scripts/vendor/jquery/jquery.min.js"></script>
-    <script src="~/Scripts/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="~/Scripts/vendor/jquery/jquery.min.js"></script>
+        <script src="~/Scripts/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="~/Scripts/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="~/Scripts/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="~/Scripts/js/sb-admin-2.min.js"></script>
-
-
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="~/Scripts/js/sb-admin-2.min.js"></script>
 
 
-    @RenderSection("scripts", required: false)
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
-</body>
+
+        @RenderSection("scripts", required: false)
+
+    </body>
 
 </html>
