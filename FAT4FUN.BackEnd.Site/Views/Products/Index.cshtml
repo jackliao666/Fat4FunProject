@@ -13,8 +13,8 @@
     }
 
         .table th:nth-child(1), .table td:nth-child(1) {
-            width: 8%; /* 适当增加宽度，确保文字不会换行 */
-            white-space: nowrap; /* 禁止文字换行 */
+            width: 8%;
+            white-space: nowrap;
         }
 
         .table th:nth-child(2), .table td:nth-child(2) {
@@ -64,19 +64,16 @@
     .small-input {
         width: 150px; /* 根據需求調整這個數值 */
     }
-</style>
-<h2>產品資訊</h2>
 
-<!-- 上下架篩選功能 -->
-<label for="statusFilter" class="mr-2">顯示商品狀態：</label>
-<div class="form-inline mb-3">
-    <select id="statusFilter" class="form-control form-control-sm">
-        <option value="true" selected>啟用</option>
-        <option value="false">不啟用</option>
-    </select>
-</div>
-<form method="get" action="@Url.Action("Index")">
-    <div class="form-inline mb-3">
+    h2 {
+        text-align: center;
+    }
+</style>
+<h2 class="mb-5">產品資訊</h2>
+
+
+<!--<form method="get" action="@Url.Action("Index")">
+    <div class="form-inline mt-3 mb-3">
         <label for="categoryName" class="mr-2">類別名稱：</label>
         <input type="text" id="categoryName" name="categoryName" class="form-control form-control-sm mr-2 small-input" />
 
@@ -84,7 +81,7 @@
         <input type="text" id="brandName" name="brandName" class="form-control form-control-sm mr-2 small-input" />
 
         <label for="productName" class="mr-2">產品名稱：</label>
-        <input type="text" id="productName" name="productName" class="form-control form-control-sm mr-2 small-input" />
+        <input type="text" id="productName" name="productName" class="form-control form-control-sm mr-2 small-input" />-->
 
         @*<label for="minPrice" class="mr-2">最低價格：</label>
             <input type="number" id="minPrice" name="minPrice" class="form-control form-control-sm mr-2 small-input" />
@@ -92,17 +89,62 @@
             <label for="maxPrice" class="mr-2">最高價格：</label>
             <input type="number" id="maxPrice" name="maxPrice" class="form-control form-control-sm mr-2 small-input" />*@
 
-        <button type="submit" class="btn btn-primary">篩選</button>
+        <!--<button type="submit" class="btn btn-primary">篩選</button>
     </div>
 
+   
+
+    <div class="form-inline mb-2 ">
+        <label for="statusFilter" class="mr-2 ">顯示商品狀態：</label>
+        <select id="statusFilter" class="form-control form-control-sm ">
+            <option value="true" selected>啟用</option>
+            <option value="false">不啟用</option>
+        </select>
+
+    </div>
+
+    <p>
+        @Html.ActionLink("新增商品", "Create", null, new { @class = "btn btn-primary mt-3 " })
+    </p>
+</form>-->
+
+
+<form method="get" action="@Url.Action("Index")">
+    <div class="d-flex flex-wrap align-items-center mb-3">
+        <div class="mr-3">
+            <label for="categoryName" class="mr-2">類別名稱：</label>
+            <input type="text" id="categoryName" name="categoryName" class="form-control form-control-sm small-input" />
+        </div>
+
+        <div class="mr-3">
+            <label for="brandName" class="mr-2">品牌名稱：</label>
+            <input type="text" id="brandName" name="brandName" class="form-control form-control-sm small-input" />
+        </div>
+
+        <div class="mr-3">
+            <label for="productName" class="mr-2">產品名稱：</label>
+            <input type="text" id="productName" name="productName" class="form-control form-control-sm small-input" />
+        </div>
+
+        <div class="mr-3">
+            <label for="statusFilter" class="mr-2">顯示商品狀態：</label>
+            <select id="statusFilter" name="statusFilter" class="form-control form-control-sm">
+                <option value="true" selected>啟用</option>
+                <option value="false">不啟用</option>
+            </select>
+        </div>
+
+        <div class="mr-3 mt-4">
+            <button type="submit" class="btn btn-primary">篩選</button>
+        </div>
+
+        <div class="ml-auto">
+            @Html.ActionLink("新增商品", "Create", null, new { @class = "btn btn-primary mt-4" })
+        </div>
+    </div>
 </form>
 
 
-
-
-<p>
-    @Html.ActionLink("新增商品", "Create", null, new { @class = "btn btn-primary mb-3" })
-</p>
 <table class="table table-bordered table-striped" id="productTable">
     <thead class="table-dark">
         <tr>
@@ -143,13 +185,13 @@
                 <td>
                     @foreach (var sku in item.ProductSkus)
                     {
-                        <p>@sku.Price</p>
+                        @sku.Price.ToString("N0")
                     }
                 </td>
                 <td>
                     @foreach (var sku in item.ProductSkus)
                     {
-                        <p>@sku.Sale</p>
+                        @sku.Sale.ToString("N0")
                     }
                 </td>
                 <td>

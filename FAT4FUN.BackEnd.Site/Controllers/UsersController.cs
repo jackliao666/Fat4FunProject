@@ -133,7 +133,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                     //FormsAuthentication.SetAuthCookie(vm.Account, true);
 
                     // 登入成功後的重定向
-                    return RedirectToAction("EditProfile", "Users");
+                    return RedirectToAction("Index", "Home");
 
                 }
                 else

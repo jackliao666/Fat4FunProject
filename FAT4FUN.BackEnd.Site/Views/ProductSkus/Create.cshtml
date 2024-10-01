@@ -1,13 +1,19 @@
 ﻿@model FAT4FUN.BackEnd.Site.Models.ViewModels.Product2Vm
 
-@{
+@*@{
     ViewBag.Title = "新增商品規格";
-}
+}*@
 
 <style>
     .small-input {
         width: 300px; /* 調整輸入框寬度 */
     }
+
+   
+    h2 {
+        text-align: center;
+    }
+
 </style>
 
 <h2 class="my-4">新增商品規格</h2>
@@ -17,7 +23,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        @*<h4>商品規格資訊</h4>*@
+        <h4>商品規格資訊</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
