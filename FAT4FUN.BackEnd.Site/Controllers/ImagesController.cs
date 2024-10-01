@@ -87,19 +87,27 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             {
                 try
                 {
-                    // 定義前台專案的絕對路徑
+                    // 前台專案的絕對路徑
                     string frontEndImagePath = @"C:\Users\Jack\Desktop\finalproject\Fat4FunProject\FAT4FUN.FrontEnd.Site\Images\";
 
+                    // 後台專案的相對路徑
                     string backEndImagePath = Server.MapPath("~/Images/");
 
+                    // 确保目录存在，如果不存在则创建
                     if (!Directory.Exists(frontEndImagePath))
                     {
                         Directory.CreateDirectory(frontEndImagePath);
                     }
+                    if (!Directory.Exists(backEndImagePath))
+                    {
+                        Directory.CreateDirectory(backEndImagePath);
+                    }
 
-                    // 生成檔名，防止重名覆蓋
-                    string fileName = Path.GetFileName(file.FileName);
-                    string fullPath = Path.Combine(frontEndImagePath, fileName);
+                    // 生成唯一檔名，防止重名覆蓋
+                    string fileExtension = Path.GetExtension(file.FileName);
+                    string uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                    string frontEndFullPath = Path.Combine(frontEndImagePath, uniqueFileName);
+                    string backEndFullPath = Path.Combine(backEndImagePath, uniqueFileName);
 
                     // 查找是否已經有相同 ProductId 和 Sort 的圖片記錄
                     var existingImage = _db.Images.FirstOrDefault(i => i.ProductId == productId && i.Sort == sort);
@@ -114,7 +122,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                         }
 
                         // 更新資料庫中的路徑
-                        existingImage.Path = "/Images/" + fileName;
+                        existingImage.Path = "/Images/" + uniqueFileName;
                         existingImage.CreateDate = DateTime.Now; // 更新創建時間
                         _db.SaveChanges();
                     }
@@ -124,7 +132,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                         var newImageRecord = new Image
                         {
                             ProductId = productId,
-                            Path = "/Images/" + fileName,
+                            Path = "/Images/" + uniqueFileName,
                             Sort = sort,
                             CreateDate = DateTime.Now
                         };
@@ -132,11 +140,12 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                         _db.SaveChanges();
                     }
 
-                    // 保存新圖片到前台 Images 目錄
-                    file.SaveAs(fullPath);
+                    // 保存新圖片到前台和後台 Images 目錄
+                    file.SaveAs(frontEndFullPath);  // 保存到前台
+                    file.SaveAs(backEndFullPath);   // 保存到後台
 
                     // 返回成功響應，附帶圖片路徑
-                    return Json(new { success = true, path = "/Images/" + fileName });
+                    return Json(new { success = true, path = "/Images/" + uniqueFileName });
                 }
                 catch (Exception ex)
                 {
@@ -145,7 +154,5 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             }
             return Json(new { success = false, message = "未上傳檔案。" });
         }
-
-
     }
 }

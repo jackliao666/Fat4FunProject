@@ -25,6 +25,12 @@
         min-width: 100%;
         text-align: center;
     }
+
+   
+    h2 {
+        text-align: center;
+    }
+
 </style>
 <h2>規格資訊</h2>
 
@@ -116,19 +122,25 @@
                 var priceDisplay = document.getElementById('price-display-' + productId);
 
                 if (priceDisplay) {
-                    priceDisplay.textContent = selectedOption.getAttribute('data-price') || '--';
+                    var initialPrice = selectedOption.getAttribute('data-price') || '--';
+                    priceDisplay.textContent = formatPrice(initialPrice);
                 }
 
                 // 當選擇規格時，更新價格顯示
                 select.addEventListener('change', function () {
                     var selectedOption = this.options[this.selectedIndex];
-                    var price = selectedOption.getAttribute('data-price');
+                    var price = selectedOption.getAttribute('data-price') || '--';
 
                     if (priceDisplay) {
-                        priceDisplay.textContent = price || '--';
+                        priceDisplay.textContent = formatPrice(price);
                     }
                 });
             });
         });
+        // 格式化價格為千分位格式
+        function formatPrice(price) {
+            if (price === '--') return price;
+            return parseInt(price, 10).toLocaleString(); // 將數字轉換為千分位格式
+        }
     </script>
 }

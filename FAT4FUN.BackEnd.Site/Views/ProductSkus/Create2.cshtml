@@ -1,49 +1,62 @@
 ﻿@model FAT4FUN.BackEnd.Site.Models.ViewModels.Product2Vm
 
 @{
-    ViewBag.Title = "Create2";
+    ViewBag.Title = "新增商品規格";
 }
 
-<h2>Create2</h2>
+<style>
+    .small-input {
+        width: 300px; /* 調整輸入框寬度 */
+    }
+    h2 {
+        text-align: center;
+    }
 
+</style>
 
-@using (Html.BeginForm()) 
+<h2 class="my-4">新增商品規格</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>Product2Vm</h4>
-    <hr />
-    <!-- 綁定key值 -->
-    @Html.HiddenFor(model => model.Key, new { Value = "cpu/harddrive/memory/gpu" })
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <h4>商品規格資訊</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <!-- 綁定key值 -->
+        @Html.HiddenFor(model => model.Key, new { Value = "cpu/harddrive/memory/gpu" })
+
+        <!-- 規格描述 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">規格描述</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入規格描述" } })
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 價格 -->
+        <div class="form-group row">
+            <label class="control-label col-md-2 col-form-label">價格</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入價格" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 保存按鈕 -->
+        <div class="form-group row">
+            <div class="col-md-10 offset-md-2">
+                <input type="submit" value="新增" class="btn btn-primary" />
+                @Html.ActionLink("返回列表", "Index", null, new { @class = "btn btn-secondary ml-2" })
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
