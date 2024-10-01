@@ -22,7 +22,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Interfaces
         User GetUserById(int id);
         bool GetStatus(string account);
         void UpdateUserStatus(int userId, bool newStatus);
-       
+        void UpdateUserRole(int id, int newRole);
     }
 
 }

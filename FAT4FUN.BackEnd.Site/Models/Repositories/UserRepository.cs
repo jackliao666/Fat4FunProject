@@ -207,6 +207,20 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
             }
         }
 
-        
+        public void UpdateUserRole(int id, int newRole)
+        {
+            var userRole = _db.Roles.FirstOrDefault(r => r.UserId == id);
+            if (userRole != null)
+            {
+                userRole.Role1 = newRole;
+            }
+            else
+            {
+                // 如果該使用者沒有角色，則新增
+                _db.Roles.Add(new Role { UserId = id, Role1 = newRole });
+            }
+
+            _db.SaveChanges();
+        }
     }
 }

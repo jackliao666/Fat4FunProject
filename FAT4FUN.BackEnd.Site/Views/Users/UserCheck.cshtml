@@ -53,7 +53,7 @@
 
 
 
-<h2>UserCheck</h2>
+<h2>員工狀態</h2>
 
 <!-- 上下架篩選功能 -->
 <label for="statusFilter" class="mr-2">顯示帳號狀態：</label>
@@ -114,7 +114,16 @@
                     @Html.DisplayFor(modelItem => item.Address)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Roles)
+                    <!-- 下拉選單 -->
+                    <select class="form-control role-dropdown" data-id="@item.Id">
+                        <option selected disabled>請選擇權限</option>
+                        @foreach (var role in ViewBag.Roles as List<SelectListItem>)
+                        {
+                            <option value="@role.Value">@role.Text</option>
+                        }
+                    </select>
+                    <!-- 當前權限顯示 -->
+                    <p class="mt-2 current-role">目前權限：@string.Join("、", item.Roles)</p>
                 </td>
 
                 <td>
@@ -172,5 +181,36 @@ document.getElementById("statusFilter").addEventListener("change", function () {
                 }
             });
         });
+
+
+         // 處理角色下拉選單變更並更新當前權限顯示
+        $('.role-dropdown').change(function () {
+            var userId = $(this).data('id');
+            var newRole = $(this).find("option:selected").text(); // 獲取選中的角色名稱
+
+            $.ajax({
+                url: '@Url.Action("UpdateUserRole", "Users")',
+                type: 'POST',
+                data: {
+                    id: userId,
+                    newRole: $(this).val()  // 傳遞角色值到後端更新
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // 更新當前權限顯示
+                        $(this).siblings(".current-role").text("目前權限：" + newRole);
+                        alert("角色更新成功");
+                    } else {
+                        alert("角色更新失敗：" + response.message);
+                    }
+                }.bind(this),  // 確保 `this` 在成功回調中仍指向正確的元素
+                error: function () {
+                    alert("發生錯誤，請稍後再試");
+                }
+            });
+        });
+
+
+
     </script>
 }

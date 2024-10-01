@@ -177,7 +177,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
                             // 可以在這裡將 roleString 轉換為對應的角色 ID 或者其他需要的內容
                             // 如果 roleString 是數字型，可以解析它，否則你可以設計一個邏輯來處理
                             // 假設你是想把 RoleString 的數字轉成角色 ID 或類似：
-                            updatedRoles.Add(roleString+"、");
+                            updatedRoles.Add(roleString+" ");
                         }
 
                     }
@@ -216,6 +216,13 @@ namespace FAT4FUN.BackEnd.Site.Models.Services
         public void UpdateUserStatus(int id, bool status)
         {
             _repo.UpdateUserStatus(id, status);
+        }
+
+        internal void UpdateUserRole(int id, int newRole)
+        {
+           
+
+            _repo.UpdateUserRole(id, newRole);
         }
     }
 }
