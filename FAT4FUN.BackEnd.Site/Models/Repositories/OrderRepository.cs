@@ -1,10 +1,12 @@
-﻿using FAT4FUN.BackEnd.Site.Models.Dtos;
+﻿using AutoMapper;
+using FAT4FUN.BackEnd.Site.Models.Dtos;
 using FAT4FUN.BackEnd.Site.Models.EFModels;
 using FAT4FUN.BackEnd.Site.Models.Interfaces;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 
 namespace FAT4FUN.BackEnd.Site.Models.Repositories
@@ -49,6 +51,26 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                 }).ToList();
 
             return order;
+        }
+
+        public OrderDto Get(int id)
+        {
+            var order = _db.Orders
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Id == id);
+            if (order == null) return null;
+
+            return WebApiApplication._mapper.Map<OrderDto>(order);
+        }
+
+        public void Update(OrderDto dto)
+        {
+            Order order = WebApiApplication._mapper.Map<Order>(dto);
+
+            //更新 order 到 db
+
+            _db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            _db.SaveChanges();
         }
     }
 }

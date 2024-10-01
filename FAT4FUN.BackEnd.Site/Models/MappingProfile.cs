@@ -36,6 +36,10 @@ namespace FAT4FUN.BackEnd.Site.Models
             CreateMap<OrderVm, OrderDto>().ReverseMap();
             CreateMap<OrderItemVM, OrderItemDto>().ReverseMap();
 
+            CreateMap<Order, OrderDto>().ReverseMap();
+            CreateMap<OrderItem, OrderItemDto>().ReverseMap();
+            CreateMap<OrderDto, EditOrderVm>().ReverseMap();
+            CreateMap<EditOrderVm, EditOrderDto>();
 
 
 

@@ -26,12 +26,18 @@ namespace FAT4FUN.BackEnd.Site.Models.ViewModels
         public int ShippingMethod { get; set; }
 
         [Display(Name = "收件人姓名")]
+        [Required(ErrorMessage = "請輸入{0}")]
+        [StringLength(50, ErrorMessage = "{0}長度不得大於50個字}")]
         public string RecipientName { get; set; }
 
         [Display(Name = "收件地址")]
+        [Required(ErrorMessage = "請輸入{0}")]
+        [StringLength(50, ErrorMessage = "{0}長度不得大於50個字}")]
         public string ShippingAddress { get; set; }
 
         [Display(Name = "聯絡電話")]
+        [Required(ErrorMessage = "請輸入{0}")]
+        [StringLength(10, ErrorMessage = "{0}長度不得大於10個字}")]
         public string Phone { get; set; }
 
         [Display(Name = "訂單狀態")]
