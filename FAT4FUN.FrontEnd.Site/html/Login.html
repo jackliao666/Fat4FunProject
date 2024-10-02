@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>會員登入</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          rel="stylesheet" />
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../Content/NavFooter.css" />
     <script src="../Scripts/vue.global.js"></script>
 
     <style>
-          body {
-              background: url("image/bgm-monkey.jpg") no-repeat center center fixed;
-              background-size: cover;
-              color: #ffffff;
-              margin: 0;
-              height: 100vh;
-              display: flex;
-              flex-direction: column;
-          }
+      body {
+        background: url("image/bgm-monkey.jpg") no-repeat center center fixed;
+        background-size: cover;
+        color: #ffffff;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-          /* .container {
+      /* .container {
           background-color: rgba(33, 33, 33, 0.8);
           border-radius: 8px;
           padding: 20px;
@@ -40,30 +49,30 @@
           flex-grow: 1;
         } */
 
-          .form-label {
-              color: #ffffff;
-          }
+      .form-label {
+        color: #ffffff;
+      }
 
-          .btn-primary {
-              background-color: #007bff;
-              border: none;
-              margin-top: 25px;
-              margin-bottom: 10px;
-          }
+      .btn-primary {
+        background-color: #007bff;
+        border: none;
+        margin-top: 25px;
+        margin-bottom: 10px;
+      }
 
-          .btn-link {
-              color: #ffffff;
-          }
+      .btn-link {
+        color: #ffffff;
+      }
 
-          h1 {
-              color: #ffffff;
-          }
+      h1 {
+        color: #ffffff;
+      }
 
-          .row {
-              height: 100%;
-          }
+      .row {
+        height: 100%;
+      }
     </style>
-</head>
+  </head>
   <body>
     <div id="app">
       <!-- nav start-->
@@ -83,31 +92,35 @@
         <div class="row justify-content-center">
           <div class="panel col-md-6 col-lg-4">
             <h1 class="text-center mb-4">會員登入</h1>
-            <form id="loginForm">
+            <form id="loginForm" @submit.prevent="login">
               <div class="mb-3">
                 <label for="name" class="form-label">帳號</label>
                 <input
                   type="text"
                   class="form-control"
                   id="name"
+                  v-model="account"
                   name="name"
                   required
                 />
               </div>
               <div class="mb-3">
-                <label for="phone" class="form-label">密碼</label>
+                <label for="password" class="form-label">密碼</label>
                 <input
-                  type="text"
+                  type="password"
                   class="form-control"
                   id="phone"
+                  v-model="password"
                   name="phone"
                   required
                 />
               </div>
               <button type="submit" class="btn btn-primary w-100">登入</button>
               <div class="d-flex justify-content-between mt-2">
-                  <a href="Sign up.html" class="btn btn-link">註冊</a>
-                  <a href="forget the password.html" class="btn btn-link">忘記密碼</a>
+                <a href="Sign up.html" class="btn btn-link">註冊</a>
+                <a href="forget the password.html" class="btn btn-link"
+                  >忘記密碼</a
+                >
               </div>
             </form>
           </div>
@@ -123,37 +136,154 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script type="module">
-      const app = Vue.createApp();
-        import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
-      // 创建 Vue 实例
-      const config = {
-        setup() {
-          return {};
+      import {
+        HeaderComponent,
+        FooterComponent,
+      } from "../Scripts/shared-components.js";
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            account: "", // 用戶輸入的帳號
+            password: "", // 用戶輸入的密碼
+          };
         },
-      };
+        methods: {
+          async login() {
+            try {
+              // 發送登入請求至 API
+              const response = await fetch("/api/MemberApi/Login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  Account: this.account,
+                  Password: this.password,
+                }),
+              });
 
-      // 注册 header 和 footer 组件
-      app.component("header-component", HeaderComponent);
-      app.component("footer-component", FooterComponent);
+              // 根據 API 回應處理登入結果
+              if (response.ok) {
+                const data = await response.json();
+                // const userData = {
+                //     id: data.id,
+                //     name: data.name,
+                //     account: data.account,
+                // };
+                // console.log("html", userData);
 
-      // 将 Vue 实例挂载到 #app
-      app.mount("#app");
-    </script>
-    <script>
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
+                localStorage.setItem("user", JSON.stringify(data));
 
-          // 這裡可以添加登入邏輯，例如驗證用戶名和密碼
-          var loginSuccessful = true;
+                Swal.fire({
+                  title: "登入成功",
+                  text: `歡迎 ${data.name}`,
+                  icon: "success",
+                  confirmButtonText: "確定",
+                }).then(() => {
+                  window.location.href = "index.html";
+                });
+              } else {
+                const errorText = await response.text();
 
-          if (loginSuccessful) {
-            alert("登入成功！");
-          } else {
-            alert("登入失敗，請檢查您的帳號或密碼。");
-          }
-        });
+                // 處理 "帳戶異常" 錯誤
+                if (errorText.includes("帳戶異常")) {
+                  Swal.fire({
+                    title: "登入失敗",
+                    text: errorText.replace(/"/g, ""), // 去掉所有的引號
+                    icon: "error",
+                    confirmButtonText: "確定",
+                  }).then(() => {
+                    window.location.href = "index.html";
+                  });
+                }
+                // 處理 "尚未開通" 錯誤
+                else if (errorText.includes("尚未開通")) {
+                  Swal.fire({
+                    title: "登入失敗",
+                    text: errorText.replace(/"/g, ""), // 去掉所有的引號
+                    icon: "error",
+                    confirmButtonText: "確定",
+                  });
+                }
+                // 處理帳號或密碼錯誤
+                else {
+                  Swal.fire({
+                    title: "登入失敗",
+                    text: "帳號或密碼不正確，請重新輸入",
+                    icon: "error",
+                    confirmButtonText: "確定",
+                  });
+                  this.account = "";
+                  this.password = "";
+                }
+              }
+            } catch (error) {
+              console.error("API 請求失敗:", error);
+              Swal.fire({
+                title: "系統錯誤",
+                text: "請稍後再試",
+                icon: "error",
+                confirmButtonText: "確定",
+              });
+            }
+          },
+          forgotPassword() {
+            // 忘記密碼功能
+            Swal.fire({
+              title: "請輸入您註冊時的信箱",
+              input: "email",
+              inputPlaceholder: "輸入您的信箱",
+              showCancelButton: true,
+              confirmButtonText: "確認",
+              cancelButtonText: "取消",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                const email = result.value;
+
+                // 發送請求到後端
+                fetch("/api/MemberApi/ForgotPassword", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ email: email }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.success) {
+                      Swal.fire({
+                        title: "已成功寄送",
+                        text: "修改密碼連結已發送至您的信箱",
+                        icon: "success",
+                        confirmButtonText: "確定",
+                      });
+                    } else {
+                      // 顯示錯誤提示框
+                      Swal.fire({
+                        title: "更新失敗: ",
+                        text: `${data.message}`,
+                        icon: "error",
+                        allowOutsideClick: false, // 禁止外部點擊關閉
+                      });
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error);
+                    Swal.fire({
+                      title: "發生錯誤",
+                      text: "請稍後再試",
+                      icon: "error",
+                      confirmButtonText: "確定",
+                    });
+                  });
+              }
+            });
+          },
+        },
+      })
+        .component("header-component", HeaderComponent)
+        .component("footer-component", FooterComponent)
+        .mount("#app");
     </script>
   </body>
 </html>

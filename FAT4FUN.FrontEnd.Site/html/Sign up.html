@@ -13,8 +13,7 @@
     <link rel="stylesheet" href="../Content/NavFooter.css" />
     <script src="../Scripts/vue.global.js"></script>
     <style>
-        html,
-        body {
+        html, body {
             height: 100%;
             margin: 0;
             display: flex;
@@ -49,6 +48,7 @@
         h1 {
             color: #ffffff; /* 白色文字 */
         }
+
         /* Custom Modal Styles */
         .modal-content {
             background-color: #ffffff; /* 模態框背景顏色為白色 */
@@ -60,83 +60,60 @@
         }
     </style>
 </head>
-  <body>
+<body>
     <div id="app">
-      <!-- nav start-->
-      <header-component></header-component>
-      <!-- nav end -->
-      <div
-        class="container"
-        style="
-          background-color: rgba(33, 33, 33, 0.8);
-          border-radius: 8px;
-          padding: 10px;
-          margin-top: 110px;
-        "
-      >
-        <div class="row justify-content-center">
-          <div class="col-md-6 col-lg-4">
-            <h1 class="text-center mb-4">會員註冊</h1>
-            <form id="registerForm">
-              <div class="mb-3">
-                <label for="name" class="form-label">姓名</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="name"
-                  name="name"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="username" class="form-label">帳號</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="username"
-                  name="username"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">密碼</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  name="password"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="phone" class="form-label">電話</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="phone"
-                  name="phone"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">電子郵件</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  name="email"
-                  required
-                />
-              </div>
-              <button type="submit" class="btn btn-primary w-100">註冊</button>
-            </form>
-          </div>
+        <!-- nav start-->
+        <header-component></header-component>
+        <!-- nav end -->
+        <div class="container" style="background-color: rgba(33, 33, 33, 0.8); border-radius: 8px; padding: 10px; margin-top: 110px;">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <h1 class="text-center mb-4">會員註冊</h1>
+                    <form @submit.prevent="registerUser">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">姓名</label>
+                            <input type="text" class="form-control" id="name" v-model="name" required />
+                        </div>
+                        <div class="mb-3" style="display:flex;">
+                            <label class="form-label">性別:</label>
+                            <div class="ms-2 me-2">
+                                <input type="radio" id="male" value="male" v-model="gender" required />
+                                <label for="male" class="form-label">男</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="female" value="female" v-model="gender" required />
+                                <label for="female" class="form-label">女</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">帳號</label>
+                            <input type="text" class="form-control" id="username" v-model="username" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密碼</label>
+                            <input type="password" class="form-control" id="password" v-model="password" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">電話</label>
+                            <input type="text" class="form-control" id="phone" v-model="phone" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">電子郵件</label>
+                            <input type="email" class="form-control" id="email" v-model="email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">地址</label>
+                            <input type="text" class="form-control" id="address" v-model="address" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">註冊</button>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <!-- footer start-->
-      <footer-component></footer-component>
-      <!-- footer end -->
+        <!-- footer start-->
+        <footer-component></footer-component>
+        <!-- footer end -->
     </div>
 
     <!-- Bootstrap JS and dependencies -->
@@ -144,32 +121,62 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script type="module">
         import { HeaderComponent, FooterComponent } from "../Scripts/shared-components.js";
-      // 创建 Vue 实例
-      const config = {
-        setup() {
-          return {};
-        },
-      };
 
-      const app = Vue.createApp(config);
+        const app = Vue.createApp({
+            data() {
+                return {
+                    name: '',
+                    username: '',
+                    password: '',
+                    phone: '',
+                    email: '',
+                    address: '', // 添加 address 屬性
+                    gender: '' // 添加 gender 屬性
+                };
+            },
+            methods: {
+                async registerUser() {
+                    // 發送 POST 請求到後端 API
+                    try {
+                        const response = await fetch('/api/MembersApi/Register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json', // 設置請求頭為 JSON
+                            },
+                            body: JSON.stringify({
+                                Name: this.name,
+                                Account: this.username, // 確保鍵名與 API 匹配
+                                Password: this.password,
+                                Phone: this.phone,
+                                Email: this.email,
+                                Address: this.address, // 在請求中包含 address
+                                Gender: this.gender // 在請求中包含 gender
+                            }), // 將數據轉換為 JSON
+                        });
 
-      // 注册 header 和 footer 组件
-      app.component("header-component", HeaderComponent);
-      app.component("footer-component", FooterComponent);
-
-      // 将 Vue 实例挂载到 #app
-      app.mount("#app");
-    </script>
-    <!-- Optional JavaScript -->
-    <script>
-      document
-        .getElementById("registerForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          // 註冊成功後跳轉到指定的頁面
-          window.location.href = "http://127.0.0.1:5500/1.sign%20in.html";
-          alert("註冊成功！");
+                        // 檢查響應
+                        if (response.ok) {
+                            alert('註冊成功！');
+                            window.location.href = "https://localhost:44342/html/index.html"; // 註冊成功後跳轉
+                        } else {
+                            const errorData = await response.json();
+                            alert(`註冊失敗：${errorData.message}`); // 顯示錯誤消息
+                        }
+                    } catch (error) {
+                        console.error('錯誤:', error);
+                        alert('發生錯誤，請稍後再試。');
+                    }
+                }
+            }
         });
+
+        // 註冊 header 和 footer 組件
+        app.component("header-component", HeaderComponent);
+        app.component("footer-component", FooterComponent);
+
+        // 將 Vue 實例掛載到 #app
+        app.mount("#app");
     </script>
-  </body>
+
+</body>
 </html>

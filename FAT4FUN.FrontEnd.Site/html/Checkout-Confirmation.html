@@ -1,93 +1,99 @@
 <!DOCTYPE html>
 <html lang="zh-TW" style="background-color: #f0f2f5">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fat4Fun-確認訂單資料</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          rel="stylesheet" />
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../Content/NavFooter.css" />
     <script src="../Scripts/vue.global.js"></script>
     <style>
-        .stepper {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+      .stepper {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
 
-        .step {
-            text-align: center;
-            width: 100%;
-            position: relative;
-        }
+      .step {
+        text-align: center;
+        width: 100%;
+        position: relative;
+      }
 
-            .step:not(:last-child)::after {
-                content: "";
-                position: absolute;
-                top: 50%;
-                right: -50%;
-                width: 100%;
-                height: 2px;
-                background-color: #e0e0e0;
-                z-index: 1;
-            }
+      .step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -50%;
+        width: 100%;
+        height: 2px;
+        background-color: #e0e0e0;
+        z-index: 1;
+      }
 
-            .step.active .circle {
-                background-color: #c6a272;
-                color: white;
-            }
+      .step.active .circle {
+        background-color: #c6a272;
+        color: white;
+      }
 
-        .circle {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            z-index: 2;
-        }
+      .circle {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 50%;
+        background-color: #e0e0e0;
+        z-index: 2;
+      }
 
-        .label {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #7d7d7d;
-        }
+      .label {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #7d7d7d;
+      }
 
-        .step.active .label {
-            color: #000;
-        }
+      .step.active .label {
+        color: #000;
+      }
 
-        .table th,
-        .table td {
-            width: 25%; /* 根據需要調整 */
-        }
+      .table th,
+      .table td {
+        width: 25%; /* 根據需要調整 */
+      }
 
-        .table .text-end {
-            text-align: right;
-        }
+      .table .text-end {
+        text-align: right;
+      }
 
-        h4 {
-            color: #222;
-        }
+      h4 {
+        color: #222;
+      }
 
-        .btn-primary {
-            background-color: #007bff; /* 按鈕主色 */
-            border-color: #007bff; /* 按鈕邊框顏色 */
-        }
+      .btn-primary {
+        background-color: #007bff; /* 按鈕主色 */
+        border-color: #007bff; /* 按鈕邊框顏色 */
+      }
 
-            .btn-primary:hover {
-                background-color: #0056b3;
-                border-color: #004085;
-            }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+      }
     </style>
-</head>
+  </head>
 
   <body style="background-color: #f0f2f5">
     <div id="app">
@@ -134,34 +140,30 @@
             </thead>
             <tbody>
               <tr v-for="item in cartItems" :key="item.id">
-                  <td>
-                      {{ item.product.name }}
-                      <!-- 如果有 SKU 規格名稱顯示 -->
-                      <div style="white-space: nowrap; font-size: 0.9em">
-                          規格：
-                          <span v-if="item.skuItem && item.skuItem.value">
-                              {{ item.skuItem.value }}
-                          </span>
-                          <span v-else> 基本款 </span>
-                          <!-- 如果有加價則顯示 -->
-                          <span v-if="item.skuItem && item.skuItem.skuPrice > 0">
-                              +{{ formatCurrency(item.skuItem.skuPrice) }} 元
-                          </span>
-                      </div>
-                  </td>
-                  <td class="text-center pt-3">{{ item.qty }}</td>
-                  <td class="text-end pt-3">
-                      {{
-formatCurrency(item.product.price + (item.skuItem ?
-                 item.skuItem.skuPrice : 0))
-                      }} 元
-                  </td>
-                  <td class="text-end pt-3">
-                      {{
-formatCurrency(item.qty * (item.product.price +
-                 (item.skuItem ? item.skuItem.skuPrice : 0)))
-                      }} 元
-                  </td>
+                <td>
+                  {{ item.product.name }}
+                  <!-- 如果有 SKU 規格名稱顯示 -->
+                  <div style="white-space: nowrap; font-size: 0.9em">
+                    規格：
+                    <span v-if="item.skuItem && item.skuItem.value">
+                      {{ item.skuItem.value }}
+                    </span>
+                    <span v-else> 基本款 </span>
+                    <!-- 如果有加價則顯示 -->
+                    <span v-if="item.skuItem && item.skuItem.skuPrice > 0">
+                      +{{ formatCurrency(item.skuItem.skuPrice) }} 元
+                    </span>
+                  </div>
+                </td>
+                <td class="text-center pt-3">{{ item.qty }}</td>
+                <td class="text-end pt-3">
+                  {{ formatCurrency(item.product.price + (item.skuItem ?
+                  item.skuItem.skuPrice : 0)) }} 元
+                </td>
+                <td class="text-end pt-3">
+                  {{ formatCurrency(item.qty * (item.product.price +
+                  (item.skuItem ? item.skuItem.skuPrice : 0))) }} 元
+                </td>
               </tr>
             </tbody>
             <tfoot>
@@ -232,89 +234,89 @@ formatCurrency(item.qty * (item.product.price +
       <!-- footer end -->
     </div>
     <script type="module">
-        import {
-            HeaderComponent,
-            FooterComponent,
-        } from "../Scripts/shared-components.js";
-        const app = Vue.createApp({
-            data() {
-                return {
-                    cartItems: JSON.parse(localStorage.getItem("cart")) || [],
-                    customer: JSON.parse(localStorage.getItem("customerInfo")) || {},
-                    userId: JSON.parse(localStorage.getItem("userId")),
-                };
-            },
-            computed: {
-                total() {
-                    return this.cartItems.reduce((acc, item) => {
-                        const price =
-                            item.product.price +
-                            (item.skuItem && item.skuItem.skuPrice
-                                ? item.skuItem.skuPrice
-                                : 0);
-                        return acc + item.qty * price;
-                    }, 0);
-                },
-            },
-            methods: {
-                formatCurrency(value) {
-                    if (typeof value !== "number" || isNaN(value)) {
-                        return "0";
-                    }
-                    return value.toLocaleString();
-                },
-                goBack() {
-                    window.history.back();
-                },
-                async confirmOrder() {
-                    const orderData = {
-                        UserId: this.userId,
-                        Vm: {
-                            RecipientName: this.customer.name,
-                            ShippingAddress: this.customer.address,
-                            Phone: this.customer.phone,
-                            DeliveryMethod: 1,
-                            PaymentMethod: 1,
-                            InvoiceOption: 1,
-                        }
-                    };
-                     try {
-                        const response = await fetch('/api/carts/SubmitOrder',
-                            {
-                            method: 'POST',
-                            headers: 
-                            {
-                              'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(orderData),
-                        });     
+      import {
+        HeaderComponent,
+        FooterComponent,
+      } from "../Scripts/shared-components.js";
+      const app = Vue.createApp({
+        data() {
+          const userId = JSON.parse(localStorage.getItem("user"))?.id;
 
-                         if (response.ok) {
-                             const result = await response.json();
-                             // 清除本地資料並導向成功頁面
-                             localStorage.removeItem('cart');
-                             localStorage.removeItem('customerInfo');
-                             window.location.href = 'Checkout-Success.html';
-                         } else {
-                             // 失敗處理，顯示錯誤訊息
-                             const errorData = await response.json();
-                             alert('訂單建立失敗: ' + errorData.message || '未知的錯誤');
-                         }
-                     } catch (error) {
-                         // 發生異常，顯示錯誤訊息
-                         alert('發生錯誤: ' + error.message);
-                         console.error('錯誤:', error);
-                     }
+          return {
+            cartItems: JSON.parse(localStorage.getItem("cart")) || [],
+            customer: JSON.parse(localStorage.getItem("customerInfo")) || {},
+            userId: userId,
+          };
+        },
+        computed: {
+          total() {
+            return this.cartItems.reduce((acc, item) => {
+              const price =
+                item.product.price +
+                (item.skuItem && item.skuItem.skuPrice
+                  ? item.skuItem.skuPrice
+                  : 0);
+              return acc + item.qty * price;
+            }, 0);
+          },
+        },
+        methods: {
+          formatCurrency(value) {
+            if (typeof value !== "number" || isNaN(value)) {
+              return "0";
+            }
+            return value.toLocaleString();
+          },
+          goBack() {
+            window.history.back();
+          },
+          async confirmOrder() {
+            const orderData = {
+              UserId: this.userId,
+              Vm: {
+                RecipientName: this.customer.name,
+                ShippingAddress: this.customer.address,
+                Phone: this.customer.phone,
+                DeliveryMethod: 1,
+                PaymentMethod: 1,
+                InvoiceOption: 1,
+              },
+            };
+            try {
+              const response = await fetch("/api/carts/SubmitOrder", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
                 },
-                handleSearch() {
-                    // 在這裡定義搜尋的邏輯
-                },
-            },
-        });
-        app.component("header-component", HeaderComponent);
-        app.component("footer-component", FooterComponent);
+                body: JSON.stringify(orderData),
+              });
 
-        app.mount("#app");
+              if (response.ok) {
+                const result = await response.json();
+                // 清除本地資料並導向成功頁面
+                localStorage.removeItem("cart");
+                localStorage.removeItem("customerInfo");
+                window.location.href = "Checkout-Success.html";
+              } else {
+                // 失敗處理，顯示錯誤訊息
+                const errorData = await response.json();
+                alert("訂單建立失敗: " + errorData.message || "未知的錯誤");
+              }
+            } catch (error) {
+              // 發生異常，顯示錯誤訊息
+              alert("發生錯誤: " + error.message);
+              console.error("錯誤:", error);
+            }
+          },
+          handleSearch() {
+            // 在這裡定義搜尋的邏輯
+          },
+        },
+      });
+      app.component("header-component", HeaderComponent);
+      app.component("footer-component", FooterComponent);
+
+      app.mount("#app");
     </script>
   </body>
 </html>

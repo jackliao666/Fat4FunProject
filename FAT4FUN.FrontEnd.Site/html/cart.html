@@ -1,503 +1,542 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW" style="background-color: #f0f2f5">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fat4Fun-確認商品及填寫資料</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          rel="stylesheet" />
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../Content/NavFooter.css" />
     <script src="../Scripts/vue.global.js"></script>
     <style>
-        .stepper {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+      .stepper {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
 
-        .step {
-            text-align: center;
-            width: 100%;
-            position: relative;
-        }
+      .step {
+        text-align: center;
+        width: 100%;
+        position: relative;
+      }
 
-            .step:not(:last-child)::after {
-                content: "";
-                position: absolute;
-                top: 50%;
-                right: -50%;
-                width: 100%;
-                height: 2px;
-                background-color: #e0e0e0;
-                z-index: 1;
-            }
+      .step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -50%;
+        width: 100%;
+        height: 2px;
+        background-color: #e0e0e0;
+        z-index: 1;
+      }
 
-            .step.active .circle {
-                background-color: #c6a272;
-                color: white;
-            }
+      .step.active .circle {
+        background-color: #c6a272;
+        color: white;
+      }
 
-        .circle {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            z-index: 2;
-        }
+      .circle {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 50%;
+        background-color: #e0e0e0;
+        z-index: 2;
+      }
 
-        .label {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #7d7d7d;
-        }
+      .label {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #7d7d7d;
+      }
 
-        .step.active .label {
-            color: #000;
-        }
+      .step.active .label {
+        color: #000;
+      }
 
-        .table th,
-        .table td {
-            width: 25%; /* 根據需要調整 */
-        }
+      .table th,
+      .table td {
+        width: 25%; /* 根據需要調整 */
+      }
 
-        .table .text-end {
-            text-align: right;
-        }
+      .table .text-end {
+        text-align: right;
+      }
 
-        h4 {
-            color: #222;
-        }
+      h4 {
+        color: #222;
+      }
 
-        .btn-primary {
-            background-color: #007bff; /* 按鈕主色 */
-            border-color: #007bff; /* 按鈕邊框顏色 */
-        }
+      .btn-primary {
+        background-color: #007bff; /* 按鈕主色 */
+        border-color: #007bff; /* 按鈕邊框顏色 */
+      }
 
-            .btn-primary:hover {
-                background-color: #0056b3;
-                border-color: #004085;
-            }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+      }
     </style>
-</head>
+  </head>
 
-<body style="background-color: #f0f2f5">
+  <body style="background-color: #f0f2f5">
     <div id="app">
-        <!-- nav start-->
-        <header-component @search="handleSearch"></header-component>
-        <!-- nav end -->
-        <!-- 購物流程Start -->
-        <div class="container" style="margin-top: 180px">
-            <div class="stepper">
-                <!-- 第一步 -->
-                <div class="step active">
-                    <div class="circle">1</div>
-                    <div class="label">購物車及填寫資料</div>
-                </div>
+      <!-- nav start-->
+      <header-component @search="handleSearch"></header-component>
+      <!-- nav end -->
+      <!-- 購物流程Start -->
+      <div class="container" style="margin-top: 180px">
+        <div class="stepper">
+          <!-- 第一步 -->
+          <div class="step active">
+            <div class="circle">1</div>
+            <div class="label">購物車及填寫資料</div>
+          </div>
 
-                <!-- 第二步 -->
-                <div class="step">
-                    <div class="circle">2</div>
-                    <div class="label">確認資料</div>
-                </div>
+          <!-- 第二步 -->
+          <div class="step">
+            <div class="circle">2</div>
+            <div class="label">確認資料</div>
+          </div>
 
-                <!-- 第三步 -->
-                <div class="step">
-                    <div class="circle">3</div>
-                    <div class="label">訂購完成</div>
-                </div>
-            </div>
+          <!-- 第三步 -->
+          <div class="step">
+            <div class="circle">3</div>
+            <div class="label">訂購完成</div>
+          </div>
         </div>
-        <!-- 購物流程End -->
-        <!-- 確認商品列表 -->
-        <div class="container mt-5" style="color: #333">
-            <div>
-                <h4>確認商品</h4>
-                <table class="table table-bordered mt-3">
-                    <thead>
-                        <tr>
-                            <th class="text-center">商品</th>
-                            <th class="text-center">數量</th>
-                            <th class="text-center">單價</th>
-                            <th class="text-center">總價</th>
-                            <th class="text-center"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item in cartItems" :key="item.id">
-                            <td>
-                                {{ item.product.name }}
-                                <!-- 如果有 SKU 規格名稱顯示 -->
-                                <div style="white-space: nowrap; font-size: 0.9em">
-                                    規格：
-                                    <span v-if="item.skuItem && item.skuItem.value">
-                                        {{ item.skuItem.value }}
-                                    </span>
-                                    <span v-else> 基本款 </span>
-                                    <!-- 如果有加價則顯示 -->
-                                    <span v-if="item.skuItem && item.skuItem.skuPrice > 0">
-                                        +{{ formatCurrency(item.skuItem.skuPrice) }} 元
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="text-center pt-3">
-                                <!-- 減少按鈕 -->
-                                <button @click="decreaseQuantity(item)"
-                                        class="btn btn-sm btn-primary align-items-center">
-                                    -
-                                </button>
-                                <span class="mx-2 pt-3"></span>
-                                {{ item.qty }}
-                                <!-- 增加按鈕 -->
-                                <span class="mx-2 pt-3 align-items-center"></span>
-                                <button @click="increaseQuantity(item)"
-                                        class="btn btn-sm btn-primary">
-                                    +
-                                </button>
-                            </td>
-                            <!-- 格式化單價和總價 -->
-                            <!-- 價格計算考慮 SKU 規格 -->
-                            <td class="text-end pt-3">
-                                {{
- formatCurrency(item.product.price + (item.skuItem ?
-                  item.skuItem.skuPrice : 0))
-                                }} 元
-                            </td>
-                            <td class="text-end pt-3">
-                                {{
- formatCurrency(item.qty * (item.product.price +
-                  (item.skuItem ? item.skuItem.skuPrice : 0)))
-                                }} 元
-                            </td>
-                            <td class="text-center pt-3">
-                                <!-- 刪除按鈕 -->
-                                <button @click="removeItem(item)"
-                                        class="btn btn-sm btn-danger">
-                                    X
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-end">總計：</td>
-                            <!-- 格式化總計 -->
-                            <td class="text-end">{{ formatCurrency(total) }} 元</td>
-                            <td class="text-center"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <!-- 取貨方式 -->
-            <div class="mt-4 mb-3">
-                <div class="">
-                    <h4>取貨方式</h4>
-                    <div class="form-check">
-                        <input class="form-check-input"
-                               type="radio"
-                               v-model="deliveryMethod"
-                               value="宅配"
-                               id="delivery1" />
-                        <label class="form-check-label" for="delivery1">宅配</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 客戶資料 -->
-            <div class="mt-3 mb-3">
-                <h4>收件人資料</h4>
-                <div class="mb-3">
-                    <label for="name" class="form-label">姓名</label>
-                    <input type="text"
-                           class="form-control"
-                           id="name"
-                           v-model="customer.name"
-                           placeholder="輸入姓名" />
-                </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">電話</label>
-                    <input type="text"
-                           class="form-control"
-                           id="phone"
-                           v-model="customer.phone"
-                           placeholder="輸入電話" />
-                </div>
-                <div class="mb-3">
-                    <label for="Address" class="form-label">送貨地址</label>
-                    <input type="text"
-                           class="form-control"
-                           id="Address"
-                           v-model="customer.address"
-                           placeholder="送貨地址" />
-                </div>
-            </div>
-            <!-- 付款方式 -->
-            <div class="mt-4 mb-3">
-                <h4>付款方式</h4>
-                <div class="form-check">
-                    <input class="form-check-input"
-                           type="radio"
-                           v-model="paymentMethod"
-                           value="貨到付款"
-                           id="payment1" />
-                    <label class="form-check-label" for="payment1">貨到付款</label>
-                </div>
-            </div>
-
-            <!-- 發票選項 -->
-            <div class="mt-4 mb-3">
-                <h4>發票選項</h4>
-                <div class="form-check">
-                    <input class="form-check-input"
-                           type="radio"
-                           v-model="invoiceMethod"
-                           value="電子發票"
-                           id="invoice1" />
-                    <label class="form-check-label" for="invoice1">電子發票</label>
-                </div>
-            </div>
-
-            <!-- 確認按鈕 -->
-            <div class="mt-4 mb-5">
-                <button @click="submitOrder" class="btn btn-primary w-100">
-                    確認結帳
-                </button>
-            </div>
+      </div>
+      <!-- 購物流程End -->
+      <!-- 確認商品列表 -->
+      <div class="container mt-5" style="color: #333">
+        <div>
+          <h4>確認商品</h4>
+          <table class="table table-bordered mt-3">
+            <thead>
+              <tr>
+                <th class="text-center">商品</th>
+                <th class="text-center">數量</th>
+                <th class="text-center">單價</th>
+                <th class="text-center">總價</th>
+                <th class="text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in cartItems" :key="item.id">
+                <td>
+                  {{ item.product.name }}
+                  <!-- 如果有 SKU 規格名稱顯示 -->
+                  <div style="white-space: nowrap; font-size: 0.9em">
+                    規格：
+                    <span v-if="item.skuItem && item.skuItem.value">
+                      {{ item.skuItem.value }}
+                    </span>
+                    <span v-else> 基本款 </span>
+                    <!-- 如果有加價則顯示 -->
+                    <span v-if="item.skuItem && item.skuItem.skuPrice > 0">
+                      +{{ formatCurrency(item.skuItem.skuPrice) }} 元
+                    </span>
+                  </div>
+                </td>
+                <td class="text-center pt-3">
+                  <!-- 減少按鈕 -->
+                  <button
+                    @click="decreaseQuantity(item)"
+                    class="btn btn-sm btn-primary align-items-center"
+                  >
+                    -
+                  </button>
+                  <span class="mx-2 pt-3"></span>
+                  {{ item.qty }}
+                  <!-- 增加按鈕 -->
+                  <span class="mx-2 pt-3 align-items-center"></span>
+                  <button
+                    @click="increaseQuantity(item)"
+                    class="btn btn-sm btn-primary"
+                  >
+                    +
+                  </button>
+                </td>
+                <!-- 格式化單價和總價 -->
+                <!-- 價格計算考慮 SKU 規格 -->
+                <td class="text-end pt-3">
+                  {{ formatCurrency(item.product.price + (item.skuItem ?
+                  item.skuItem.skuPrice : 0)) }} 元
+                </td>
+                <td class="text-end pt-3">
+                  {{ formatCurrency(item.qty * (item.product.price +
+                  (item.skuItem ? item.skuItem.skuPrice : 0))) }} 元
+                </td>
+                <td class="text-center pt-3">
+                  <!-- 刪除按鈕 -->
+                  <button
+                    @click="removeItem(item)"
+                    class="btn btn-sm btn-danger"
+                  >
+                    X
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="text-end">總計：</td>
+                <!-- 格式化總計 -->
+                <td class="text-end">{{ formatCurrency(total) }} 元</td>
+                <td class="text-center"></td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
 
-        <!-- footer start-->
-        <footer-component></footer-component>
-        <!-- footer end -->
+        <!-- 取貨方式 -->
+        <div class="mt-4 mb-3">
+          <div class="">
+            <h4>取貨方式</h4>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                v-model="deliveryMethod"
+                value="宅配"
+                id="delivery1"
+              />
+              <label class="form-check-label" for="delivery1">宅配</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 客戶資料 -->
+        <div class="mt-3 mb-3">
+          <h4>收件人資料</h4>
+          <div class="mb-3">
+            <label for="name" class="form-label">姓名</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              v-model="customer.name"
+              placeholder="輸入姓名"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">電話</label>
+            <input
+              type="text"
+              class="form-control"
+              id="phone"
+              v-model="customer.phone"
+              placeholder="輸入電話"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="Address" class="form-label">送貨地址</label>
+            <input
+              type="text"
+              class="form-control"
+              id="Address"
+              v-model="customer.address"
+              placeholder="送貨地址"
+            />
+          </div>
+        </div>
+        <!-- 付款方式 -->
+        <div class="mt-4 mb-3">
+          <h4>付款方式</h4>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              v-model="paymentMethod"
+              value="貨到付款"
+              id="payment1"
+            />
+            <label class="form-check-label" for="payment1">貨到付款</label>
+          </div>
+        </div>
+
+        <!-- 發票選項 -->
+        <div class="mt-4 mb-3">
+          <h4>發票選項</h4>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              v-model="invoiceMethod"
+              value="電子發票"
+              id="invoice1"
+            />
+            <label class="form-check-label" for="invoice1">電子發票</label>
+          </div>
+        </div>
+
+        <!-- 確認按鈕 -->
+        <div class="mt-4 mb-5">
+          <button @click="submitOrder" class="btn btn-primary w-100">
+            確認結帳
+          </button>
+        </div>
+      </div>
+
+      <!-- footer start-->
+      <footer-component></footer-component>
+      <!-- footer end -->
     </div>
     <!-- 導覽列元件 -->
     <script type="module">
-        import {
-            HeaderComponent,
-            FooterComponent,
-        } from "../Scripts/shared-components.js";
-        const app = Vue.createApp({
-            data() {
-                return {
-                    cartItems: [], // 初始為空陣列
-                    deliveryMethod: "宅配",
-                    customer: {
-                        name: "",
-                        phone: "",
-                        address: "",
-                    },
-                    paymentMethod: "貨到付款",
-                    invoiceMethod: "電子發票",
-                };
+      import {
+        HeaderComponent,
+        FooterComponent,
+      } from "../Scripts/shared-components.js";
+      const app = Vue.createApp({
+        data() {
+          return {
+            cartItems: [], // 初始為空陣列
+            deliveryMethod: "宅配",
+            customer: {
+              name: "",
+              phone: "",
+              address: "",
             },
-            computed: {
-                total() {
-                    return this.cartItems.reduce((sum, item) => {
-                        return sum + (item.qty * (item.product.price + (item.skuItem ? item.skuItem.skuPrice : 0)));
-                    }, 0) || 0; // 確保 total 至少為 0
+            paymentMethod: "貨到付款",
+            invoiceMethod: "電子發票",
+          };
+        },
+        computed: {
+          total() {
+            return (
+              this.cartItems.reduce((sum, item) => {
+                return (
+                  sum +
+                  item.qty *
+                    (item.product.price +
+                      (item.skuItem ? item.skuItem.skuPrice : 0))
+                );
+              }, 0) || 0
+            ); // 確保 total 至少為 0
+          },
+        },
+        created() {
+          const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+          if (!userId) {
+            Swal.fire({
+              icon: "info",
+              title: "請先登入",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setTimeout(() => {
+              window.location.href = "Login.html";
+            }, 2000);
+            return;
+          }
+
+          console.log("User ID:", userId); // 檢查 userId
+          this.fetchCart(userId);
+        },
+        methods: {
+          async fetchCart(userId) {
+            const apiUrl = `/api/carts/${userId}`;
+
+            try {
+              const response = await fetch(apiUrl);
+
+              if (!response.ok) {
+                throw new Error(
+                  `Network response was not ok: ${response.statusText}`
+                );
+              }
+
+              const data = await response.json(); // 將獲取到的資料賦值給 cartItems
+              this.cartItems = data.cartItems; // 假設你的 API 返回的資料格式與你的範例一致
+
+              console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
+            } catch (error) {
+              console.error(
+                "There was a problem with the fetch operation:",
+                error
+              );
+              localStorage.setItem("cart", JSON.stringify(this.cartItems));
+            }
+          },
+          async increaseQuantity(item) {
+            item.qty++;
+
+            const apiUrl = `/api/carts/UpdateItemQty`;
+            try {
+              const response = await fetch(apiUrl, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
                 },
-            },
-            created() {
-                let userId = localStorage.getItem("userId");
-                if (!userId) {
-                    userId = 3; // 預設值
-                    localStorage.setItem("userId", userId);
-                    /*console.error("未找到會員ID，請先登入");*/
+                body: JSON.stringify({
+                  userId: item.userId,
+                  productSkuId: item.productSkuId,
+                  skuItemId: item.skuItemId,
+                  qty: item.qty,
+                }),
+              });
+              if (!response.ok) {
+                throw new Error(
+                  `Network response was not ok: ${response.statusText}`
+                );
+              }
+
+              const result = await response.json();
+              console.log("Quantity updated successfully", result);
+            } catch (error) {
+              console.error(
+                "There was a problem with the fetch operation:",
+                error
+              );
+            }
+
+            localStorage.setItem("cart", JSON.stringify(this.cartItems));
+          },
+
+          async decreaseQuantity(item) {
+            const apiUrl = `/api/carts/UpdateItemQty`;
+            if (item.qty > 1) {
+              item.qty--;
+              try {
+                const response = await fetch(apiUrl, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    userId: item.userId,
+                    productSkuId: item.productSkuId,
+                    skuItemId: item.skuItemId,
+                    qty: item.qty,
+                  }),
+                });
+
+                if (!response.ok) {
+                  throw new Error(
+                    `Network response was not ok: ${response.statusText}`
+                  );
                 }
-                console.log("User ID:", userId); // 檢查 userId
-                this.fetchCart(userId);
+                const result = await response.json();
+                console.log("Quantity updated successfully", result);
+              } catch (error) {
+                console.error(
+                  "There was a problem with the fetch operation:",
+                  error
+                );
+              }
+            } else {
+              // 數量為 1 時刪除該項目
+              this.removeItem(item);
+            }
+            localStorage.setItem("cart", JSON.stringify(this.cartItems));
+          },
+          formatCurrency(value) {
+            if (typeof value !== "number" || isNaN(value)) {
+              return "0";
+            }
+            return value.toLocaleString();
+          },
 
-            },
-            methods: {
-                async fetchCart(userId) {        
-                    const apiUrl = `/api/carts/${userId}`;
+          async removeItem(item) {
+            // 檢查 item 是否存在於 cartItems
+            const index = this.cartItems.indexOf(item);
+            if (index > -1) {
+              this.cartItems.splice(index, 1); // 刪除商品
+            }
 
-                    try {
-                        const response = await fetch(apiUrl);
-
-                        if (!response.ok) {
-                            throw new Error(
-                                `Network response was not ok: ${response.statusText}`
-                            );
-                        }
-
-                        const data = await response.json(); // 將獲取到的資料賦值給 cartItems
-                        this.cartItems = data.cartItems; // 假設你的 API 返回的資料格式與你的範例一致
-
-                        console.log("cartItems:", this.cartItems); // 檢查 cartItems 的內容
-                    } catch (error) {
-                        console.error(
-                            "There was a problem with the fetch operation:",
-                            error
-                        );
-                        localStorage.setItem("cart", JSON.stringify(this.cartItems));
-                    }
+            const apiUrl = `/api/carts/RemoveItem`;
+            try {
+              const response = await fetch(apiUrl, {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
                 },
-                async increaseQuantity(item) {
-                    item.qty++;
+                body: JSON.stringify({
+                  userId: item.userId,
+                  productSkuId: item.productSkuId,
+                  skuItemId: item.skuItemId,
+                }),
+              });
+              if (!response.ok) {
+                throw new Error(
+                  `Failed to remove item: ${response.statusText}`
+                );
+              }
 
-                    const apiUrl = `/api/carts/UpdateItemQty`;
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: "PUT",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                userId: item.userId,
-                                productSkuId: item.productSkuId,
-                                skuItemId: item.skuItemId,
-                                qty: item.qty,
-                            }),
-                        });
-                        if (!response.ok) {
-                            throw new Error(
-                                `Network response was not ok: ${response.statusText}`
-                            );
-                        }
+              this.fetchCart(userId);
+              const data = await response.json();
 
-                        const result = await response.json();
-                        console.log("Quantity updated successfully", result);
-                    } catch (error) {
-                        console.error(
-                            "There was a problem with the fetch operation:",
-                            error
-                        );
-                    }
+              // 將獲取到的資料賦值給 cartItems
+              this.cartItems = data.cartItems;
 
-                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
-                },
+              this.cartItems = this.cartItems.filter(
+                (cartItem) => cartItem.id !== item?.id
+              );
+            } catch (error) {
+              console.error("Error removing item:", error);
+            }
 
-                async decreaseQuantity(item) {
-                    const apiUrl = `/api/carts/UpdateItemQty`;
-                    if (item.qty > 1) {
-                        item.qty--;
-                        try {
-                            const response = await fetch(apiUrl, {
-                                method: "PUT",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    userId: item.userId,
-                                    productSkuId: item.productSkuId,
-                                    skuItemId: item.skuItemId,
-                                    qty: item.qty,
-                                }),
-                            });
+            localStorage.setItem("cart", JSON.stringify(this.cartItems));
+          },
+          submitOrder() {
+            if (this.cartItems.length === 0) {
+              alert("購物車內無商品繼續選購！");
+              return;
+            }
+            // 將整個購物車存儲到 localStorage
+            localStorage.setItem("cart", JSON.stringify(this.cartItems));
+            if (
+              this.customer.name &&
+              this.customer.phone &&
+              this.customer.address
+            ) {
+              const customerInfo = {
+                name: this.customer.name,
+                phone: this.customer.phone,
+                address: this.customer.address,
+                deliveryMethod: this.deliveryMethod,
+                paymentMethod: this.paymentMethod,
+                invoiceMethod: this.invoiceMethod,
+              };
+              localStorage.setItem(
+                "customerInfo",
+                JSON.stringify(customerInfo)
+              );
 
-                            if (!response.ok) {
-                                throw new Error(
-                                    `Network response was not ok: ${response.statusText}`
-                                );
-                            }
-                            const result = await response.json();
-                            console.log("Quantity updated successfully", result);
-                        } catch (error) {
-                            console.error(
-                                "There was a problem with the fetch operation:",
-                                error
-                            );
-                        }
-                    } else {
-                        // 數量為 1 時刪除該項目
-                        this.removeItem(item);
-                    }
-                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
-                },
-                formatCurrency(value) {
-                    if (typeof value !== "number" || isNaN(value)) {
-                        return "0";
-                    }
-                    return value.toLocaleString();
-                },
+              window.location.href = "Checkout-Confirmation.html";
+            } else {
+              alert("請填寫完整的顧客資料！");
+            }
+          },
+          handleSearch() {
+            // 在這裡定義搜尋的邏輯
+          },
+        },
+      });
 
-                async removeItem(item) {
-                  
-                    // 檢查 item 是否存在於 cartItems
-                    const index = this.cartItems.indexOf(item);
-                    if (index > -1) {
-                        this.cartItems.splice(index, 1); // 刪除商品
-                    }
+      app.component("header-component", HeaderComponent);
+      app.component("footer-component", FooterComponent);
 
-                        const apiUrl = `/api/carts/RemoveItem`;
-                        try {
-                            const response = await fetch(apiUrl, {
-                                method: "DELETE",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    userId: item.userId,
-                                    productSkuId: item.productSkuId,
-                                    skuItemId: item.skuItemId,
-                                }),
-                            });
-                            if (!response.ok) {
-                                throw new Error(
-                                    `Failed to remove item: ${response.statusText}`
-                                );
-                            }
-
-                            this.fetchCart(userId);
-                            const data = await response.json();
-
-                            // 將獲取到的資料賦值給 cartItems
-                            this.cartItems = data.cartItems;
-
-                            this.cartItems = this.cartItems.filter(cartItem => cartItem.id !== item?.id);
-                        } catch (error) {
-                            console.error("Error removing item:", error);
-                        }
-                    
-                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
-                },
-                submitOrder() {
-                    if (this.cartItems.length === 0) {
-                        alert("購物車內無商品繼續選購！");
-                        return;
-                    }
-                    // 將整個購物車存儲到 localStorage
-                    localStorage.setItem("cart", JSON.stringify(this.cartItems));
-                    if (
-                        this.customer.name &&
-                        this.customer.phone &&
-                        this.customer.address
-                    ) {
-                        const customerInfo = {
-                            name: this.customer.name,
-                            phone: this.customer.phone,
-                            address: this.customer.address,
-                            deliveryMethod: this.deliveryMethod,
-                            paymentMethod: this.paymentMethod,
-                            invoiceMethod: this.invoiceMethod
-                        };
-                        localStorage.setItem("customerInfo", JSON.stringify(customerInfo));
-
-                        window.location.href = "Checkout-Confirmation.html";
-                    } else {
-                        alert("請填寫完整的顧客資料！");
-                    }
-                },
-                handleSearch() {
-                    // 在這裡定義搜尋的邏輯
-                },
-            },
-        });
-
-        app.component("header-component", HeaderComponent);
-        app.component("footer-component", FooterComponent);
-
-        app.mount("#app");
+      app.mount("#app");
     </script>
-</body>
+  </body>
 </html>

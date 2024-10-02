@@ -1,392 +1,415 @@
 <!DOCTYPE html>
 <html lang="zh-tw" style="background-color: #f0f2f5">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fat4Fun-確認商品及填寫資料</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          rel="stylesheet" />
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../Content/NavFooter.css" />
     <script src="../Scripts/vue.global.js"></script>
     <style>
-        body,
-        main {
-            font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
-            color: #333; /* 文字色調較深 */
-        }
-        /* 主背景顏色 */
-        main {
-            background-color: #ffffff; /* 主要區域的背景設置為白色 */
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 加陰影效果 */
-            font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
-        }
+      body,
+      main {
+        font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue",
+          Arial, sans-serif;
+        color: #333; /* 文字色調較深 */
+      }
+      /* 主背景顏色 */
+      main {
+        background-color: #ffffff; /* 主要區域的背景設置為白色 */
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 加陰影效果 */
+        font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue",
+          Arial, sans-serif;
+      }
 
-        h1,
-        h3 {
-            color: #4a4a4a; /* 標題用較深灰色 */
-        }
+      h1,
+      h3 {
+        color: #4a4a4a; /* 標題用較深灰色 */
+      }
 
-        .nav-tabs .nav-link {
-            color: #6c757d; /* 頁籤文字色 */
-            background-color: #e9ecef;
-        }
+      .nav-tabs .nav-link {
+        color: #6c757d; /* 頁籤文字色 */
+        background-color: #e9ecef;
+      }
 
-            .nav-tabs .nav-link.active {
-                color: #fff;
-                background-color: #007bff; /* 藍色主題 */
-            }
+      .nav-tabs .nav-link.active {
+        color: #fff;
+        background-color: #007bff; /* 藍色主題 */
+      }
 
-        .table {
-            border-collapse: collapse; /* 避免雙重邊框 */
-        }
+      .table {
+        border-collapse: collapse; /* 避免雙重邊框 */
+      }
 
-            .table td {
-                min-height: 50px; /* 調整這裡的高度值 */
-            }
+      .table td {
+        min-height: 50px; /* 調整這裡的高度值 */
+      }
 
-            .table th,
-            .table td {
-                color: #333;
-                padding: 12px 15px;
-                border: 2px solid #ddd; /* 添加邊框 */
-                vertical-align: middle; /* 垂直置中 */
-            }
+      .table th,
+      .table td {
+        color: #333;
+        padding: 12px 15px;
+        border: 2px solid #ddd; /* 添加邊框 */
+        vertical-align: middle; /* 垂直置中 */
+      }
 
-            .table thead th {
-                background-color: #f8f9fa; /* 淺灰色背景 */
-                color: #333;
-                font-weight: bold;
-            }
+      .table thead th {
+        background-color: #f8f9fa; /* 淺灰色背景 */
+        color: #333;
+        font-weight: bold;
+      }
 
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f2f2f2; /* 偶數行的背景顏色 */
-        }
+      .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f2f2f2; /* 偶數行的背景顏色 */
+      }
 
-        /* 按鈕顏色設定 */
-        .btn-link {
-            color: #007bff; /* 設定連結按鈕顏色 */
-            text-decoration: none;
-        }
+      /* 按鈕顏色設定 */
+      .btn-link {
+        color: #007bff; /* 設定連結按鈕顏色 */
+        text-decoration: none;
+      }
 
-            .btn-link:hover {
-                color: #0056b3;
-                text-decoration: underline;
-            }
+      .btn-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+      }
 
-        .progress-bar {
-            color: white; /* 進度條內的文字白色 */
-        }
+      .progress-bar {
+        color: white; /* 進度條內的文字白色 */
+      }
 
-        /* 美化的分隔線 */
-        hr {
-            background-color: #007bff;
-            height: 3px;
-            border: none;
-        }
+      /* 美化的分隔線 */
+      hr {
+        background-color: #007bff;
+        height: 3px;
+        border: none;
+      }
 
-        .accordion-body {
-            background-color: #f9fafb;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-        }
+      .accordion-body {
+        background-color: #f9fafb;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+      }
 
+      /* 調整按鈕樣式 */
+      .btn-primary {
+        background-color: blue;
+      }
 
+      .btn-primary:hover {
+        background-color: red;
+        border-color: #1e7e34;
+      }
 
-        /* 調整按鈕樣式 */
-        .btn-primary {
-            background-color: blue;
-        }
-
-            .btn-primary:hover {
-                background-color: red;
-                border-color: #1e7e34;
-            }
-
-        .btn-disabled {
-            background-color: #d3d3d3 !important; /* 淺灰色背景 */
-            border-color: #d3d3d3 !important; /* 邊框顏色 */
-            color: #a9a9a9 !important; /* 文字顏色 */
-            cursor: not-allowed; /* 改變滑鼠游標樣式 */
-        }
+      .btn-disabled {
+        background-color: #d3d3d3 !important; /* 淺灰色背景 */
+        border-color: #d3d3d3 !important; /* 邊框顏色 */
+        color: #a9a9a9 !important; /* 文字顏色 */
+        cursor: not-allowed; /* 改變滑鼠游標樣式 */
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <!-- nav start-->
-        <header-component></header-component>
-        <!-- nav end -->
+      <!-- nav start-->
+      <header-component></header-component>
+      <!-- nav end -->
 
-        <main>
-            <!-- 这里放置页面主要内容 -->
-            <div class="container py-5" style="margin-top: 140px">
-                <!-- 頁籤區域 -->
-                <div>
-                    <h1 class="text-dark mb-5">追蹤商品</h1>
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link" href="Order.html">訂單查詢</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="track.html">追蹤商品</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="QA.html">Q&A</a>
-                        </li>
-                    </ul>
-                </div>
+      <main>
+        <!-- 这里放置页面主要内容 -->
+        <div class="container py-5" style="margin-top: 140px">
+          <!-- 頁籤區域 -->
+          <div>
+            <h1 class="text-dark mb-5">追蹤商品</h1>
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link" href="Order.html">訂單查詢</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="track.html">追蹤商品</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="QA.html">Q&A</a>
+              </li>
+            </ul>
+          </div>
 
-                <section class="mt-4">
-                    <!-- 追蹤訂單表格 -->
-                    <div>
-                        <h3 class="mt-4">商品列表</h3>
-                        <div>
-                            <table  class="table table-bordered text-center align-middle table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>加入日期</th>
-                                        <th>商品圖片</th>
-                                        <th>商品名稱</th>
-                                        <th>最新價格</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(item, index) in MemberFollowLists" :key="index">
-                                        <td style="width:150px">{{ formatDate(item.createDate) }}</td>
-                                        <td style="width:300px">
-                                            <!-- 點擊圖片觸發模態框 -->
-                                            <img :src="item.image"
-                                                 alt="item.name"
-                                                 class="img-fluid"
-                                                 style="object-fit: fill; cursor: pointer;"
-                                                 @click="goToPcDetail(item.productId)" />
-                                        </td>
-                                        <td class="text-start">{{ item.name }}</td>
-                                        <td class="text-end">{{ formatCurrency(item.price) }}</td>
-                                        <td style="width:250px">
-                                            <button class="btn btn-primary mx-3" 
-                                                    @click.stop="addToCart(item.productSkuId)">加入購物車</button>
-                                            <button class="btn btn-danger" @click="removeItem(item)">移除</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                  
-
-                </section>
-
-
+          <section class="mt-4">
+            <!-- 追蹤訂單表格 -->
+            <div>
+              <h3 class="mt-4">商品列表</h3>
+              <div>
+                <table
+                  class="table table-bordered text-center align-middle table-striped"
+                >
+                  <thead>
+                    <tr>
+                      <th>加入日期</th>
+                      <th>商品圖片</th>
+                      <th>商品名稱</th>
+                      <th>最新價格</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in MemberFollowLists" :key="index">
+                      <td style="width: 150px">
+                        {{ formatDate(item.createDate) }}
+                      </td>
+                      <td style="width: 300px">
+                        <!-- 點擊圖片觸發模態框 -->
+                        <img
+                          :src="item.image"
+                          alt="item.name"
+                          class="img-fluid"
+                          style="object-fit: fill; cursor: pointer"
+                          @click="goToPcDetail(item.productId)"
+                        />
+                      </td>
+                      <td class="text-start">{{ item.name }}</td>
+                      <td class="text-end">{{ formatCurrency(item.price) }}</td>
+                      <td style="width: 250px">
+                        <button
+                          class="btn btn-primary mx-3"
+                          @click.stop="addToCart(item.productSkuId)"
+                        >
+                          加入購物車
+                        </button>
+                        <button
+                          class="btn btn-danger"
+                          @click="removeItem(item)"
+                        >
+                          移除
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-        </main>
-        <!-- footer start-->
-        <footer-component></footer-component>
-        <!-- footer end -->
+          </section>
+        </div>
+      </main>
+      <!-- footer start-->
+      <footer-component></footer-component>
+      <!-- footer end -->
     </div>
     <!-- Vue.js邏輯 -->
     <script type="module">
-        import {
-            HeaderComponent,
-            FooterComponent,
-        } from "../Scripts/shared-components.js";
-        const app = Vue.createApp({
-            data() {
-                return {
-                    MemberFollowLists: [],
-                    userId: localStorage.getItem("userId"), // 新增 userId
-                    products: [], // 全部商品數據
+      import {
+        HeaderComponent,
+        FooterComponent,
+      } from "../Scripts/shared-components.js";
+      const userId = JSON.parse(localStorage.getItem("user"))?.id;
 
-                };
-            },
-            mounted() {
-                // 加載商品數據
-                fetch("/api/products/GetProducts?categoryName=PC")
-                    .then((response) => response.json())
-                    .then((data) => {
-                        this.products = data;
-                    })
-                    .catch((error) => console.error("Error loading products:", error));
+      const app = Vue.createApp({
+        data() {
+          return {
+            MemberFollowLists: [],
+            userId, // 新增 userId
+            products: [], // 全部商品數據
+          };
+        },
+        mounted() {
+          // 加載商品數據
+          fetch("/api/products/GetProducts?categoryName=PC")
+            .then((response) => response.json())
+            .then((data) => {
+              this.products = data;
+            })
+            .catch((error) => console.error("Error loading products:", error));
 
-                // 確保在組件掛載時從 API 正確地獲取資料
-                this.fetchTeack(this.userId);
-            },
-            created() {
-                let userId = localStorage.getItem("userId");
-                if (!userId) {
-                    userId = 3; // 預設值
-                    localStorage.setItem("userId", userId);
-                    /*console.error("未找到會員ID，請先登入");*/
-                }
-                console.log("User ID:", userId); // 檢查 userId
-            },
-            methods: {
-                async fetchTeack(userId) {
-                    fetch(`/api/Members/Track/${userId}`)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            this.MemberFollowLists = data;
-                            console.log("MemberFollowLists:", this.MemberFollowLists); // 檢查 MemberFollowLists 的內容
-                            })
-                        .catch((error) =>   
-                            console.error("Error loading Tracj:", error)
-                    );
-                },
-                formatCurrency(value) {
-                    if (typeof value !== "number" || isNaN(value)) {
-                        return "0";
-                    }
-                    return value.toLocaleString();
-                },
-                formatDate(dateString) {
-                    const date = new Date(dateString);
-                    return date.toISOString().split("T")[0]; // 只保留日期部分
-                },
-                checkToCart(SkuId, SkuItemId, userId) {
-                    return fetch(
-                        `/api/products/QueryCart?UserId=${userId}&ProductSkuId=${SkuId}&SkuItemId=${SkuItemId}`,
-                        {
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        }
-                    )
-                        .then((response) => response.json())
-                        .then((exists) => {
-                            return exists; // 返回 true 或 false
-                        })
-                        .catch((error) => {
-                            console.error("Error checking cart:", error);
-                            return false; // 出現錯誤時返回 false
-                        });
-                },
+          // 確保在組件掛載時從 API 正確地獲取資料
+          this.fetchTeack(this.userId);
+        },
+        created() {
+          const userId = JSON.parse(localStorage.getItem("user"))?.id;
 
-                // 用來新增商品或更新商品數量到購物車
-                addToCart(productSkuId) {
-                    const SkuItemId = null; // 取得 SkuItemId
-                    const userId = localStorage.getItem("userId");
-                    // 檢查商品是否存在於購物車
-                    this.checkToCart(productSkuId, SkuItemId, userId).then((exists) => {
-                        const item = {
-                            userId: this.userId,
-                            ProductSkuId: productSkuId,
-                            ProductSkuItemId: SkuItemId,
-                            Qty: 1, // 默認數量為1
-                        };
+          if (!userId) {
+            Swal.fire({
+              icon: "info",
+              title: "請先登入",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setTimeout(() => {
+              window.location.href = "Login.html";
+            }, 2000);
+            return;
+          }
+          console.log("User ID:", userId); // 檢查 userId
+        },
+        methods: {
+          async fetchTeack(userId) {
+            fetch(`/api/Members/Track/${userId}`)
+              .then((response) => response.json())
+              .then((data) => {
+                this.MemberFollowLists = data;
+                console.log("MemberFollowLists:", this.MemberFollowLists); // 檢查 MemberFollowLists 的內容
+              })
+              .catch((error) => console.error("Error loading Tracj:", error));
+          },
+          formatCurrency(value) {
+            if (typeof value !== "number" || isNaN(value)) {
+              return "0";
+            }
+            return value.toLocaleString();
+          },
+          formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toISOString().split("T")[0]; // 只保留日期部分
+          },
+          checkToCart(SkuId, SkuItemId, userId) {
+            return fetch(
+              `/api/products/QueryCart?UserId=${userId}&ProductSkuId=${SkuId}&SkuItemId=${SkuItemId}`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((response) => response.json())
+              .then((exists) => {
+                return exists; // 返回 true 或 false
+              })
+              .catch((error) => {
+                console.error("Error checking cart:", error);
+                return false; // 出現錯誤時返回 false
+              });
+          },
 
-                        if (exists) {
-                            //如果商品存在購物車中，更新數量
-                            // 呼叫saveToCart，將商品發送到後端
-                            fetch("/api/Track/SaveToCart", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(item),
-                            })
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    Swal.fire({
-                                        //position: "top-end",
-                                        icon: "info",
-                                        title: "商品數量已增加",
-                                        showConfirmButton: false,
-                                        timer: 1500,
-                                    });
-                                    //alert("商品數量已增加");
-                                })
-                                .catch((error) =>
-                                    console.error("Error updating item in cart:", error)
-                                );
-                        } else {
-                            // 如果商品不存在購物車中 就新增商品到購物車
-                            fetch("/api/Track/SaveToCart", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(item),
-                            })
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    Swal.fire({
-                                        //position: "top-end",
-                                        icon: "success",
-                                        title: "商品已加入購物車",
-                                        showConfirmButton: false,
-                                        timer: 1500,
-                                    });
-                                    //alert("商品已加入購物車");
-                                })
-                                .catch((error) =>
-                                    console.error("Error adding item to cart:", error)
-                                );
-                        }
+          // 用來新增商品或更新商品數量到購物車
+          addToCart(productSkuId) {
+            const SkuItemId = null; // 取得 SkuItemId
+            const userId = JSON.parse(localStorage.getItem("user"))?.id;
+            // 檢查商品是否存在於購物車
+            this.checkToCart(productSkuId, SkuItemId, userId).then((exists) => {
+              const item = {
+                userId: this.userId,
+                ProductSkuId: productSkuId,
+                ProductSkuItemId: SkuItemId,
+                Qty: 1, // 默認數量為1
+              };
+
+              if (exists) {
+                //如果商品存在購物車中，更新數量
+                // 呼叫saveToCart，將商品發送到後端
+                fetch("/api/Track/SaveToCart", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(item),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    Swal.fire({
+                      //position: "top-end",
+                      icon: "info",
+                      title: "商品數量已增加",
+                      showConfirmButton: false,
+                      timer: 1500,
                     });
+                    //alert("商品數量已增加");
+                  })
+                  .catch((error) =>
+                    console.error("Error updating item in cart:", error)
+                  );
+              } else {
+                // 如果商品不存在購物車中 就新增商品到購物車
+                fetch("/api/Track/SaveToCart", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(item),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    Swal.fire({
+                      //position: "top-end",
+                      icon: "success",
+                      title: "商品已加入購物車",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                    //alert("商品已加入購物車");
+                  })
+                  .catch((error) =>
+                    console.error("Error adding item to cart:", error)
+                  );
+              }
+            });
+          },
+
+          goToPcDetail(productId) {
+            window.location.href = `PcDetail.html?id=${productId}`;
+          },
+
+          async removeItem(item) {
+            // 檢查 item 是否存在於 cartItems
+            const index = this.MemberFollowLists.indexOf(item);
+            if (index > -1) {
+              this.MemberFollowLists.splice(index, 1); // 刪除商品
+            }
+
+            const apiUrl = `/api/Members/Track/RemoveItem/${item.id}`;
+            try {
+              const response = await fetch(apiUrl, {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
                 },
+                body: JSON.stringify({
+                  userId: item.userId,
+                  memberFollowListsId: item.id,
+                  productSkuId: item.productSkuId,
+                }),
+              });
+              if (!response.ok) {
+                throw new Error(
+                  `Failed to remove item: ${response.statusText}`
+                );
+              }
 
-                goToPcDetail(productId) {
-                    window.location.href = `PcDetail.html?id=${productId}`;
-                },
+              this.fetchTeack(userId);
+              const data = await response.json();
 
-                async removeItem(item) {
+              // 將獲取到的資料賦值給 cartItems
+              this.MemberFollowLists = data;
 
-                    // 檢查 item 是否存在於 cartItems
-                    const index = this.MemberFollowLists.indexOf(item);
-                    if (index > -1) {
-                        this.MemberFollowLists.splice(index, 1); // 刪除商品
-                    }
-
-                    const apiUrl = `/api/Members/Track/RemoveItem/${item.id}`;
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: "DELETE",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                userId: item.userId,
-                                memberFollowListsId: item.id,
-                                productSkuId: item.productSkuId,
-                            }),
-                        });
-                        if (!response.ok) {
-                            throw new Error(
-                                `Failed to remove item: ${response.statusText}`
-                            );
-                        }
-
-                        this.fetchTeack(userId);
-                        const data = await response.json();
-
-                        // 將獲取到的資料賦值給 cartItems
-                        this.MemberFollowLists = data;
-
-                        this.MemberFollowLists = this.MemberFollowLists.filter(MemberFollowLists => MemberFollowLists.id !== item?.id);
-                    } catch (error) {
-                        console.error("Error removing item:", error);
-                    }
-                },
- 
-            },
-        });
-        app.component("header-component", HeaderComponent);
-        app.component("footer-component", FooterComponent);
-        app.mount("#app");
+              this.MemberFollowLists = this.MemberFollowLists.filter(
+                (MemberFollowLists) => MemberFollowLists.id !== item?.id
+              );
+            } catch (error) {
+              console.error("Error removing item:", error);
+            }
+          },
+        },
+      });
+      app.component("header-component", HeaderComponent);
+      app.component("footer-component", FooterComponent);
+      app.mount("#app");
     </script>
-</body>
+  </body>
 </html>

@@ -212,74 +212,87 @@
       </div>
 
       <div class="content">
-          <div class="row mb-3">
-              <div class="col-md-2">
-                  <input id="minPrice"
-                         type="number"
-                         class="form-control"
-                         v-model.number="minPrice"
-                         placeholder="最低價格"
-                         @input="filterProducts" />
-              </div>
-              <div class="col-md-2">
-                  <input id="maxPrice"
-                         type="number"
-                         class="form-control"
-                         v-model.number="maxPrice"
-                         placeholder="最高價格"
-                         @input="filterProducts" />
-              </div>
-              <div class="col-md-2">
-                  <select id="priceSort"
-                          class="form-select"
-                          v-model="selectedPriceSort"
-                          @change="filterProducts">
-                      <option value="name">默認排序</option>
-                      <option value="price_asc">價格：低到高</option>
-                      <option value="price_desc">價格：高到低</option>
-                  </select>
-              </div>
-              <div class="col-md-2">
-                  <select id="brandSelect"
-                          class="form-select"
-                          v-model="selectedBrand"
-                          @change="filterProducts">
-                      <option value="">所有品牌</option>
-                      <option value="華碩">ASUS-華碩</option>
-                      <option value="微星">MSI-微星</option>
-                      <option value="宏碁">ACER-宏碁</option>
-                      <option value="技嘉">GIGABYTE-技嘉</option>
-                  </select>
-              </div>
-              <div class="col-md-2">
-                  <select id="categorySelect"
-                          class="form-select"
-                          v-model="selectedCategory"
-                          @change="updateSubOptions">
-                      <option value="">選擇類別</option>
-                      <option value="harddrive">硬碟</option>
-                      <option value="memory">記憶體</option>
-                      <option value="gpu">顯示卡</option>
-                  </select>
-              </div>
-              <div class="col-md-2">
-                  <select id="subCategorySelect"
-                          class="form-select"
-                          v-model="selectedSubCategory"
-                          @change="filterProducts">
-                      <option value="">請先選擇類別</option>
-                      <option v-for="option in subOptions"
-                              :key="option"
-                              :value="option">
-                          {{ option }}
-                      </option>
-                  </select>
-              </div>
+        <div class="row mb-3">
+          <div class="col-md-2">
+            <input
+              id="minPrice"
+              type="number"
+              class="form-control"
+              v-model.number="minPrice"
+              placeholder="最低價格"
+              @input="filterProducts"
+            />
           </div>
+          <div class="col-md-2">
+            <input
+              id="maxPrice"
+              type="number"
+              class="form-control"
+              v-model.number="maxPrice"
+              placeholder="最高價格"
+              @input="filterProducts"
+            />
+          </div>
+          <div class="col-md-2">
+            <select
+              id="priceSort"
+              class="form-select"
+              v-model="selectedPriceSort"
+              @change="filterProducts"
+            >
+              <option value="name">默認排序</option>
+              <option value="price_asc">價格：低到高</option>
+              <option value="price_desc">價格：高到低</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <select
+              id="brandSelect"
+              class="form-select"
+              v-model="selectedBrand"
+              @change="filterProducts"
+            >
+              <option value="">所有品牌</option>
+              <option value="華碩">ASUS-華碩</option>
+              <option value="微星">MSI-微星</option>
+              <option value="宏碁">ACER-宏碁</option>
+              <option value="技嘉">GIGABYTE-技嘉</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <select
+              id="categorySelect"
+              class="form-select"
+              v-model="selectedCategory"
+              @change="updateSubOptions"
+            >
+              <option value="">選擇類別</option>
+              <option value="harddrive">硬碟</option>
+              <option value="memory">記憶體</option>
+              <option value="gpu">顯示卡</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <select
+              id="subCategorySelect"
+              class="form-select"
+              v-model="selectedSubCategory"
+              @change="filterProducts"
+            >
+              <option value="">請先選擇類別</option>
+              <option
+                v-for="option in subOptions"
+                :key="option"
+                :value="option"
+              >
+                {{ option }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-
-          <!-- 插入产品选择和已上传图片的代码 -->
-          <!--<label for="productSelect">選擇產品:</label>
+        <!-- 插入产品选择和已上传图片的代码 -->
+        <!--<label for="productSelect">選擇產品:</label>
           <select id="productSelect" name="productId" v-model="selectedProduct" @change="loadProductImages">
               <option v-for="product in products" :key="product.Value" :value="product.Value">
                   {{ product.Text }}
@@ -297,62 +310,81 @@
               </div>
           </div>-->
 
-
-
-          <div class="card-container" style="flex-grow: 1">
-              <div class="card"
-                   v-for="product in paginatedProducts"
-                   :key="product.id"
-                   @click="goToPcDetail(product.id)">
-                  <img :src="product.image"
-                       class="card-img-top"
-                       :alt="product?.name" />
-                  <div class="card-body">
-                      <h5 class="card-title">{{ product?.name }}</h5>
-                      <p class="card-text">{{ product.description }}</p>
-                      <p class="card-brand">品牌: {{ product.brand }}</p>
-                      <p class="card-price">價格: ${{ product.specs[0]?.price }}</p>
-                      <!-- 顯示默認規格 -->
-                      <p class="card-specs">規格: {{ product.specs[0]?.name }}</p>
-                      <div class="d-flex justify-content-between">
-                          <!-- 愛心按鈕 -->
-                          <button class="btn btn-outline-danger btn-wishlist me-3"
-                                  @click.stop="addToWishlist(product)">
-                              <i class="fas fa-heart"></i>
-                          </button>
-                          <!-- 加入購物車按鈕 -->
-                          <button class="btn btn-primary btn-add-to-cart"
-                                  @click.stop="addToCart(product)">
-                              加入購物車
-                          </button>
-                      </div>
-                  </div>
+        <div class="card-container" style="flex-grow: 1">
+          <div
+            class="card"
+            v-for="product in paginatedProducts"
+            :key="product.id"
+            @click="goToPcDetail(product.id)"
+          >
+            <img
+              :src="product.image"
+              class="card-img-top"
+              :alt="product?.name"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ product?.name }}</h5>
+              <p class="card-text">{{ product.description }}</p>
+              <p class="card-brand">品牌: {{ product.brand }}</p>
+              <p class="card-price">價格: ${{ product.specs[0]?.price }}</p>
+              <!-- 顯示默認規格 -->
+              <p class="card-specs">規格: {{ product.specs[0]?.name }}</p>
+              <div class="d-flex justify-content-between">
+                <!-- 愛心按鈕 -->
+                <button
+                  class="btn btn-outline-danger btn-wishlist me-3"
+                  @click.stop="addToWishlist(product)"
+                >
+                  <i class="fas fa-heart"></i>
+                </button>
+                <!-- 加入購物車按鈕 -->
+                <button
+                  class="btn btn-primary btn-add-to-cart"
+                  @click.stop="addToCart(product)"
+                >
+                  加入購物車
+                </button>
               </div>
+            </div>
           </div>
+        </div>
 
-          <nav aria-label="Page navigation">
-              <ul class="pagination justify-content-center">
-                  <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                      <a class="page-link"
-                         href="#"
-                         @click.prevent="setCurrentPage(currentPage - 1)">上一頁</a>
-                  </li>
-                  <li class="page-item"
-                      v-for="page in totalPages"
-                      :key="page"
-                      :class="{ active: currentPage === page }">
-                      <a class="page-link"
-                         href="#"
-                         @click.prevent="setCurrentPage(page)">{{ page }}</a>
-                  </li>
-                  <li class="page-item"
-                      :class="{ disabled: currentPage === totalPages }">
-                      <a class="page-link"
-                         href="#"
-                         @click.prevent="setCurrentPage(currentPage + 1)">下一頁</a>
-                  </li>
-              </ul>
-          </nav>
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{ disabled: currentPage === 1 }">
+              <a
+                class="page-link"
+                href="#"
+                @click.prevent="setCurrentPage(currentPage - 1)"
+                >上一頁</a
+              >
+            </li>
+            <li
+              class="page-item"
+              v-for="page in totalPages"
+              :key="page"
+              :class="{ active: currentPage === page }"
+            >
+              <a
+                class="page-link"
+                href="#"
+                @click.prevent="setCurrentPage(page)"
+                >{{ page }}</a
+              >
+            </li>
+            <li
+              class="page-item"
+              :class="{ disabled: currentPage === totalPages }"
+            >
+              <a
+                class="page-link"
+                href="#"
+                @click.prevent="setCurrentPage(currentPage + 1)"
+                >下一頁</a
+              >
+            </li>
+          </ul>
+        </nav>
       </div>
       <footer-component></footer-component>
     </div>
@@ -388,11 +420,11 @@
             .then((response) => response.json())
             .then((data) => {
               this.products = data;
-                this.filteredProducts = data; // 初始化顯示所有商品
-                //if (this.products.length > 0) {
-                //    this.selectedProduct = this.products[0].Value; // 默认选择第一个产品
-                //    this.loadProductImages(); // 加载第一个产品的图片
-                //}
+              this.filteredProducts = data; // 初始化顯示所有商品
+              //if (this.products.length > 0) {
+              //    this.selectedProduct = this.products[0].Value; // 默认选择第一个产品
+              //    this.loadProductImages(); // 加载第一个产品的图片
+              //}
             })
             .catch((error) => console.error("Error loading products:", error));
 
@@ -424,17 +456,17 @@
             );
           },
         },
-          methods: {
-              //loadProductImages() {
-              //    if (this.selectedProduct) {
-              //        fetch(`/api/products/GetProductImages?productId=${this.selectedProduct}`)
-              //            .then((response) => response.json())
-              //            .then((data) => {
-              //                this.images = data; // 将返回的图片存入images
-              //            })
-              //            .catch((error) => console.error("Error loading images:", error));
-              //    }
-              //},
+        methods: {
+          //loadProductImages() {
+          //    if (this.selectedProduct) {
+          //        fetch(`/api/products/GetProductImages?productId=${this.selectedProduct}`)
+          //            .then((response) => response.json())
+          //            .then((data) => {
+          //                this.images = data; // 将返回的图片存入images
+          //            })
+          //            .catch((error) => console.error("Error loading images:", error));
+          //    }
+          //},
           setAccordion(seriesName) {
             this.removeSearchParams();
             if (seriesName.includes("華碩")) {
@@ -588,7 +620,21 @@
           },
 
           checkToCart(SkuId, SkuItemId) {
-            const userId = 3; // 假設當前用戶 ID 為 3
+            const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+            if (!userId) {
+              Swal.fire({
+                icon: "info",
+                title: "請先登入",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setTimeout(() => {
+                window.location.href = "Login.html";
+              }, 2000);
+              return;
+            }
+
             return fetch(
               `/api/products/QueryCart?UserId=${userId}&ProductSkuId=${SkuId}&SkuItemId=${SkuItemId}`,
               {
@@ -613,8 +659,23 @@
             const SkuItemId = null; // 取得 SkuItemId
             // 檢查商品是否存在於購物車
             this.checkToCart(SkuId, SkuItemId).then((exists) => {
+              const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+              if (!userId) {
+                Swal.fire({
+                  icon: "info",
+                  title: "請先登入",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                setTimeout(() => {
+                  window.location.href = "Login.html";
+                }, 2000);
+                return;
+              }
+
               const item = {
-                UserId: 3, // 假設用戶ID為3
+                UserId: userId, // 假設用戶ID為3
                 ProductSkuId: SkuId,
                 ProductSkuItemId: SkuItemId,
                 Qty: 1, // 默認數量為1
@@ -672,7 +733,21 @@
           },
           // 檢查是否再追蹤清單
           checkToFollow(ProductId) {
-            const userId = 3; // 假設當前用戶 ID 為 3
+            const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+            if (!userId) {
+              Swal.fire({
+                icon: "info",
+                title: "請先登入",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setTimeout(() => {
+                window.location.href = "Login.html";
+              }, 2000);
+              return;
+            }
+
             return fetch(
               `/api/products/QueryFollow?UserId=${userId}&ProductId=${ProductId}`
             )
@@ -708,8 +783,9 @@
                 //alert("商品已在追蹤清單中");
               } else {
                 // 如果商品不再追蹤清單中 就新增商品到追蹤清單
+                const userId = JSON.parse(localStorage.getItem("user"))?.id;
                 const item = {
-                  UserId: 3,
+                  UserId: userId,
                   ProductId: ProductId,
                   Name: product?.name,
                 };

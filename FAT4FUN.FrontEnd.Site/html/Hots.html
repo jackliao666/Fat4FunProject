@@ -192,7 +192,21 @@
             window.location.href = `PcDetail.html?id=${productId}`;
           },
           checkToCart(SkuId, SkuItemId) {
-            const userId = 3; // 假設當前用戶 ID 為 3
+            const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+            if (!userId) {
+              Swal.fire({
+                icon: "info",
+                title: "請先登入",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setTimeout(() => {
+                window.location.href = "Login.html";
+              }, 2000);
+              return;
+            }
+
             return fetch(
               `/api/products/QueryCart?UserId=${userId}&ProductSkuId=${SkuId}&SkuItemId=${SkuItemId}`,
               {
@@ -213,12 +227,27 @@
 
           // 用來新增商品或更新商品數量到購物車
           addToCart(product) {
+            const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+            if (!userId) {
+              Swal.fire({
+                icon: "info",
+                title: "請先登入",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setTimeout(() => {
+                window.location.href = "Login.html";
+              }, 2000);
+              return;
+            }
+
             const SkuId = product.specs[0].id; // 取得 SkuId
             const SkuItemId = null; // 取得 SkuItemId
             // 檢查商品是否存在於購物車
             this.checkToCart(SkuId, SkuItemId).then((exists) => {
               const item = {
-                UserId: 3, // 假設用戶ID為3
+                UserId: userId, // 假設用戶ID為3
                 ProductSkuId: SkuId,
                 ProductSkuItemId: SkuItemId,
                 Qty: 1, // 默認數量為1
@@ -276,7 +305,21 @@
           },
           // 檢查是否再追蹤清單
           checkToFollow(ProductId) {
-            const userId = 3; // 假設當前用戶 ID 為 3
+            const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+            if (!userId) {
+              Swal.fire({
+                icon: "info",
+                title: "請先登入",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setTimeout(() => {
+                window.location.href = "Login.html";
+              }, 2000);
+              return;
+            }
+
             return fetch(
               `/api/products/QueryFollow?UserId=${userId}&ProductId=${ProductId}`
             )
@@ -297,6 +340,20 @@
 
           // 新增商品到追蹤清單
           addToWishlist(product) {
+            const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+            if (!userId) {
+              Swal.fire({
+                icon: "info",
+                title: "請先登入",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setTimeout(() => {
+                window.location.href = "Login.html";
+              }, 2000);
+              return;
+            }
             const ProductId = product.id;
 
             // 檢查是否在追蹤清單中
@@ -313,7 +370,7 @@
               } else {
                 // 如果商品不再追蹤清單中 就新增商品到追蹤清單
                 const item = {
-                  UserId: 3,
+                  UserId: userId,
                   ProductId: ProductId,
                   Name: product?.name,
                 };
