@@ -8,6 +8,23 @@ function html(strings, ...values) {
   );
 }
 
+// Cookie 操作函数
+//function getCookie(name) {
+//    const value = `; ${document.cookie}`;
+//    const parts = value.split(`; ${name}=`);
+//    if (parts.length === 2) return parts.pop().split(';').shift();
+//}
+
+//function setCookie(name, value, days) {
+//    let expires = "";
+//    if (days) {
+//        const date = new Date();
+//        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+//        expires = `; expires=${date.toUTCString()}`;
+//    }
+//    document.cookie = `${name}=${value || ""}${expires}; path=/`;
+//}
+
 const HeaderComponent = {
   template: html`
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
@@ -89,22 +106,27 @@ const HeaderComponent = {
 
         <div class="d-flex">
           <a
-            href="Order.html"
+            href="#"
             class="ms-5 btn btn-link"
+            @click="handleOrderClick"
             :class="{'active-link': isActiveLink('Order.html')}"
           >
             <i class="bi bi-person-circle"></i>
           </a>
           <a
-            href="Login.html"
+            :href="isLoggedIn? '#': 'Login.html'"
             class="ms-5 btn btn-link"
             :class="{'active-link': isActiveLink('Login.html')}"
+            @click="handleLoginClick"
           >
-            <i class="bi bi-box-arrow-in-right"></i>
+            <i
+              :class="isLoggedIn ? 'bi bi-box-arrow-in-left' : 'bi bi-box-arrow-in-right'"
+            ></i>
           </a>
           <a
-            href="cart.html"
+            href="#"
             class="ms-5 btn btn-link"
+            @click="handleCartClick"
             :class="{'active-link': isActiveLink('cart.html')}"
           >
             <i class="bi bi-cart"></i>
@@ -117,10 +139,18 @@ const HeaderComponent = {
     return {
       searchQuery: "", // 绑定搜索输入
       pathname: "",
+      isLoggedIn: false,
     };
   },
+
   mounted() {
     this.pathname = window.location.pathname;
+    const loggedInStatus = localStorage.getItem("user");
+    if (loggedInStatus) {
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
+    }
   },
   methods: {
     // searchProduct() {
@@ -131,6 +161,61 @@ const HeaderComponent = {
     // },
     isActiveLink(pathname) {
       return window.location.pathname.includes(pathname);
+    },
+    handleLoginClick() {
+      if (this.isLoggedIn) {
+        // 用户已登录，点击时显示 SweetAlert 并处理登出逻辑
+        localStorage.removeItem("user");
+        Swal.fire({
+          icon: "success",
+          title: "登出成功",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          // this.isLoggedIn = false;
+          // setCookie("auth_token", "false", 0); // 删除 Cookie
+          setTimeout(() => {
+            window.location.reload(); // 刷新页面，确保状态更新
+          }, 2000);
+        });
+      } else {
+        // 用户未登录，跳转到登录页面
+        window.location.href = "Login.html";
+      }
+    },
+    handleOrderClick() {
+      if (this.isLoggedIn) {
+        // 如果用户已登录，跳转到订单页面
+        window.location.href = "Order.html";
+      } else {
+        // 未登录时跳转到登录页面
+        Swal.fire({
+          icon: "info",
+          title: "請先登入",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          setTimeout(() => {
+            window.location.href = "Login.html";
+          }, 2000);
+        });
+      }
+    },
+    handleCartClick() {
+      if (this.isLoggedIn) {
+        // 如果用户已登录，跳转到购物车页面
+        window.location.href = "cart.html";
+      } else {
+        // 未登录时跳转到登录页面
+        Swal.fire({
+          icon: "info",
+          title: "請先登入",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          window.location.href = "Login.html";
+        });
+      }
     },
   },
 };
