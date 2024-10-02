@@ -222,6 +222,14 @@
             mounted() {
                 // 初始化時使用全部訂單
                 this.filteredOrders = this.orders;
+
+                // 讀取 URL 中的搜尋參數
+                const urlParams = new URLSearchParams(window.location.search);
+                const status = urlParams.get('searchStatus');
+
+                if (status) {
+                    this.searchStatus = status; // 設置為處理中
+                }
             },
             methods: {
                 getPaymentMethodText(PaymentMethod) {
@@ -352,9 +360,7 @@
                     const currentDate = new Date();
                     // 計算日期差
                     const daysDiff = Math.floor((currentDate - createdDate) / (1000 * 3600 * 24)); // 轉換為天數
-                    console.log('createdDate:', createdDate);
-                    console.log('currentDate:', currentDate);
-                    console.log('daysDiff:', daysDiff);
+                    
                     // 檢查狀態是否為處理中且是否超過5天
                     return item.Status === 1 && daysDiff > 5;
                 },

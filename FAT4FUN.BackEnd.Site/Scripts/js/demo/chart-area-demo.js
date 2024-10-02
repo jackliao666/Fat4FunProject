@@ -46,7 +46,7 @@ var myLineChart = new Chart(ctx, {
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
       pointHitRadius: 10,
       pointBorderWidth: 2,
-      data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+      data: [],
     }],
   },
   options: {
@@ -116,3 +116,20 @@ var myLineChart = new Chart(ctx, {
     }
   }
 });
+// 使用 fetch 獲取每月收入數據
+fetch('/Home/GetMonthlyEarnings')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json(); // 將回應轉換為 JSON
+    })
+    .then(data => {
+        console.log(data);
+        // 更新圖表數據
+        myLineChart.data.datasets[0].data = data; // 設定數據為返回的數據
+        myLineChart.update(); // 更新圖表
+    })
+    .catch(error => {
+        console.error("Error fetching monthly earnings:", error);
+    });
