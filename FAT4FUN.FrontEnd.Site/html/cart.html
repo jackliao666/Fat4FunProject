@@ -221,6 +221,7 @@
                     <input type="text"
                            class="form-control"
                            id="name"
+                           maxlength="50"
                            v-model="customer.name"
                            placeholder="輸入姓名" />
                 </div>
@@ -230,6 +231,7 @@
                            class="form-control"
                            id="phone"
                            v-model="customer.phone"
+                           maxlength="10"
                            placeholder="輸入電話" />
                 </div>
                 <div class="mb-3">
@@ -238,6 +240,7 @@
                            class="form-control"
                            id="Address"
                            v-model="customer.address"
+                           maxlength="50"
                            placeholder="送貨地址" />
                 </div>
             </div>
