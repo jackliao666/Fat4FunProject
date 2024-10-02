@@ -48,7 +48,10 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
                         Qty = item.Qty,
                         SubTotal = item.SubTotal
                     }).ToList()
-                }).ToList();
+                })
+                .OrderBy(o => o.Status) // 先依據狀態排序
+                .ThenByDescending(o => o.CreateDate) // 再依據創建日期排序
+                .ToList();
 
             return order;
         }
