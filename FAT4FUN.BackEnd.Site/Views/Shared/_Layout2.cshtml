@@ -1,0 +1,85 @@
+﻿@{
+    // 判斷當前是否為登入頁面
+    var currentAction = ViewContext.RouteData.Values["action"].ToString();
+    var currentController = ViewContext.RouteData.Values["controller"].ToString();
+    bool isLoginPage = currentAction == "Login" && currentController == "Users";
+
+
+    var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+    if (authCookie != null)
+    {
+        var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+        System.Diagnostics.Debug.WriteLine($"Decrypted Role Number from Cookie: {ticket.UserData}");
+    }
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@Page.Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/site.css" rel="stylesheet" />  <!-- 自定義CSS文件 -->
+    @RenderSection("head", required: false)
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        /* 頁面背景 */
+        .default-bg {
+            background-color: #f8f9fa;
+        }
+
+        .login-bg {
+            background: linear-gradient(135deg, #92a8b3 0%, #557c8e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 頁面主體內容 */
+        .container {
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+
+        /* 鏈接樣式 */
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+
+        .login-bg {
+            background-image: url('/images/bg1.jpg'); /* 背景图片的路径 */
+            background-size: cover; /* 让背景图片充满整个页面 */
+            background-position: center; /* 居中显示背景图片 */
+            background-repeat: no-repeat; /* 不重复背景图片 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body class="@((isLoginPage ? "login-bg" : "default-bg"))">
+    <!-- 根據頁面不同應用背景 -->
+    <!-- 頁面主體內容 -->
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

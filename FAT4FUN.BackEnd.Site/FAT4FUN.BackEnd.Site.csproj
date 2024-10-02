@@ -1991,6 +1991,7 @@
     <Content Include="Views\Users\ChangePassword.cshtml" />
     <Content Include="Views\Users\UserCheck.cshtml" />
     <Content Include="Views\Users\UserEditStatus.cshtml" />
+    <Content Include="Views\Shared\_Layout2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

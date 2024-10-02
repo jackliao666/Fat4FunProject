@@ -229,6 +229,8 @@
     <Content Include="Content\NavFooter.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="html\activation.html" />
+    <Content Include="html\activationSuccess.html" />
     <Content Include="html\Checkout-Confirmation.html" />
     <Content Include="html\Checkout-Success.html" />
     <Content Include="html\EditProfile.html" />
