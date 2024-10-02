@@ -6,7 +6,7 @@
 }
     
 
-<div id="app">
+<div id="app" class="mx-2">
     <div>
         <div>
             <div class="col-md-12">
@@ -44,13 +44,13 @@
                 <table class="table table-bordered table-hover text-center align-middle">
                     <thead class="thead-dark">
                         <tr>
-                            <th>@Html.DisplayNameFor(model => model.UserId)</th>
-                            <th>@Html.DisplayNameFor(model => model.No)</th>
+                            <th class="col-md-1">@Html.DisplayNameFor(model => model.UserId)</th>
+                            <th class="col-md-2">@Html.DisplayNameFor(model => model.No)</th>
                             <th>@Html.DisplayNameFor(model => model.TotalAmount)</th>
-                            <th>@Html.DisplayNameFor(model => model.Status)</th>
-                            <th>@Html.DisplayNameFor(model => model.CreateDate)</th>
-                            <th>@Html.DisplayNameFor(model => model.ModifyDate)</th>
-                            <th>操作</th>
+                            <th style="width:150px;">@Html.DisplayNameFor(model => model.Status)</th>
+                            <th class="col-md-2">@Html.DisplayNameFor(model => model.CreateDate)</th>
+                            <th class="col-md-2">@Html.DisplayNameFor(model => model.ModifyDate)</th>
+                            <th class="col-md-2">操作</th>
                         </tr>
                     </thead>
                     <tbody v-for="item in filteredOrders" :key="item.Id"  style="vertical-align: middle;">                           
