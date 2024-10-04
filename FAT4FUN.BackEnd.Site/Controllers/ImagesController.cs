@@ -24,6 +24,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             // 獲取所有產品的列表
             model.Products = _db.Products
                 .OrderBy(p=>p.Name)
+                .Where(p=>p.Status)
                 .Select(p => new SelectListItem
             {
                 Value = p.Id.ToString(),

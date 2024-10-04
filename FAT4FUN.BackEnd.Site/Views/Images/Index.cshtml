@@ -128,10 +128,10 @@
 
 
 <div class="upload-form">
-    <h3>上傳新圖片</h3>
+    <h3>顯示順序</h3>
     <form id="uploadForm" enctype="multipart/form-data">
         <input type="hidden" id="productId" name="productId" value="@Model.SelectedProductId" />
-
+        
         <input type="number" id="sort" name="sort" class="form-control" placeholder="請輸入0,1,2" min="0" max="2" step="1" required oninput="this.value = Math.max(0, Math.min(2, this.value))" />
 
         <!-- 自訂檔案選擇按鈕 -->
@@ -183,6 +183,7 @@
             });
         }
 
+
         $('#uploadForm').submit(function (e) {
             e.preventDefault(); // 阻止表單的默認提交行為
 
@@ -197,7 +198,8 @@
                 success: function (response) {
                     if (response.success) {
                         alert('圖片上傳成功，路徑為：' + response.path);
-                        window.location.href = '@Url.Action("Index", "Images")' + '?productId=' + productId;
+                        location.reload();
+
                     } else {
                         alert('圖片上傳失敗：' + response.message);
                     }
