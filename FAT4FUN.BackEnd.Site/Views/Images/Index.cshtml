@@ -153,8 +153,11 @@
             <input type="number" id="sort" name="sort" class="form-control" placeholder="請輸入0,1,2" min="0" max="2" step="1" required oninput="this.value = Math.max(0, Math.min(2, this.value))" />
 
             <!-- 自訂檔案選擇按鈕 -->
-            <label for="file" class="custom-file-upload">選擇檔案</label>
-            <input type="file" id="file" name="file" class="form-control-file" required />
+            <label for="file" class="custom-file-upload" style='position: relative; overflow: hidden;'>
+                選擇檔案
+               <input type="file" id="file" name="file" class="form-control-file" required style='position: absolute; display: block; top: 0; left: 0; z-index: -1;' />
+            </label>
+            
 
             <!-- 顯示檔名的元素 -->
             <span id="fileName" class="mt-2"></span>
