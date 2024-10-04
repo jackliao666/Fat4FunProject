@@ -195,12 +195,42 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
             if (result.IsSuccess)
             {
-                return RedirectToAction("Index"); // 密碼修改成功，轉到首頁
+                return RedirectToAction("Index", "Home"); // 密碼修改成功，轉到首頁
             }
             ModelState.AddModelError(string.Empty, result.ErrorMessage);
             return View(vm); // 密碼修改失敗，返回修改密碼頁面
 
         }
+
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult ChangePasswordAlert(ChangePasswordVm vm)
+        {
+            string account = User.Identity.Name;
+
+            try
+            {
+                Result result = HandleChangePassword(account, vm);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true }); // 返回 JSON 对象
+                }
+                else
+                {
+                    return Json(new { success = false, message = result.ErrorMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                // 捕获异常，防止返回 HTML 错误页面
+                return Json(new { success = false, message = "發生錯誤：" + ex.Message });
+            }
+        }
+
+
+
 
         [HttpPost]
         public JsonResult ToggleUserStatus(int id, bool status)

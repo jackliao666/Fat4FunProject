@@ -87,185 +87,181 @@
     </style>
 </head>
     
-    <body id="page-top" class="@((isLoginPage ? "login-bg" : "default-bg"))">
+<body id="page-top" class="@((isLoginPage ? "login-bg" : "default-bg"))">
 
 
-        <!-- Page Wrapper -->
-        <div id="wrapper">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        @if (!isLoginPage && User.Identity.IsAuthenticated)
+        {
+            <!-- Sidebar -->
+            <ul class="navbar-nav  sidebar sidebar-dark accordion fixed-sidebar" style="color: #6a6e99" id="accordionSidebar">
+                @*<ul class="navbar-nav sidebar sidebar-dark accordion position-fixed" style="color: #6a6e99; " id="accordionSidebar">*@
+                <!-- Sidebar - Brand -->
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Home/Index">
+                    <img src="~/Images/LOGO.jpg" alt="Fat4Fun Logo" style="width: 65px; height: 65px; margin-right: 10px;">
+                    <div class="sidebar-brand-text mx-3">Fat4Fun</div>
+                </a>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
+
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProfile"
+                       aria-expanded="true" aria-controls="collapseProfile">
+                        <span>個人資訊</span>
+                    </a>
+                    <div id="collapseProfile" class="collapse" aria-labelledby="headingProfile" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="/Users/EditProfile">修改個資</a>
+                            <a class="collapse-item" href="/Users/ChangePassword">變更密碼</a>
+                        </div>
+                    </div>
+                </li>
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
+
+
+
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+
+                </div>
+
+
+
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmployee"
+                       aria-expanded="true" aria-controls="collapseEmployee">
+                        <span>員工管理</span>
+                    </a>
+                    <div id="collapseEmployee" class="collapse" aria-labelledby="headingEmployee" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="/Users/Register">帳戶創建</a>
+                            <a class="collapse-item" href="/Users/UserCheck">員工資料</a>
+                        </div>
+                    </div>
+                </li>
+
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Nav Item - Utilities Collapse Menu -->
+
+
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                       aria-expanded="true" aria-controls="collapseUtilities">
+                        @*<i class="fas fa-fw fa-wrench"></i>*@
+                        <span>商品管理</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+
+                            <a class="collapse-item" href="/Products/Index">產品資訊</a>
+                            <a class="collapse-item" href="/ProductCategories/Index">商品類別管理</a>
+                            <a class="collapse-item" href="/Images/Index">圖片管理</a>
+                            <a class="collapse-item" href="/ProductSkus/Index">規格管理</a>
+                            <a class="collapse-item" href="/Brands/Index">品牌管理</a>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Divider -->
+                <!-- Nav Item - Dashboard -->
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+
+                </div>
+
+                <!-- Nav Item - Tables -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Orders/Index">
+                        @*<i class="fas fa-fw fa-table"></i>*@
+                        <span>訂單管理</span>
+                    </a>
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
+
+
+
+
+
+                <!-- Sidebar Toggler (Sidebar) -->
+                <!--<div class="text-center d-none d-md-inline">
+                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                </div>-->
+
+
+
+
+
+            </ul>
+            <!-- End of Sidebar -->
+        }
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column  @(isLoginPage ? "w-100" : "content-wrapper")">
 
             @if (!isLoginPage && User.Identity.IsAuthenticated)
             {
-                <!-- Sidebar -->
-                <ul class="navbar-nav  sidebar sidebar-dark accordion fixed-sidebar" style="color: #6a6e99" id="accordionSidebar">
-                    @*<ul class="navbar-nav sidebar sidebar-dark accordion position-fixed" style="color: #6a6e99; " id="accordionSidebar">*@
-                    <!-- Sidebar - Brand -->
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Home/Index">
-                        <img src="~/Images/LOGO.jpg" alt="Fat4Fun Logo" style="width: 65px; height: 65px; margin-right: 10px;">
-                        <div class="sidebar-brand-text mx-3">Fat4Fun</div>
-                    </a>
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                    <!-- Divider -->
-                    <hr class="sidebar-divider my-0">
-
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProfile"
-                           aria-expanded="true" aria-controls="collapseProfile">
-                            <span>個人資訊</span>
-                        </a>
-                        <div id="collapseProfile" class="collapse" aria-labelledby="headingProfile" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="/Users/EditProfile">修改個資</a>
-                                <a class="collapse-item" href="/Users/ChangePassword">變更密碼</a>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- Divider -->
-                    <hr class="sidebar-divider my-0">
-
-
-
-
-                    <!-- Heading -->
-                    <div class="sidebar-heading">
-
-                    </div>
-
-
-
-                    <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmployee"
-                           aria-expanded="true" aria-controls="collapseEmployee">
-                            <span>員工管理</span>
-                        </a>
-                        <div id="collapseEmployee" class="collapse" aria-labelledby="headingEmployee" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="/Users/Register">帳戶創建</a>
-                                <a class="collapse-item" href="/Users/UserCheck">員工資料</a>
-                            </div>
-                        </div>
-                    </li>
-
-
-                    <!-- Divider -->
-                    <hr class="sidebar-divider">
-
-                    <!-- Nav Item - Utilities Collapse Menu -->
-
-
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                           aria-expanded="true" aria-controls="collapseUtilities">
-                            @*<i class="fas fa-fw fa-wrench"></i>*@
-                            <span>商品管理</span>
-                        </a>
-                        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                             data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <a class="collapse-item" href="/Products/Index">產品資訊</a>
-                                <a class="collapse-item" href="/ProductCategories/Index">商品類別管理</a>
-                                <a class="collapse-item" href="/Images/Index">圖片管理</a>
-                                <a class="collapse-item" href="/ProductSkus/Index">規格管理</a>
-                                <a class="collapse-item" href="/Brands/Index">品牌管理</a>
-                            </div>
-                        </div>
-                    </li>
-
-                    <!-- Divider -->
-                   
-
-                    <!-- Nav Item - Dashboard -->
-                    
-
-                    <!-- Divider -->
-                    <hr class="sidebar-divider">
-
-                    <!-- Heading -->
-                    <div class="sidebar-heading">
-
-                    </div>
-
-                    <!-- Nav Item - Tables -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Orders/Index">
-                            @*<i class="fas fa-fw fa-table"></i>*@
-                            <span>訂單管理</span>
-                        </a>
-                    </li>
-
-                    <!-- Divider -->
-                    <hr class="sidebar-divider d-none d-md-block">
-
-
-
-
-
-                    <!-- Sidebar Toggler (Sidebar) -->
-                    <!--<div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>-->
-
-
-
-
-
-                </ul>
-                <!-- End of Sidebar -->
+                    @*Topbar Navbar*@
+                    <ul class="navbar-nav ml-auto">
+                        @*Nav Item - User Information*@
+                        <li class="nav-item dropdown no-arrow">
+                            <ul class="navbar-nav flex-grow-1">
+                                <li><a href="~/Users/EditProfile" class="nav-link"><video src="~/Content/Images/user-icon.mp4" autoplay loop muted playsinline style="width: 50px; margin-right: 10px;"></video>&nbsp;&nbsp;@User.Identity.Name</a></li>
+                                <li>@Html.ActionLink("登出", "Logout", "Users", new { area = "" }, new { @class = "nav-link" })</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
             }
-          
-            <!-- Content Wrapper -->
-            <div id="content-wrapper" class="d-flex flex-column  @(isLoginPage ? "w-100" : "content-wrapper")">
+            <!-- Main Content -->
+            <div id="content" class="mx-4">
 
-                @if (!isLoginPage && User.Identity.IsAuthenticated)
-                {
-                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                        @*Topbar Navbar*@
-                        <ul class="navbar-nav ml-auto">
-                            @*Nav Item - User Information*@
-                            <li class="nav-item dropdown no-arrow">
-                                <ul class="navbar-nav flex-grow-1">
-                                    <li><a href="~/Users/EditProfile" class="nav-link"><video src="~/Content/Images/user-icon.mp4" autoplay loop muted playsinline style="width: 50px; margin-right: 10px;"></video>&nbsp;&nbsp;@User.Identity.Name</a></li>
-                                    <li>@Html.ActionLink("登出", "Logout", "Users", new { area = "" }, new { @class = "nav-link" })</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
-                }
-                <!-- Main Content -->
-                <div id="content" class="mx-4">
-
-                    @*Topbar*@
+                @*Topbar*@
 
 
 
-                    <!-- End of Topbar -->
-                    <!-- Begin Page Content -->
-                    @RenderBody()
-                    <!-- /.container-fluid -->
-                    <!-- Footer -->
+                <!-- End of Topbar -->
+                <!-- Begin Page Content -->
+                @RenderBody()
+                <!-- /.container-fluid -->
+                <!-- Footer -->
 
-                </div>
-                <!-- End of Main Content -->
-                <!-- End of Footer -->
             </div>
-            <!-- End of Content Wrapper -->
-
+            <!-- End of Main Content -->
+            <!-- End of Footer -->
         </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
 
 
 
-        <!-- End of Page Wrapper -->
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-        <!-- Logout Modal-->
-        <!--<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <!-- Logout Modal-->
+    <!--<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -283,23 +279,24 @@
             </div>
         </div>
     </div>-->
-        <!-- Bootstrap core JavaScript-->
-        <script src="~/Scripts/vendor/jquery/jquery.min.js"></script>
-        <script src="~/Scripts/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/Scripts/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="~/Scripts/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="~/Scripts/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-        <!-- Custom scripts for all pages-->
-        <script src="~/Scripts/js/sb-admin-2.min.js"></script>
-
-
-        <script src="~/Scripts/jquery.validate.min.js"></script>
-        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="~/Scripts/js/sb-admin-2.min.js"></script>
 
 
-        @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    </body>
+
+    @RenderSection("scripts", required: false)
+
+</body>
 
 </html>
