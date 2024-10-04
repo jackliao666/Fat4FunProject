@@ -138,10 +138,7 @@
     else
     {
 
-        <script type="text/javascript">
-            // 当没有图片时，调用清空函数并弹出提示
-            clearImagesAndAlert();
-        </script>
+        
         <div class="no-images-message text-center">
             <h5>尚未上傳任何圖片。</h5>
         </div>
@@ -184,17 +181,23 @@
             $('#productId').val(selectedProductId); // 更新隱藏字段
 
             // 自動加載選中的產品的圖片
+            
             $.ajax({
                 url: '@Url.Action("GetProductImages", "Images")',
                 type: 'GET',
                 data: { productId: selectedProductId },
-                success: function (response) {
-                    if (response.success) {
-                        $('#imageContainer').empty();
+
+                success: function (response)
+                
+                {
+                    console.log(1)
+                    $('#imageContainer').empty();
+                    if (response.success) {                      
                         response.images.forEach(function (image) {
                             $('#imageContainer').append('<div class="image-wrapper"><img src="' + image.Path + '" class="product-image" alt="Product Image" /></div>');
                         });
                     } else {
+                        
                         alert(response.message);
                     }
                 },
@@ -241,8 +244,11 @@
                 type: 'GET',
                 data: { productId: productId },
                 success: function (response) {
+                    $('#imageContainer').empty();
+                    console.log(2)
                     if (response.success) {
-                        $('#imageContainer').empty();
+                        
+                        
                         response.images.forEach(function (image) {
                             $('#imageContainer').append('<div class="image-wrapper"><img src="' + image.Path + '" class="product-image" alt="Product Image" /></div>');
                         });
