@@ -64,6 +64,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
                     ModifyDate = DateTime.Now,
                     IsConfirmed = false // 新用戶預設為未確認狀態
                 };
+                
 
                 // 生成確認碼
                 string confirmCode = Guid.NewGuid().ToString("N");
@@ -74,6 +75,15 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
                 // 6. 將新用戶添加到資料庫
                 db.Users.Add(newUser); // 將新用戶添加到 Users 集合中
                 await db.SaveChangesAsync(); // 保存變更到資料庫
+
+                var newRole = new Role
+                {
+                    UserId = newUser.Id, // 使用剛剛創建用戶的 ID
+                    Role1 = 5 // 這裡可以更具需求設定角色名稱
+                };
+
+                db.Roles.Add(newRole);
+                await db.SaveChangesAsync();
 
                 // 假設您的應用程式運行在 localhost，並且使用 https
                 string baseUrl = "https://localhost:44342"; // 根據您的實際域名或地址進行調整
