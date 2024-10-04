@@ -186,15 +186,16 @@
                 url: '@Url.Action("GetProductImages", "Images")',
                 type: 'GET',
                 data: { productId: selectedProductId },
-
-                success: function (response)
-                
-                {
-                    console.log(1)
+                success: function (response) {
                     $('#imageContainer').empty();
                     if (response.success) {                      
-                        response.images.forEach(function (image) {
-                            $('#imageContainer').append('<div class="image-wrapper"><img src="' + image.Path + '" class="product-image" alt="Product Image" /></div>');
+                        response.images.forEach(function (image, i) {
+                            $('#imageContainer').append(`
+                            <div class="image-wrapper">
+                                <img src="${image.Path}" class="product-image" alt="Product Image" />
+                                <div class="image-index">${i}</div>
+                            </div>`
+                            );
                         });
                     } else {
                         
@@ -245,12 +246,15 @@
                 data: { productId: productId },
                 success: function (response) {
                     $('#imageContainer').empty();
-                    console.log(2)
+                    
                     if (response.success) {
-                        
-                        
-                        response.images.forEach(function (image) {
-                            $('#imageContainer').append('<div class="image-wrapper"><img src="' + image.Path + '" class="product-image" alt="Product Image" /></div>');
+                        response.images.forEach(function (image, i) {
+                            $('#imageContainer').append(`
+                            <div class="image-wrapper">
+                                <img src="${image.Path}" class="product-image" alt="Product Image" />
+                                <div class="image-index">${i}</div>
+                            </div>
+                            `);
                         });
                     } else {
                         alert(response.message);
