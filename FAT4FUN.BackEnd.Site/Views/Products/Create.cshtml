@@ -10,7 +10,8 @@
     .small-input {
         width: 300px; /* 調整寬度，可以根據需要進一步修改 */
     }
-    h2{
+
+    h2 {
         text-align: center;
     }
 </style>
@@ -18,7 +19,7 @@
 <h2 class="my-4">新增商品</h2>
 
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", role = "form", onsubmit = "return validateForm()" }))
 {
     @Html.AntiForgeryToken()
 
@@ -31,8 +32,8 @@
         <div class="form-group row">
             <label class="control-label col-md-2 col-form-label">商品分類</label>
             <div class="col-md-10">
-                @Html.DropDownList("CategoryId", ViewBag.Categories as List<SelectListItem>, "請選擇分類", new { @class = "form-control small-input" })
-                @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                @Html.DropDownList("CategoryId", ViewBag.Categories as List<SelectListItem>, "請選擇分類", new { @class = "form-control small-input", id = "CategoryId" })
+                <span id="CategoryIdError" class="text-danger"></span>
             </div>
         </div>
 
@@ -40,8 +41,8 @@
         <div class="form-group row">
             <label class="control-label col-md-2 col-form-label">品牌</label>
             <div class="col-md-10">
-                @Html.DropDownList("BrandId", ViewBag.Brands as List<SelectListItem>, "請選擇品牌", new { @class = "form-control small-input" })
-                @Html.ValidationMessageFor(model => model.BrandId, "", new { @class = "text-danger" })
+                @Html.DropDownList("BrandId", ViewBag.Brands as List<SelectListItem>, "請選擇品牌", new { @class = "form-control small-input", id = "BrandId" })
+                <span id="BrandIdError" class="text-danger"></span>
             </div>
         </div>
 
@@ -49,8 +50,8 @@
         <div class="form-group row">
             <label class="control-label col-md-2 col-form-label">商品名稱</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入商品名稱" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入商品名稱", id = "Name" } })
+                <span id="NameError" class="text-danger"></span>
             </div>
         </div>
 
@@ -58,8 +59,8 @@
         <div class="form-group row">
             <label class="control-label col-md-2 col-form-label">商品描述</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入商品描述" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入商品描述", id = "Description" } })
+                <span id="DescriptionError" class="text-danger"></span>
             </div>
         </div>
 
@@ -67,8 +68,8 @@
         <div class="form-group row">
             <label class="control-label col-md-2 col-form-label">規格名稱</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ProductSkuName, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入 規格名稱" } })
-                @Html.ValidationMessageFor(model => model.ProductSkuName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ProductSkuName, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入規格名稱", id = "ProductSkuName" } })
+                <span id="ProductSkuNameError" class="text-danger"></span>
             </div>
         </div>
 
@@ -76,8 +77,8 @@
         <div class="form-group row">
             <label class="control-label col-md-2 col-form-label">價格</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入價格" } })
-                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入價格", id = "Price" } })
+                <span id="PriceError" class="text-danger"></span>
             </div>
         </div>
 
@@ -85,8 +86,8 @@
         <div class="form-group row">
             <label class="control-label col-md-2 col-form-label">特價</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Sale, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入價格" } })
-                @Html.ValidationMessageFor(model => model.Sale, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Sale, new { htmlAttributes = new { @class = "form-control small-input", placeholder = "請輸入價格", id = "Sale" } })
+                <span id="SaleError" class="text-danger"></span>
             </div>
         </div>
 
@@ -98,8 +99,8 @@
                 {
                     new { Value = "true", Text = "啟用" },
                     new { Value = "false", Text = "不啟用" }
-                }, "Value", "Text"), new { @class = "form-control small-input" })
-                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                }, "Value", "Text"), new { @class = "form-control small-input", id = "Status" })
+                <span id="StatusError" class="text-danger"></span>
             </div>
         </div>
 
@@ -111,9 +112,74 @@
             </div>
         </div>
     </div>
-    
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+<script>function validateForm() {
+        let isValid = true;
+
+        // 取得每個欄位的值
+        const categoryId = document.getElementById("CategoryId").value;
+        const brandId = document.getElementById("BrandId").value;
+        const name = document.getElementById("Name").value;
+        const price = document.getElementById("Price").value;
+        const sale = document.getElementById("Sale").value;
+        const productSkuName = document.getElementById("ProductSkuName").value;
+        const status = document.getElementById("Status").value;
+
+        // 清除之前的錯誤訊息
+        document.getElementById("CategoryIdError").textContent = "";
+        document.getElementById("BrandIdError").textContent = "";
+        document.getElementById("NameError").textContent = "";
+        document.getElementById("PriceError").textContent = "";
+        document.getElementById("SaleError").textContent = "";
+        document.getElementById("ProductSkuNameError").textContent = "";
+        document.getElementById("StatusError").textContent = "";
+
+        // 驗證商品分類
+        if (categoryId === "") {
+            document.getElementById("CategoryIdError").textContent = "請選擇商品分類";
+            isValid = false;
+        }
+
+        // 驗證品牌
+        if (brandId === "") {
+            document.getElementById("BrandIdError").textContent = "請選擇品牌";
+            isValid = false;
+        }
+
+        // 驗證商品名稱
+        if (name === "") {
+            document.getElementById("NameError").textContent = "請輸入商品名稱";
+            isValid = false;
+        }
+
+        // 驗證價格（必須是正數）
+        if (price === "" || isNaN(price) || parseFloat(price) <= 0) {
+            document.getElementById("PriceError").textContent = "請輸入有效的價格";
+            isValid = false;
+        }
+
+        // 驗證特價（如果有輸入則必須為數字）
+        if (sale !== "" && (isNaN(sale) || parseFloat(sale) <= 0)) {
+            document.getElementById("SaleError").textContent = "請輸入有效的特價";
+            isValid = false;
+        }
+
+        // 驗證規格名稱
+        if (productSkuName === "") {
+            document.getElementById("ProductSkuNameError").textContent = "請輸入規格名稱";
+            isValid = false;
+        }
+
+        // 驗證狀態
+        if (status === "") {
+            document.getElementById("StatusError").textContent = "請選擇狀態";
+            isValid = false;
+        }
+
+        // 如果驗證失敗，阻止表單提交
+        return isValid;
+    }</script>
 }
