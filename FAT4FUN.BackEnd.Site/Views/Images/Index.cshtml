@@ -101,6 +101,12 @@
         .custom-file-upload:hover {
             background-color: #0056b3;
         }
+
+    .no-images-message {
+        color: #555;
+        font-size: 1.2em;
+        margin-top: 20px;
+    }
 </style>
 
 <div class="container">
@@ -116,38 +122,50 @@
     </div>
 
     <!-- 圖片顯示區域 -->
-    <div id="imageContainer">
-        @foreach (var image in Model.Images.Select((img, index) => new { img, index }))
-        {
-            <div class="image-wrapper">
-                <img src="@Url.Content(image.img.Path)" alt="Image for product @Model.SelectedProductId" class="product-image" />
-                <div class="image-index">@image.index</div> <!-- 添加索引数字 -->
-            </div>
-        }
-    </div>
 
-
-<div class="upload-form">
-    <h3>上傳新圖片</h3>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="hidden" id="productId" name="productId" value="@Model.SelectedProductId" />
-
-        <input type="number" id="sort" name="sort" class="form-control" placeholder="請輸入0,1,2" min="0" max="2" step="1" required oninput="this.value = Math.max(0, Math.min(2, this.value))" />
-
-        <!-- 自訂檔案選擇按鈕 -->
-        <label for="file" class="custom-file-upload">選擇檔案</label>
-        <input type="file" id="file" name="file" class="form-control-file" required />
-
-        <!-- 顯示檔名的元素 -->
-        <span id="fileName" class="mt-2"></span>
-
-        <!-- 按鈕容器 -->
-        <div class="button-container mt-3" style="display: flex; gap: 10px;">
-            <button type="submit" class="btn btn-upload">上傳圖片</button>
+    @if (Model.Images.Any())
+    {
+        <div id="imageContainer">
+            @foreach (var image in Model.Images.Select((img, index) => new { img, index }))
+            {
+                <div class="image-wrapper">
+                    <img src="@Url.Content(image.img.Path)" alt="Image for product @Model.SelectedProductId" class="product-image" />
+                    <div class="image-index">@image.index</div> <!-- 添加索引数字 -->
+                </div>
+            }
         </div>
-    </form>
-</div>
+    }
+    else
+    {
+
+        
+        <div class="no-images-message text-center">
+            <h5>尚未上傳任何圖片。</h5>
+        </div>
+    }
+
+
+    <div class="upload-form">
+        <h3>顯示順序</h3>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="hidden" id="productId" name="productId" value="@Model.SelectedProductId" />
+
+            <input type="number" id="sort" name="sort" class="form-control" placeholder="請輸入0,1,2" min="0" max="2" step="1" required oninput="this.value = Math.max(0, Math.min(2, this.value))" />
+
+            <!-- 自訂檔案選擇按鈕 -->
+            <label for="file" class="custom-file-upload">選擇檔案</label>
+            <input type="file" id="file" name="file" class="form-control-file" required />
+
+            <!-- 顯示檔名的元素 -->
+            <span id="fileName" class="mt-2"></span>
+
+            <!-- 按鈕容器 -->
+            <div class="button-container mt-3" style="display: flex; gap: 10px;">
+                <button type="submit" class="btn btn-upload">上傳圖片</button>
+            </div>
+        </form>
     </div>
+</div>
     
 
     <!-- 使用 jQuery 處理上傳 -->
@@ -163,17 +181,23 @@
             $('#productId').val(selectedProductId); // 更新隱藏字段
 
             // 自動加載選中的產品的圖片
+            
             $.ajax({
                 url: '@Url.Action("GetProductImages", "Images")',
                 type: 'GET',
                 data: { productId: selectedProductId },
-                success: function (response) {
-                    if (response.success) {
-                        $('#imageContainer').empty();
+
+                success: function (response)
+                
+                {
+                    console.log(1)
+                    $('#imageContainer').empty();
+                    if (response.success) {                      
                         response.images.forEach(function (image) {
                             $('#imageContainer').append('<div class="image-wrapper"><img src="' + image.Path + '" class="product-image" alt="Product Image" /></div>');
                         });
                     } else {
+                        
                         alert(response.message);
                     }
                 },
@@ -182,6 +206,7 @@
                 }
             });
         }
+
 
         $('#uploadForm').submit(function (e) {
             e.preventDefault(); // 阻止表單的默認提交行為
@@ -197,7 +222,8 @@
                 success: function (response) {
                     if (response.success) {
                         alert('圖片上傳成功，路徑為：' + response.path);
-                        window.location.href = '@Url.Action("Index", "Images")' + '?productId=' + productId;
+                        location.reload();
+
                     } else {
                         alert('圖片上傳失敗：' + response.message);
                     }
@@ -218,8 +244,11 @@
                 type: 'GET',
                 data: { productId: productId },
                 success: function (response) {
+                    $('#imageContainer').empty();
+                    console.log(2)
                     if (response.success) {
-                        $('#imageContainer').empty();
+                        
+                        
                         response.images.forEach(function (image) {
                             $('#imageContainer').append('<div class="image-wrapper"><img src="' + image.Path + '" class="product-image" alt="Product Image" /></div>');
                         });
@@ -244,5 +273,6 @@
                 });
             });
         </script>
+
 
     }

@@ -51,7 +51,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh; /* 设置最小高度为 100% 视窗高度 */
-            max-width: 86vw; /* 设置最大宽度为 100% 视窗宽度 */
+            /* max-width: 86vw; 设置最大宽度为 100% 视窗宽度 */
         }
 
         .content-wrapper {
@@ -61,6 +61,7 @@
             flex-direction: column; /* 确保内容从上到下排列 */
             justify-content: space-between; /* 让内容撑满高度 */
             min-height: calc(100vh - 56px); /* 确保最小高度占满全屏 */
+            width: calc(100vw -  224px) !important;
         }
         .w-100 {
             margin: 0; /* 确保内容区域没有多余的外边距 */

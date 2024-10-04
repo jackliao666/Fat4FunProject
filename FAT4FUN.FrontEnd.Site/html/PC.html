@@ -109,6 +109,7 @@
       .card-img-top {
         height: 200px;
         object-fit: cover;
+        padding: 1rem;
       }
 
       .card-body {
@@ -116,6 +117,7 @@
         flex-direction: column;
         flex-grow: 1;
         padding: 1rem;
+       
       }
 
       .card-title {
@@ -326,7 +328,7 @@
               <h5 class="card-title">{{ product?.name }}</h5>
               <p class="card-text">{{ product.description }}</p>
               <p class="card-brand">品牌: {{ product.brand }}</p>
-              <p class="card-price">價格: ${{ product.specs[0]?.price }}</p>
+              <p class="card-price">價格: ${{ product.specs[0]?.price.toLocaleString() }}</p>
               <!-- 顯示默認規格 -->
               <p class="card-specs">規格: {{ product.specs[0]?.name }}</p>
               <div class="d-flex justify-content-between">

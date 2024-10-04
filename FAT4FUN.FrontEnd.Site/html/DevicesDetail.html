@@ -24,7 +24,7 @@
 
       .main-image {
         width: 100%;
-        height: auto;
+        height: 500px;
         max-height: 400px;
         object-fit: contain;
         border-radius: 8px;
@@ -166,12 +166,10 @@
             <p class="product-brand">品牌: {{ product.brand }}</p>
             <div class="product-price mb-3">
               <span class="current-price">
-                ${{ product.specs[0].sale + Number(selectedSpec?.skuPrice ?? 0)
+                ${{( product.specs[0].sale + Number(selectedSpec?.skuPrice ?? 0)).toLocaleString()
                 }}
               </span>
-              <span class="original-price" v-if="product.specs?.[0]?.price"
-                >${{ product.specs[0].price }}</span
-              >
+              <span class="original-price" v-if="product.specs?.[0]?.price">${{ product.specs[0].price.toLocaleString() }}</span>
             </div>
             <div class="product-description mb-3">
               <p>{{ product.description }}</p>
@@ -193,12 +191,10 @@
                   @change="updatePrice"
                 >
                   <option :value="undefined">基本款</option>
-                  <option
-                    v-for="item in product.specs[0].skuItems"
-                    :key="item.value"
-                    :value="item"
-                  >
-                    配置： {{item.value}} / 價格： {{item.skuPrice}}
+                  <option v-for="item in product.specs[0].skuItems"
+                          :key="item.value"
+                          :value="item">
+                      配置： {{item.value}} / 價格： {{item.skuPrice.toLocaleString()}}
                   </option>
                 </select>
               </div>
