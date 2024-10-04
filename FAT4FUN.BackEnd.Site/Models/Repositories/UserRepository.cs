@@ -151,21 +151,21 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
         public List<UserCheckDto> GetAllUsers()
         {
             var users = _db.Users
-                .Include(x => x.Roles)
-                .Select(x => new UserCheckDto
-                {
-                    Id = x.Id,
-                    Account = x.Account,
-                    Address = x.Address,
-                    Name = x.Name,
-                    Email = x.Email,
-                    Gender = x.Gender,
-                    Phone = x.Phone,
-                    Status = x.Status,
-                    Roles = x.Roles.Select(r => r.Role1)
-
-                })
-                .ToList();
+       .Include(x => x.Roles) // 確保包含 Roles 的資料
+       .Where(x => !x.Roles.Any(r => r.Role1 == 5)) // 過濾掉有角色ID為5的使用者
+       .Select(x => new UserCheckDto
+       {
+           Id = x.Id,
+           Account = x.Account,
+           Address = x.Address,
+           Name = x.Name,
+           Email = x.Email,
+           Gender = x.Gender,
+           Phone = x.Phone,
+           Status = x.Status,
+           Roles = x.Roles.Select(r => r.Role1) // 假設 Role1 是角色名稱
+       })
+       .ToList();
             return users;
         }
 

@@ -1,4 +1,5 @@
-﻿using FAT4FUN.BackEnd.Site.Models.EFModels;
+﻿using FAT4FUN.BackEnd.Site.Models;
+using FAT4FUN.BackEnd.Site.Models.EFModels;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             _db = new AppDbContext();
         }
 
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Index(int? productId, int? imageId)
         {
             var model = new ImageVm();
@@ -55,6 +57,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
 
+        [MyAuthorize(Functions = "0,1,2")]
         [HttpGet]
         public ActionResult GetProductImages(int productId)
         {
@@ -80,6 +83,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return Json(new { success = true, images = images }, JsonRequestBehavior.AllowGet);
         }
 
+        [MyAuthorize(Functions = "0,1,2")]
         [HttpPost]
         public ActionResult UploadImage(int productId, int sort, HttpPostedFileBase file)
         {

@@ -78,13 +78,16 @@
             width: 100%; /* 确保页面顶层容器宽度为 100% */
             overflow-x: hidden; /* 禁止水平方向上的滚动条 */
             background-color: #f8f9fc; /* 设置背景色，可以根据需要修改 */
-
         }
+
+
+
+
         
     </style>
 </head>
     
-    <body id="page-top">
+    <body id="page-top" class="@((isLoginPage ? "login-bg" : "default-bg"))">
 
 
         <!-- Page Wrapper -->

@@ -35,7 +35,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
                     new SelectListItem { Value = "2", Text = "Designer" },
                     new SelectListItem { Value = "3", Text = "Sales" },
                     new SelectListItem { Value = "4", Text = "Human Resources" },
-                    new SelectListItem { Value = "5", Text = "Members" }
+                    //new SelectListItem { Value = "5", Text = "Members" }
                 };
 
             return roles;
@@ -154,7 +154,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return RedirectToAction("Login","Users");
         }
 
-        
+
         [Authorize]
         public ActionResult EditProfile()
         {
@@ -231,7 +231,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         new SelectListItem { Value = "2", Text = "Designer" },
         new SelectListItem { Value = "3", Text = "Sales" },
         new SelectListItem { Value = "4", Text = "Human Resources" },
-        new SelectListItem { Value = "5", Text = "Members" }
+        //new SelectListItem { Value = "5", Text = "Members" }
     };
 
            
@@ -290,6 +290,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult ActiveRegister(int? userId, string confirmCode)
         {
 

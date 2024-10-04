@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using FAT4FUN.BackEnd.Site.Models;
 using FAT4FUN.BackEnd.Site.Models.EFModels;
 
 namespace FAT4FUN.BackEnd.Site.Controllers
@@ -15,6 +16,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: ProductCategories
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Index(string searchKeyword)
         {
             var categories = db.ProductCategories.AsQueryable();
@@ -29,6 +31,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
         // GET: ProductCategories/Details/5
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -44,6 +47,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
         // GET: ProductCategories/Create
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Create()
         {
             return View();
@@ -67,6 +71,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
         // GET: ProductCategories/Edit/5
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -86,6 +91,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Edit([Bind(Include = "Id,CategoryName,DisplayOrder,Status")] ProductCategory productCategory)
         {
             if (ModelState.IsValid)
@@ -98,6 +104,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
         // GET: ProductCategories/Delete/5
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -115,6 +122,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         // POST: ProductCategories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult DeleteConfirmed(int id)
         {
             ProductCategory productCategory = db.ProductCategories.Find(id);

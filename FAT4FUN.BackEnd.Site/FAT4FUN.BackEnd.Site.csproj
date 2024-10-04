@@ -220,6 +220,16 @@
     <Compile Include="Models\Interfaces\IProductSkuRepository.cs" />
     <Compile Include="Models\Interfaces\IUserRepository.cs" />
     <Compile Include="Models\MappingProfile.cs" />
+    <Compile Include="Models\Model1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MyAuthorizeAttribute.cs" />
     <Compile Include="Models\Repositories\OrderRepository.cs" />
     <Compile Include="Models\Repositories\ProductRepository.cs" />
@@ -297,6 +307,14 @@
     <Content Include="img\undraw_profile_3.svg" />
     <Content Include="img\undraw_rocket.svg" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Models\Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\js\demo\chart-area-demo.js" />

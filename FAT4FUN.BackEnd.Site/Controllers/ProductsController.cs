@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FAT4FUN.BackEnd.Site.Models;
 using FAT4FUN.BackEnd.Site.Models.Dtos;
 using FAT4FUN.BackEnd.Site.Models.Services;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
@@ -22,6 +23,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
         // GET: Products
         [HttpGet]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Index(string categoryName, string brandName, string productName, int page = 1, int pageSize = 10)
         {
            var productVm = _productService.ConverToVm(categoryName, brandName, productName, page, pageSize);
@@ -29,6 +31,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return View(productVm);
         }
         [HttpGet]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Create()
         {
             var categories = _productService.GetCategories(); // 獲取所有分類
@@ -47,6 +50,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         // 新增商品，提交表單時觸發
         [HttpPost]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Create(ProductVm vm)
         {
             if (ModelState.IsValid)
@@ -62,6 +66,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return View(vm);
         }
         [HttpGet]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Edit(int id)
         {
             ProductVm product = _productService.GetProduct(id);
@@ -80,6 +85,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return View(product);
         }
         [HttpPost]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Edit(ProductVm vm)
         {
             if (ModelState.IsValid)
@@ -95,6 +101,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Delete(int id)
         {
             _productService.Delete(id); // 呼叫刪除邏輯

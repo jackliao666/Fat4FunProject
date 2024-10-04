@@ -24,6 +24,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
         // GET: Orders
 
+        [MyAuthorize(Functions ="0,1,3")]
         public ActionResult Index()
         {
             List<OrderDto> dto = new OrderRepository().Get();
@@ -32,6 +33,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
 
             return View(vm);
         }
+
 
         [HttpGet]
         public JsonResult GetOrders()
@@ -43,6 +45,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return Json(vm, JsonRequestBehavior.AllowGet);
         }
 
+        [MyAuthorize(Functions = "0,1,3")]
         [HttpPost]
         public ActionResult Update(EditOrderVm vm)
         {

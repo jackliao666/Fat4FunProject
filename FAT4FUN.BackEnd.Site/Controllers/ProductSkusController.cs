@@ -1,4 +1,5 @@
-﻿using FAT4FUN.BackEnd.Site.Models.Dtos;
+﻿using FAT4FUN.BackEnd.Site.Models;
+using FAT4FUN.BackEnd.Site.Models.Dtos;
 using FAT4FUN.BackEnd.Site.Models.EFModels;
 using FAT4FUN.BackEnd.Site.Models.Services;
 using FAT4FUN.BackEnd.Site.Models.ViewModels;
@@ -14,16 +15,20 @@ namespace FAT4FUN.BackEnd.Site.Controllers
     {
         private readonly ProductSkuService _productSkuService;
 
+
         public ProductSkusController()
         {
             _productSkuService = new ProductSkuService();
         }
         // GET: ProductSkus
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Index()
         {
             var productVm = _productSkuService.GetProducts();
             return View(productVm);
         }
+       
+        [MyAuthorize(Functions = "0,1,2")]
 
         public ActionResult Create()
         {
@@ -43,6 +48,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
         [HttpPost]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Create(Product2Vm vm)
         {
             if (ModelState.IsValid)
@@ -57,7 +63,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return View(vm);
         }
 
-              
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Create2(int id)
         {
             Product2Vm product = _productSkuService.GetProducts(id);
@@ -74,6 +80,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
         [HttpPost]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Create2(Product2Vm vm)
         {
             if (ModelState.IsValid)
@@ -88,6 +95,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return View(vm);
         }
 
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Edit(int id)
         {
             Product2Vm product = _productSkuService.GetProducts(id);
@@ -108,6 +116,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
 
         [HttpPost]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Edit(Product2Vm vm)
         {
             if (ModelState.IsValid)
@@ -124,6 +133,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [MyAuthorize(Functions = "0,1,2")]
         public ActionResult Delete(int productId,int skuId,int skuItemId)
         {
             _productSkuService.Delete(productId, skuId, skuItemId);
