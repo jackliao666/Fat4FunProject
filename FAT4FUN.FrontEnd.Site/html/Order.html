@@ -183,9 +183,9 @@
             <li class="nav-item">
               <a class="nav-link" href="track.html">追蹤商品</a>
             </li>
-            <li class="nav-item">
+            <!--<li class="nav-item">
               <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
-            </li>
+            </li>-->
             <li class="nav-item">
               <a class="nav-link" href="QA.html">Q&A</a>
             </li>
@@ -864,7 +864,12 @@
               }
 
               const data = await response.json();
-              alert(data.message);
+                Swal.fire({
+                    title: "退貨申請",
+                    text: "退貨申請已完成，請您儘速將商品裝箱後寄回。",
+                    icon: "success",
+                    confirmButtonText: "確定",
+                });
 
               // 獲取舊的 ModifyDate，並使用正確的格式
               const originalModifyDate = new Date(data.originalModifyDate);
@@ -952,10 +957,21 @@
               }
 
               const data = await response.json();
-              alert(data.message);
+                Swal.fire({
+                    title: "取消訂單",
+                    text: "訂單已成功取消",
+                    icon: "success",
+                    confirmButtonText: "確定",
+                });
             } catch (error) {
               console.error("Error in submitCancelOrder:", error); // 輸出詳細錯誤信息
-              alert("取消訂單申請失敗，請稍後再試。");
+                Swal.fire({
+                    title: "取消訂單",
+                    text: "取消訂單申請失敗，請稍後再試。",
+                    icon: "error",
+                    confirmButtonText: "確定",
+                });
+                alert("取消訂單申請失敗，請稍後再試。");
             }
             console.log(
               "取消訂單申請已提交:",

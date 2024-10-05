@@ -145,9 +145,9 @@
               <li class="nav-item">
                 <a class="nav-link active" href="track.html">追蹤商品</a>
               </li>
-              <li class="nav-item">
+              <!--<li class="nav-item">
                 <a class="nav-link" href="EditProfile.html">修改資料及密碼</a>
-              </li>
+              </li>-->
               <li class="nav-item">
                 <a class="nav-link" href="QA.html">Q&A</a>
               </li>
@@ -276,8 +276,18 @@
             return value.toLocaleString();
           },
           formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toISOString().split("T")[0]; // 只保留日期部分
+              if (!dateString) {
+                  return "日期不明"; // 如果日期無效，顯示預設文字
+              }
+
+              const date = new Date(dateString);
+
+              // 確保日期有效
+              if (isNaN(date.getTime())) {
+                  return "日期不明"; // 無效的日期返回這個值
+              }
+
+              return date.toISOString().split("T")[0]; // 只保留日期部分
           },
           checkToCart(SkuId, SkuItemId, userId) {
             return fetch(
@@ -391,16 +401,34 @@
                   `Failed to remove item: ${response.statusText}`
                 );
               }
-
+                // 顯示成功提示訊息
+                Swal.fire({
+                    title: "已移除",
+                    text: "追蹤商品已從追蹤清單移除",
+                    icon: "success",
+                    confirmButtonText: "確認",
+                });
               this.fetchTeack(userId);
-              const data = await response.json();
+              let data = await response.json();
+
+                // 確保 data 是陣列，如果不是，初始化為空陣列
+                if (!Array.isArray(data)) {
+                    data = [];
+                }
+                // 確保 this.MemberFollowLists 是陣列
+                if (!Array.isArray(this.MemberFollowLists)) {
+                    this.MemberFollowLists = [];
+                }
 
               // 將獲取到的資料賦值給 cartItems
               this.MemberFollowLists = data;
 
               this.MemberFollowLists = this.MemberFollowLists.filter(
                 (MemberFollowLists) => MemberFollowLists.id !== item?.id
-              );
+                );
+                
+
+
             } catch (error) {
               console.error("Error removing item:", error);
             }
