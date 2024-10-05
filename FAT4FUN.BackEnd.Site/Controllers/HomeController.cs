@@ -54,7 +54,7 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             ViewBag.ReturningOrdersCount = GetReturningOrdersCount(orders);
 
             // 設定年度銷售目標並計算達成率
-            const decimal annualSalesTarget = 1000000; // 100萬銷售目標
+            const decimal annualSalesTarget = 5000000; // 100萬銷售目標
             decimal totalAnnualSales = ViewBag.TotalAnnualCompletedOrderAmount;
             ViewBag.SalesAchievementRate = CalculateSalesAchievementRate(totalAnnualSales, annualSalesTarget);
 
