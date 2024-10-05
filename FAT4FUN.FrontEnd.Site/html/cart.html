@@ -243,7 +243,7 @@
               class="form-control"
               id="phone"
               v-model="customer.phone"
-              placeholder="輸入電話"
+              placeholder="輸入電話(EX:手機 09123456789 OR 市話請加區碼 0229104488"
             />
           </div>
           <div class="mb-3">
@@ -498,11 +498,60 @@
             localStorage.setItem("cart", JSON.stringify(this.cartItems));
           },
           submitOrder() {
-            if (this.cartItems.length === 0) {
-              alert("購物車內無商品繼續選購！");
+              if (this.cartItems.length === 0) {
+                  Swal.fire({
+                      icon: "error",
+                      title: "購物車不能為空",
+                      text: "購物車內無商品繼續選購",
+                  });
               return;
             }
-            // 將整個購物車存儲到 localStorage
+              // 將整個購物車存儲到 localStorage
+              // 姓名驗證：不能有數字和英文字母
+              const namePattern = /^[^\dA-Za-z]+$/;
+              if (!namePattern.test(this.customer.name)) {
+                  Swal.fire({
+                      icon: "error",
+                      title: "姓名格式錯誤",
+                      text: "姓名不能包含數字和英文字母",
+                  });
+                  return;
+              }
+              if (this.customer.name.length < 2 || this.customer.name.length > 5) {
+                  Swal.fire({
+                      icon: "error",
+                      title: "姓名長度錯誤",
+                      text: "姓名長度必須在 2 到 4 個字之間",
+                  });
+                  return;
+              }
+
+              // 電話驗證：開頭必須為0，09或02為10個字，其他為9字以上
+              const phonePattern = /^0(9\d{8}|2\d{8}|\d{8,9})$/;
+              if (!phonePattern.test(this.customer.phone)) {
+                  Swal.fire({
+                      icon: "error",
+                      title: "電話格式錯誤",
+                      text: "請輸入有效的電話號碼，手機為09開頭，市話請輸入區碼，",
+                  });
+                  return;
+              }
+
+              // 地址驗證：必須包含 縣市、鄉鎮市區、路 和 號
+              const addressPattern = /(.+[縣市].+[鄉鎮市區].+[路].+[號])/;
+              if (!addressPattern.test(this.customer.address)) {
+                  Swal.fire({
+                      icon: "error",
+                      title: "地址格式錯誤",
+                      text: "地址必須包含 縣市、鄉鎮市區、路 和 號",
+                  });
+                  return;
+              }
+
+              // 如果所有驗證通過，則進行提交操作
+              // 你的訂單提交邏輯
+              console.log("訂單資料驗證成功，進行提交...");
+
             localStorage.setItem("cart", JSON.stringify(this.cartItems));
             if (
               this.customer.name &&

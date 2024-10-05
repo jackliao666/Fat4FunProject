@@ -187,6 +187,7 @@
     <Compile Include="Models\EFModels\ProductCategory.cs" />
     <Compile Include="Models\EFModels\ProductSku.cs" />
     <Compile Include="Models\EFModels\Role.cs" />
+    <Compile Include="Models\EFModels\RolesString.cs" />
     <Compile Include="Models\EFModels\SkuItem.cs" />
     <Compile Include="Models\EFModels\User.cs" />
     <Compile Include="Models\Infra\HashUtility.cs" />
@@ -303,6 +304,13 @@
     <Content Include="html\PC.html" />
     <Content Include="html\PcDetail.html" />
     <Content Include="html\vueNavFooter.html" />
+    <Content Include="Images\3ab21f57-e9d2-453f-b8d2-481ccb35c757.jpg" />
+    <Content Include="Images\3d27eade-e87a-45d3-b083-b16c3727fd1b.jpg" />
+    <Content Include="Images\5f2a3183-263c-4c59-b8d3-07a54446ebb0.jpg" />
+    <Content Include="Images\68f53e2b-e026-4f63-ad54-5626a69482f3.jpg" />
+    <Content Include="Images\89891018-2354-4b70-b16d-b00c1d225a3a.jpg" />
+    <Content Include="Images\8d784900-6846-4dc5-ac51-f46a7ea59f1d.jpg" />
+    <Content Include="Images\a081db86-c512-4fa9-83ab-53a79df886c5.jpg" />
     <Content Include="Images\a1.jpg" />
     <Content Include="Images\a2.jpg" />
     <Content Include="Images\a3.jpg" />
@@ -311,11 +319,15 @@
     <Content Include="Images\a6.jpg" />
     <Content Include="Images\a7.jpg" />
     <Content Include="Images\a8.jpg" />
+    <Content Include="Images\b4a7a558-7355-4487-b2b5-cfd0dc645470.jpg" />
+    <Content Include="Images\bfa415ff-65df-4c37-b2f1-793d39f7f0e0.jpg" />
     <Content Include="Images\bg.jpg" />
     <Content Include="Images\bg1.jpg" />
     <Content Include="Images\bg2.jpg" />
     <Content Include="Images\bgm-monkey.jpg" />
+    <Content Include="Images\c1202f4c-ea84-47c8-b9a6-7e1442f7865c.jpg" />
     <Content Include="Images\cart.jpg" />
+    <Content Include="Images\e909832b-f378-4f75-9665-484415fc50b9.jpg" />
     <Content Include="Images\ii1.jpg" />
     <Content Include="Images\ii2.jpg" />
     <Content Include="Images\ii3.jpg" />
@@ -374,6 +386,8 @@
     <Content Include="Images\logo1.webp" />
     <Content Include="Images\monkeylogo.webp" />
     <Content Include="Images\Register.webp" />
+    <Content Include="Images\2cd28441-1839-4bac-bab3-8ebd047fba97.webp" />
+    <Content Include="Images\437d9fad-b268-4a78-9eec-1bdbeb130041.webp" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -401,6 +415,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="html\series.json" />
+    <Content Include="Views\Product\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -286,7 +286,7 @@ namespace FAT4FUN.FrontEnd.Site.Controllers.Apis
                     ProductSkuId = item.ProductSkuId,
                     ProductName = item.Product.Name,
                     SkuItemId=item.SkuItemId ?? null,
-                    SkuItemName =item.SkuItem?.Value ?? "No Spec",
+                    SkuItemName =item.SkuItem?.Value ?? "基本款",
                     Price = item.Product.Price + (item.SkuItem?.SkuPrice ?? 0),
                     Qty = item.Qty,
                     SubTotal = item.SubTotal,
