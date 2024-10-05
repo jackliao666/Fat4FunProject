@@ -139,6 +139,7 @@
 
                 if (selectedValue === "all" || status === selectedValue) {
                     row.style.display = "";
+                    
                 } else {
                     row.style.display = "none";
                 }
@@ -160,6 +161,7 @@
                 success: function (response) {
                     if (response.success) {
                         alert("狀態更新成功");
+                        location.reload();
                     } else {
                         alert("狀態更新失敗：" + response.message);
                     }
