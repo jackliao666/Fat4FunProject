@@ -66,7 +66,7 @@ const HeaderComponent = {
                 class="nav-link"
                 :class="{'active-link': isActiveLink('PC.html')}"
                 href="PC.html"
-                >PC專區</a
+                >電腦專區</a
               >
             </li>
             <li class="nav-item col-3">

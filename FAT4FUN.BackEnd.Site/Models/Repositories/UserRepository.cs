@@ -152,7 +152,7 @@ namespace FAT4FUN.BackEnd.Site.Models.Repositories
         {
             var users = _db.Users
        .Include(x => x.Roles) // 確保包含 Roles 的資料
-       .Where(x => !x.Roles.Any(r => r.Role1 == 5)) // 過濾掉有角色ID為5的使用者
+       .Where(x => x.Roles.Any(r => r.Role1 == 0 || r.Role1 == 1 || r.Role1 == 2 || r.Role1 == 3 || r.Role1 == 4)) // 過濾掉有角色ID為5的使用者
        .Select(x => new UserCheckDto
        {
            Id = x.Id,
