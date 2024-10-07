@@ -67,7 +67,7 @@ namespace FAT4FUN.BackEnd.Site.Models
                     // 若沒有權限，則重定向到登入頁面
                     System.Diagnostics.Debug.WriteLine("MyAuthorize: User does not have the required functions, redirecting to Login.");
 
-                    filterContext.Result = new RedirectResult("/Users/Login");
+                    filterContext.Result = new RedirectResult("/Users/RoleNone");
                     return;
 
                 }

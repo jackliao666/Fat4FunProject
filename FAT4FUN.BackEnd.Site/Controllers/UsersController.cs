@@ -51,6 +51,10 @@ namespace FAT4FUN.BackEnd.Site.Controllers
             return View();
         }
 
+        public ActionResult RoleNone()
+            {
+            return View();
+        }
 
 
         [MyAuthorize(Functions ="0,4")]
